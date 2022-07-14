@@ -3,6 +3,7 @@
 ## A propos
 
 Cette application a pour but de recréer le jeu Lemming.
+https://www.trictrac.net/jeu-de-societe/lemming
 Ce n'est pas fini !
 
 ## Installation

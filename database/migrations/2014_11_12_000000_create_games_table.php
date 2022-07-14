@@ -26,14 +26,17 @@ class CreateGamesTable extends Migration
             $table->unsignedBigInteger('cards2')->nullable();
 			$table->unsignedBigInteger('cards3')->nullable();
 			$table->unsignedBigInteger('cards4')->nullable();
-            $table->integer('earth')->default(2);
-            $table->integer('rock')->default(2);
-            $table->integer('water')->default(2);
-            $table->integer('forest')->default(2);
-            $table->integer('desert')->default(2);
+            $table->text('earth');
+            $table->text('rock');
+            $table->text('water');
+            $table->text('forest');
+            $table->text('desert');
+            $table->text('map');
+
             $table->string('name');
             $table->text('cards_played')->comment('');
             $table->text('cards')->comment('All cards in the game [cardId=>card]');
+
             $table->enum('status',Game::STATUS)->default("waiting");
             $table->timestamps();
 
