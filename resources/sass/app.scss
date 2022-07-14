@@ -1,0 +1,53 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+
+@media (min-width: 1200px){
+    .container {
+        max-width: 1840px;
+    }
+}
+
+.hidden{
+    display:none;
+}
+
+.mygrid{
+    display:flex;  flex-wrap: wrap;
+}
+
+.card{
+    margin:5px;
+    margin-bottom:0;
+}
+.card-body{padding-bottom:0px;padding-top:0px;}
+.card-header{padding:1px;border-bottom:1px solid #ffffff;}
+.card-primary{
+    background-color: #0a53be;
+}
+
+.card-border {
+    border: 5px solid #ddd !important;
+}
+.border-primary {
+    border: 5px solid #0a53be !important;
+}
+.card-secondary{
+    background-color: #b21f2d;
+}
+.border-secondary {
+    border: 5px solid #b21f2d !important;
+}
+
+.card-header{
+    text-align: center;
+    text-transform: capitalize;
+    color:#fff;
+    background-color: inherit;
+}
