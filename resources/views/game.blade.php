@@ -9,10 +9,9 @@ use App\Models\Game;
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
+            Game's status: {{$game->status}}
             @if ($game->status == Game::STATUS_WAITING)
-                <a href="/start/{{$game->id}}">Start</a>
-            @else
-                Game's status: {{$game->status}}
+                <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
             @endif
             <br/>
             @if ($game->winner == Auth::user()->id)
@@ -57,7 +56,6 @@ use App\Models\Game;
             <br/>
             <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
                 @csrf
-                Path:
                 <input type="hidden" id="path" name="path" value="" />
                 <input type="hidden" id="hexa-x" name="hexa-x" value="" />
                 <input type="hidden" id="hexa-y" name="hexa-y" value="" />

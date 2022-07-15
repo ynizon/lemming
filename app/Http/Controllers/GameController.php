@@ -156,7 +156,18 @@ class GameController extends Controller
             $cardsPlayed[] = $cards[$cardId];
             $game->cards_played = serialize($cardsPlayed);
             $cards[$cardId]['player'] = -1;
+
+            //New card
+            $cardAffected = false;
+            foreach ($cards as $cardId =>$card){
+                if ($card['player'] == 0 && $cardAffected == false){
+                    $cards[$cardId]['player'] == Auth::user()->id;
+                    $cardAffected = true;
+                }
+            }
             $game->cards = serialize($cards);
+
+            //@Todo refaire la pioche
 
             //@TODO Winner -> end ?
 
