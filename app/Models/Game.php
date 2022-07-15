@@ -27,7 +27,7 @@ class Game extends Model
         // ----------------------------------------------------------------------
         $terrain_images = [];
         foreach (Card::LANDSCAPES as $landscape) {
-            $terrain_images[$landscape] = "/images/".$landscape.".png";
+            $terrain_images[$landscape] = $landscape;
         }
         return $terrain_images;
     }
@@ -51,13 +51,13 @@ class Game extends Model
         $this->water = serialize([2]);
         $this->forest = serialize([2]);
         $this->desert = serialize([2]);
-
+        $this->lemmings_positions = serialize([]);
         $this->cards = serialize($cards);
-        $this->map = serialize($this->generate_map_data());
+        $this->map = serialize($this->generateOriginalMapData());
         $this->save();
     }
 
-    public function generate_map_data() {
+    public function generateOriginalMapData() {
         // -------------------------------------------------------------
         // --- Fill the $map array with values identifying the terrain
         // --- type in each hex.  This example simply randomizes the
@@ -66,13 +66,9 @@ class Game extends Model
         // -------------------------------------------------------------
         $MAP_WIDTH = config("app.map_width");
         $MAP_HEIGHT = config("app.map_height");
-        $terrain_images = $this->getLandscapesPictures();
         $map = [];
         for ($x=0; $x<$MAP_WIDTH; $x++) {
             for ($y=0; $y<$MAP_HEIGHT; $y++) {
-                // --- Randomly choose a terrain type from the terrain
-                // --- images array and assign to this coordinate.
-                $map[$x][$y] = array_rand($terrain_images);
                 $map[$x][$y] = "none";
             }
         }
@@ -139,6 +135,28 @@ class Game extends Model
         $map[8][8] = "water";
 
         $map[12][12] = "water";
+
+        return $map;
+    }
+
+    public function generate_map_data() {
+        // -------------------------------------------------------------
+        // --- Fill the $map array with values identifying the terrain
+        // --- type in each hex.  This example simply randomizes the
+        // --- contents of each hex.  Your code could actually load the
+        // --- values from a file or from a database.
+        // -------------------------------------------------------------
+        $MAP_WIDTH = config("app.map_width");
+        $MAP_HEIGHT = config("app.map_height");
+        $terrain_images = $this->getLandscapesPictures();
+        $map = [];
+        for ($x=0; $x<$MAP_WIDTH; $x++) {
+            for ($y=0; $y<$MAP_HEIGHT; $y++) {
+                // --- Randomly choose a terrain type from the terrain
+                // --- images array and assign to this coordinate.
+                $map[$x][$y] = array_rand($terrain_images);
+            }
+        }
 
         return $map;
     }

@@ -80,3 +80,90 @@ function handle_map_click(event) {
     highlight.style.left = tx + 'px';
     highlight.style.top = ty + 'px';
 }
+
+let currentCard = null;
+let currentTile = null;
+let path = [];
+let maxTilesPath = 0;
+let landscapePath = null;
+function initCards() {
+    $( ".card" ).each(function(index) {
+        $(this).on("click", function(){
+            if (currentCard) {
+                resetCard();
+            }
+            currentCard = $(this);
+            $(this).addClass("selected");
+            var score = $(this).attr('data-score');
+            var landscape = $(this).attr('data-landscape');
+
+            //TODO additionner les cartes si egale ou inferieure/ retirer les anciennes si plus fortes
+            maxTilesPath = score;
+            landscapePath = landscape;
+        });
+    });
+}
+
+function initLemmings() {
+    $( "#lemming1" ).on("click", function(){
+        $(".lemming").removeClass("selected");
+        $(this).addClass("selected");
+        var hexa = $(".hex[data-x="+$(this).attr('data-x')+"][data-y="+$(this).attr('data-y')+"]");
+
+        if (hexa.length) {
+            hexa.focus();
+            hexa.addClass("selected");
+        }
+    });
+
+    $( "#lemming2" ).on("click", function(){
+        $(".lemming").removeClass("selected");
+        $(this).addClass("selected");
+    });
+}
+
+function initMap() {
+    $( ".hex" ).on("click", function(){
+        if (!currentCard) {
+            alert('Select a card before');
+        } else {
+            var hexa = $(this);
+            if (path.length < maxTilesPath) {
+                if (hexa.attr('data-landscape') === 'none' ||
+                hexa.attr('data-landscape') === landscapePath)
+                {
+                    var moveOK = false;
+                    if (currentTile.attr('data-x') === hexa.attr('data-x'))
+                     {
+                         if (parseInt(currentTile.attr('data-y'))-1 === parseInt(hexa.attr('data-y')) ||
+                             parseInt(currentTile.attr('data-y'))+1 === parseInt(hexa.attr('data-y'))
+                         )
+                         {
+                             moveOK = true;
+                         }
+                    }
+
+                    if (moveOk)
+                    {
+                        hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
+                        hexa.addClass("path");
+                        path.push(hexa);
+                        currentTile = hexa;
+                    } else {
+                        alert("Case non adjacente");
+                    }
+                } else {
+                    alert("Impossible de traverser cette case");
+                }
+            } else {
+                alert("Chemin maximumm dépassé");
+            }
+        }
+    });
+}
+
+function resetCard(){
+    $(".card").removeClass("selected");
+    $(".hex").removeClass("path");
+    path = [];
+}

@@ -32,6 +32,7 @@ class CreateGamesTable extends Migration
             $table->text('forest');
             $table->text('desert');
             $table->text('map');
+            $table->text('lemmings_positions');
 
             $table->string('name');
             $table->text('cards_played')->comment('');

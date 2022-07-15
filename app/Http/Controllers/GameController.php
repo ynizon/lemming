@@ -31,7 +31,9 @@ class GameController extends Controller
             }
             $players[] = $game->player1_id;
 
+            $lemmingsPositions = [];
             foreach ($players as $playerId) {
+                $lemmingsPositions[$playerId] = [1=>["x"=>-1,"y"=>-1], 2=>["x"=>-1,"y"=>-1]];
                 $nbCard = 0;
                 while ($nbCard < 5) {
                     $k = 0;
@@ -46,6 +48,7 @@ class GameController extends Controller
             }
 
             $game->cards = serialize($cards);
+            $game->lemmings_positions = serialize($lemmingsPositions);
             $game->save();
 
             $nextPlayerEvent = new NextPlayer($game->id);
@@ -65,7 +68,7 @@ class GameController extends Controller
             $field = 'player'.$i.'_id';
             if (!empty($game->$field)) {
                 $playersId[] = $game->$field;
-                $playersName[$game->$field] = [User::find($game->$field)->name];
+                $playersName[$game->$field] = User::find($game->$field)->name;
             }
         }
         shuffle($playersId);

@@ -1,6 +1,8 @@
 <?php
 use App\Models\Card;
 use App\Models\Game;
+
+$lemmingsPositions = unserialize($game->lemmings_positions);
 ?>
 @extends('layouts.app')
 
@@ -15,6 +17,23 @@ use App\Models\Game;
                     Game's status: {{$game->status}}
                 @endif
                 <br/>
+                Players:
+                @foreach ($playersName as $playerId => $player)
+                    <div class="player{{$loop->iteration}}">
+                        {{$player}}
+                        @if ($game->status == Game::STATUS_STARTED && $playerId == Auth::user()->id)
+                            @TODO A corriger
+                            / <span class="lemming" id="lemming1"
+                                    data-x="5"
+                                    data-y="1"
+                            >Lemming 1</span>
+                            - <span class="lemming" id="lemming2"
+                                    data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
+                                    data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
+                            >Lemming 2</span>
+                        @endif
+                    </div>
+                @endforeach
 
                 @if ($game->winner == Auth::user()->id)
                     <div class="alert alert-success" role="alert">
@@ -37,10 +56,15 @@ use App\Models\Game;
                     @endif
 
                     @foreach ($cards as $card)
-                        <ul>
+                        <ul class="cards">
                             @if ($card['player'] == Auth()->user()->id)
                                 <li>
-                                    {{$card['landscape']}} - {{$card['score']}}
+                                    <div class="card landscape-{{$card['landscape']}}" style="width: 10rem;"
+                                         data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
+                                        <div class="card-body" alt="{{$card['landscape']}}">
+                                            <h5 class="card-title">{{$card['score']}}</h5>
+                                        </div>
+                                    </div>
                                 </li>
                             @endif
                         </ul>
@@ -90,8 +114,8 @@ use App\Models\Game;
 
                     .hex {
                         position: absolute;
-                        width: <?php echo $HEX_SCALED_HEIGHT ?>;
-                        height: <?php echo $HEX_SCALED_HEIGHT ?>;
+                        width: <?php echo $HEX_SCALED_HEIGHT ?>px;
+                        height: <?php echo $HEX_SCALED_HEIGHT ?>px;
                     }
                 </style>
                 <script type="text/javascript">
@@ -117,6 +141,7 @@ use App\Models\Game;
                     // -------------------------------------------------------------
                     // --- Draw each hex in the map
                     // -------------------------------------------------------------
+                    $nbHexa = 0;
                     for ($x=0; $x<$MAP_WIDTH; $x++) {
                         for ($y=0; $y<$MAP_HEIGHT; $y++) {
                             // --- Terrain type in this hex
@@ -127,13 +152,15 @@ use App\Models\Game;
 
                             // --- Coordinates to place hex on the screen
                             $tx = $x * $HEX_SIDE * 1.5;
-                            $ty = $y * $HEX_SCALED_HEIGHT + ($x % 2) * $HEX_SCALED_HEIGHT / 2;
+                            $ty = $y * $HEX_SCALED_HEIGHT + ($x % 2) * $HEX_SCALED_HEIGHT / 2 -30;
 
                             // --- Style values to position hex image in the right location
                             $style = sprintf("left:%dpx;top:%dpx", $tx, $ty);
 
                             // --- Output the image tag for this hex
-                            print "<img src='$img' alt='$terrain' data-landscape='".$terrain."' data-x='".$x."' data-y='".$y."' class='hex' style='zindex:99;$style'>\n";
+                            print "<div id='hexa$nbHexa' alt='$terrain' data-landscape='".$terrain."' data-x='".$x."'
+                            data-y='".$y."' class='hex hex-$img' style='$style' >&nbsp;</div>".PHP_EOL;
+                            $nbHexa++;
                         }
                     }
                 }
@@ -141,7 +168,7 @@ use App\Models\Game;
 
                 <div id='hexmap' class='hexmap' onclick='handle_map_click(event);'>
                     <?php render_map_to_html(); ?>
-                    <img id='highlight' class='hex' src='/images/hex-highlight.png' style='zindex:100;'>
+                    <img id='highlight' class='hex' src='/images/hex-highlight.png' style='z-index:100;' />
                 </div>
             </div>
         </div>
@@ -149,6 +176,11 @@ use App\Models\Game;
 
     <!--Change player -> reload page -->
     <script>
+        initCards();
+        initLemmings();
+        initMap();
+
+        /*
         let timer = 2000;
         @if (!empty(env('PUSHER_APP_ID')))
             Echo.channel(`game-{{$game->id}}`)
@@ -169,6 +201,7 @@ use App\Models\Game;
                 })
             }
         },timer)
+        */
     </script>
 </div>
 @endsection
