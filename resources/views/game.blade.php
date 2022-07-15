@@ -1,5 +1,6 @@
 <?php
 use App\Models\Card;
+use App\Models\Game;
 ?>
 @extends('layouts.app')
 
@@ -8,8 +9,13 @@ use App\Models\Card;
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="">
-                {{$game->status}}
-                <a href="/start/{{$game->id}}">Start</a>
+                @if ($game->status == Game::STATUS_WAITING)
+                    <a href="/start/{{$game->id}}">Start</a>
+                @else
+                    Game's status: {{$game->status}}
+                @endif
+                <br/>
+
                 @if ($game->winner == Auth::user()->id)
                     <div class="alert alert-success" role="alert">
                         {{__('Game over. You win.')}}<br/>

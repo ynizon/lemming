@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    public const STATUS = ['waiting','started','end'];
+    public const STATUS_WAITING = 'waiting';
+    public const STATUS_STARTED = 'started';
+    public const STATUS_PAUSE = 'pause';
+    public const STATUS_ENDED = 'ended';
+    public const STATUS = [self::STATUS_PAUSE,self::STATUS_WAITING,self::STATUS_STARTED,self::STATUS_ENDED];
+
     public function cards()
     {
         return $this->hasMany(Card::class);
@@ -36,8 +41,10 @@ class Game extends Model
 
         $cardsInit = Card::where("game_id","=",0)->get()->shuffle()->take(config("app.nb_cards"));
         $cards = [];
+        $k=0;
         foreach ($cardsInit as $card){
-            $cards[] = ['score'=>$card->score, 'landscape'=>$card->landscape, 'player'=>0];
+            $cards[$k] = ['score'=>$card->score, 'landscape'=>$card->landscape, 'player'=>0];
+            $k++;
         }
         $this->earth = serialize([2]);
         $this->rock = serialize([2]);

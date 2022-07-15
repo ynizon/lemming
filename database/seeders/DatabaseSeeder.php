@@ -41,12 +41,14 @@ class DatabaseSeeder extends Seeder
 
         $scores = [4,3,3,2,2,2,1,1,1,0,0];
         foreach (Card::LANDSCAPES as $landscape) {
-            foreach ($scores as $score) {
-                $card = new Card();
-                $card->landscape = $landscape;
-                $card->score = $score;
-                $card->game_id = 0;
-                $card->save();
+            if (!in_array($landscape, ['out','none'])) {
+                foreach ($scores as $score) {
+                    $card = new Card();
+                    $card->landscape = $landscape;
+                    $card->score = $score;
+                    $card->game_id = 0;
+                    $card->save();
+                }
             }
         }
     }

@@ -14,21 +14,46 @@ class GameController extends Controller
     public function start($id)
     {
         $game = Game::findOrFail($id);
-        if ($game->status == 'waiting' && Auth()->user()->id == $game->player1_id){
-            $game->status = 'started';
+        if ($game->status == GAME::STATUS_WAITING && Auth()->user()->id == $game->player1_id){
+            $game->status = GAME::STATUS_STARTED;
 
-            $cards = $game->cards;
+            $cards = unserialize($game->cards);
             shuffle($cards);
-            foreach ($cards as $card) {
+            $players = [];
+            if (!empty($game->player4_id)) {
+                $players[] = $game->player4_id;
+            }
+            if (!empty($game->player3_id)) {
+                $players[] = $game->player3_id;
+            }
+            if (!empty($game->player2_id)) {
+                $players[] = $game->player2_id;
+            }
+            $players[] = $game->player1_id;
 
+            foreach ($players as $playerId) {
+                $nbCard = 0;
+                while ($nbCard < 5) {
+                    $k = 0;
+                    foreach ($cards as $card) {
+                        if ($card['player'] == 0 && $nbCard < 5) {
+                            $cards[$k]['player'] = $playerId;
+                            $nbCard++;
+                        }
+                        $k++;
+                    }
+                }
             }
 
+            $game->cards = serialize($cards);
             $game->save();
+
             $nextPlayerEvent = new NextPlayer($game->id);
             broadcast($nextPlayerEvent)->toOthers();
+            return redirect("/game/".$game->id);
+        } else {
+            return redirect("/game/".$game->id)->withError("This game is already started.");
         }
-
-        return redirect("/game/".$game->id);
     }
 
     public function game($id, Request $request){
