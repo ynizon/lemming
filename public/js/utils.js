@@ -82,6 +82,7 @@ function handle_map_click(event) {
 }
 
 let currentCard = null;
+let currentLemming = null;
 let currentTile = null;
 let path = [];
 let maxTilesPath = 0;
@@ -106,17 +107,18 @@ function initCards() {
 
 function initLemmings() {
     $( "#lemming1" ).on("click", function(){
+        currentLemming = $(this);
         $(".lemming").removeClass("selected");
         $(this).addClass("selected");
         var hexa = $(".hex[data-x="+$(this).attr('data-x')+"][data-y="+$(this).attr('data-y')+"]");
 
         if (hexa.length) {
-            hexa.focus();
-            hexa.addClass("selected");
+            hexa.html("<i class=\"fa fa-frog "+$(this).attr('data-color')+"\"></i>");
         }
     });
 
     $( "#lemming2" ).on("click", function(){
+        currentLemming = $(this);
         $(".lemming").removeClass("selected");
         $(this).addClass("selected");
     });
@@ -124,46 +126,98 @@ function initLemmings() {
 
 function initMap() {
     $( ".hex" ).on("click", function(){
-        if (!currentCard) {
-            alert('Select a card before');
-        } else {
-            var hexa = $(this);
-            if (path.length < maxTilesPath) {
-                if (hexa.attr('data-landscape') === 'none' ||
-                hexa.attr('data-landscape') === landscapePath)
-                {
-                    var moveOK = false;
-                    if (currentTile.attr('data-x') === hexa.attr('data-x'))
-                     {
-                         if (parseInt(currentTile.attr('data-y'))-1 === parseInt(hexa.attr('data-y')) ||
-                             parseInt(currentTile.attr('data-y'))+1 === parseInt(hexa.attr('data-y'))
-                         )
-                         {
-                             moveOK = true;
-                         }
-                    }
-
-                    if (moveOk)
+        if (currentLemming) {
+            if (currentCard) {
+                var hexa = $(this);
+                if (path.length < maxTilesPath) {
+                    if (hexa.attr('data-landscape') === 'none' ||
+                        hexa.attr('data-landscape') === landscapePath)
                     {
-                        hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
-                        hexa.addClass("path");
-                        path.push(hexa);
-                        currentTile = hexa;
+                        var canMove = false;
+                        if (!currentTile) {
+                            if (hexa.attr('data-event') === 'start') {
+                                canMove = true;
+                            } else {
+                                alert('Pas une case de depart');
+                            }
+                        } else {
+                            if (isContiguousHexa(hexa)) {
+                                canMove = true;
+                            }
+                        }
+                        if (canMove)
+                        {
+                            hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
+                            hexa.addClass("path");
+                            path.push(hexa);
+                            currentTile = hexa;
+                        } else {
+                            if (currentTile) {
+                                alert("Case non adjacente");
+                            }
+                        }
                     } else {
-                        alert("Case non adjacente");
+                        alert("Impossible de traverser cette case");
                     }
                 } else {
-                    alert("Impossible de traverser cette case");
+                    alert("Chemin maximum dépassé");
                 }
             } else {
-                alert("Chemin maximumm dépassé");
+                alert('Select a card before');
             }
+        } else {
+            alert("Choisi ton lemming d'abord");
         }
     });
 }
 
+function isContiguousHexa(newHexa) {
+    let canMove = false;
+    //5/1 est contigue de 4/1 4/2 5/0 5/2 6/1 6/2
+    //6/2 est contigue de  5/1 5/2 6/1 6/3 5 7/1 7/2
+    var contiguousHexa = [];
+    if (currentTile.attr('data-x')%2 === 0) {
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        contiguousHexa.push(hexa);
+    } else {
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        contiguousHexa.push(hexa);
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        contiguousHexa.push(hexa);
+    }
+
+    contiguousHexa.forEach((hexa, index) => {
+        if (newHexa.attr('id') === hexa.attr('id')) {
+            canMove = true;
+        }
+    })
+
+    return canMove;
+}
 function resetCard(){
     $(".card").removeClass("selected");
     $(".hex").removeClass("path");
     path = [];
+}
+
+function validateCardAndPath() {
+
 }

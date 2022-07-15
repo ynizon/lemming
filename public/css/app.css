@@ -10073,6 +10073,12 @@ h3 {
 
 .lemming{
     cursor:pointer;
+    padding:5px;
+}
+.lemming.selected{
+    border: 1px solid #ccc;
+    border-radius:15px;
+    background: #ccc;
 }
 
 .landscape-earth{
@@ -10112,6 +10118,9 @@ h3 {
     line-height: 2em;
 }
 
+.hex-finish{
+    background: url('/images/finish.png') no-repeat;
+}
 .hex-out{
     background: url('/images/out.png') no-repeat;
 }

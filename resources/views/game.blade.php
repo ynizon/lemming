@@ -9,72 +9,104 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="">
-                @if ($game->status == Game::STATUS_WAITING)
-                    <a href="/start/{{$game->id}}">Start</a>
-                @else
-                    Game's status: {{$game->status}}
-                @endif
-                <br/>
-                Players:
-                @foreach ($playersName as $playerId => $player)
+        <div class="col-md-4">
+            @if ($game->status == Game::STATUS_WAITING)
+                <a href="/start/{{$game->id}}">Start</a>
+            @else
+                Game's status: {{$game->status}}
+            @endif
+            <br/>
+            @if ($game->winner == Auth::user()->id)
+                <div class="alert alert-success" role="alert">
+                    {{__('Game over. You win.')}}<br/>
+                    <a href="{{env('APP_URL')}}/replay/{{$game->id}}">{{__('Play again')}}</a>
+                </div>
+            @endif
+
+            @if ($game->winner != Auth::user()->id && !empty($game->winner))
+                <div class="alert alert-danger" role="alert">
+                    {{__('Game over. You loose.')}}<br/>
+                    {{__('It was')}}
+                    @if (0 != $game->winner)) {{ $playersName[$game->winner] }}. @endif
+                </div>
+            @endif
+            <br/>
+            Players (Select Your Lemming):
+            <ul>
+            @foreach ($playersName as $playerId => $player)
+                <li>
                     <div class="player{{$loop->iteration}}">
                         {{$player}}
                         @if ($game->status == Game::STATUS_STARTED && $playerId == Auth::user()->id)
-                            @TODO A corriger
                             / <span class="lemming" id="lemming1"
-                                    data-x="5"
-                                    data-y="1"
+                                    data-color="player{{$loop->iteration}}"
+                                    data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
+                                    data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                             >Lemming 1</span>
                             - <span class="lemming" id="lemming2"
+                                    data-color="player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                             >Lemming 2</span>
                         @endif
                     </div>
-                @endforeach
-
-                @if ($game->winner == Auth::user()->id)
-                    <div class="alert alert-success" role="alert">
-                        {{__('Game over. You win.')}}<br/>
-                        <a href="{{env('APP_URL')}}/replay/{{$game->id}}">{{__('Play again')}}</a>
-                    </div>
+                </li>
+            @endforeach
+            </ul>
+            <br/>
+            Path:
+            <input type="text" id="path" value="" />
+        </div>
+        <div class="col-md-4">
+            @if (empty($game->winner))
+                @if (!empty($game->player) && $game->player == Auth::user()->id)
+                    {{__('Please, choose a card')}}<br/>
                 @endif
 
-                @if ($game->winner != Auth::user()->id && !empty($game->winner))
-                    <div class="alert alert-danger" role="alert">
-                        {{__('Game over. You loose.')}}<br/>
-                        {{__('It was')}}
-                        @if (0 != $game->winner)) {{ $playersName[$game->winner] }}. @endif
-                    </div>
-                @endif
-
-                @if (empty($game->winner))
-                    @if (!empty($game->player) && $game->player == Auth::user()->id)
-                        {{__('Please, choose a card')}}<br/>
-                    @endif
-
-                    @foreach ($cards as $card)
-                        <ul class="cards">
-                            @if ($card['player'] == Auth()->user()->id)
-                                <li>
-                                    <div class="card landscape-{{$card['landscape']}}" style="width: 10rem;"
-                                         data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
-                                        <div class="card-body" alt="{{$card['landscape']}}">
-                                            <h5 class="card-title">{{$card['score']}}</h5>
+                <h3>Your deck</h3>
+                <ul class="cards">
+                @foreach (Card::LANDSCAPES as $landscape)
+                    @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')
+                        @for ($k = 4; $k > 0; $k--)
+                            @foreach ($cards as $card)
+                                @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['player'] == Auth()->user()->id)
+                                    <li>
+                                        <div class="card landscape-{{$card['landscape']}}" style="width: 10rem;"
+                                             data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
+                                            <div class="card-body" alt="{{$card['landscape']}}">
+                                                <h5 class="card-title">{{$card['score']}}</h5>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            @endif
-                        </ul>
-                    @endforeach
-
-                    @if (!empty($game->player) && $game->player != Auth::user()->id)
-                            {{__('Wait other player')}}<br/>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endfor
                     @endif
-                @endif
+                @endforeach
+                </ul>
+            @endif
+        </div>
+        <div class="col-md-4">
+            <div>
+                <h3>Global Deck</h3>
+                <ul class="deck">
+                    @foreach (Card::LANDSCAPES as $landscape)
+                        @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')
+                            <li>
+                                <div class="card landscape-{{$landscape}}" style="width: 10rem;">
+                                    <div class="card-body" alt="{{$landscape}}">
+                                        <h5 class="card-title">5 > 3 > 0 = 8</h5>
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
             </div>
+
+            @if (!empty($game->player) && $game->player != Auth::user()->id)
+                {{__('Wait other player')}}<br/>
+            @endif
         </div>
     </div>
     <br/>
@@ -98,8 +130,8 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                     $HEX_SIDE = $HEX_SCALED_HEIGHT / 2;
                     ?>
                     .hexmap {
-                        width: <?php echo $MAP_WIDTH * $HEX_SIDE * 1.5 + $HEX_SIDE/2; ?>px;
-                        height: <?php echo $MAP_HEIGHT * $HEX_SCALED_HEIGHT + $HEX_SIDE; ?>px;
+                        min-width: <?php echo $MAP_WIDTH * $HEX_SIDE * 1.5 + $HEX_SIDE/2; ?>px;
+                        min-height: <?php echo $MAP_HEIGHT * $HEX_SCALED_HEIGHT + $HEX_SIDE; ?>px;
                         position: relative;
                         background: #000;
                     }
@@ -144,6 +176,12 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                     $nbHexa = 0;
                     for ($x=0; $x<$MAP_WIDTH; $x++) {
                         for ($y=0; $y<$MAP_HEIGHT; $y++) {
+                            //Event (start / end)
+                            $event = '';
+                            if ($x == 4 && $y <= 3){
+                                $event = 'start';
+                            }
+
                             // --- Terrain type in this hex
                             $terrain = $map[$x][$y];
 
@@ -159,7 +197,8 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
 
                             // --- Output the image tag for this hex
                             print "<div id='hexa$nbHexa' alt='$terrain' data-landscape='".$terrain."' data-x='".$x."'
-                            data-y='".$y."' class='hex hex-$img' style='$style' >&nbsp;</div>".PHP_EOL;
+                            data-y='".$y."' data-event='$event' class='hex hex-$img' style='$style'
+                            >&nbsp;</div>".PHP_EOL;
                             $nbHexa++;
                         }
                     }
