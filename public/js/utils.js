@@ -1,86 +1,3 @@
-function handle_map_click(event) {
-    // ----------------------------------------------------------------------
-    // --- This function gets a mouse click on the map, converts the click to
-    // --- hex map coordinates, then moves the highlight image to be over the
-    // --- clicked on hex.
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // --- Determine coordinate of map div as we want the click coordinate as
-    // --- we want the mouse click relative to this div.
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // --- Code based on http://www.quirksmode.org/js/events_properties.html
-    // ----------------------------------------------------------------------
-    var posx = 0;
-    var posy = 0;
-    if (event.pageX || event.pageY) {
-        posx = event.pageX;
-        posy = event.pageY;
-    } else if (event.clientX || e.clientY) {
-        posx = event.clientX + document.body.scrollLeft
-            + document.documentElement.scrollLeft;
-        posy = event.clientY + document.body.scrollTop
-            + document.documentElement.scrollTop;
-    }
-    // --- Apply offset for the map div
-    var map = document.getElementById('hexmap');
-    posx = posx - map.offsetLeft;
-    posy = posy - map.offsetTop;
-    //console.log ("posx = " + posx + ", posy = " + posy);
-
-    // ----------------------------------------------------------------------
-    // --- Convert mouse click to hex grid coordinate
-    // --- Code is from http://www-cs-students.stanford.edu/~amitp/Articles/GridToHex.html
-    // ----------------------------------------------------------------------
-    x = (posx - (hex_height/2)) / (hex_height * 0.75);
-    y = (posy - (hex_height/2)) / hex_height;
-    z = -0.5 * x - y;
-    y = -0.5 * x + y;
-
-    ix = Math.floor(x+0.5);
-    iy = Math.floor(y+0.5);
-    iz = Math.floor(z+0.5);
-    s = ix + iy + iz;
-    if (s) {
-        abs_dx = Math.abs(ix-x);
-        abs_dy = Math.abs(iy-y);
-        abs_dz = Math.abs(iz-z);
-        if (abs_dx >= abs_dy && abs_dx >= abs_dz) {
-            ix -= s;
-        } else if (abs_dy >= abs_dx && abs_dy >= abs_dz) {
-            iy -= s;
-        } else {
-            iz -= s;
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    // --- map_x and map_y are the map coordinates of the click
-    // ----------------------------------------------------------------------
-    map_x = ix;
-    map_y = (iy - iz + (1 - ix %2 ) ) / 2 - 0.5;
-
-    // ----------------------------------------------------------------------
-    // --- Calculate coordinates of this hex.  We will use this
-    // --- to place the highlight image.
-    // ----------------------------------------------------------------------
-    tx = map_x * hex_side * 1.5;
-    ty = map_y * hex_height + (map_x % 2) * (hex_height / 2);
-
-    // ----------------------------------------------------------------------
-    // --- Get the highlight image by ID
-    // ----------------------------------------------------------------------
-    var highlight = document.getElementById('highlight');
-
-    // ----------------------------------------------------------------------
-    // --- Set position to be over the clicked on hex
-    // ----------------------------------------------------------------------
-    highlight.style.left = tx + 'px';
-    highlight.style.top = ty + 'px';
-}
-
 let currentCard = null;
 let currentLemming = null;
 let currentTile = null;
@@ -95,12 +12,31 @@ function initCards() {
             }
             currentCard = $(this);
             $(this).addClass("selected");
-            var score = $(this).attr('data-score');
-            var landscape = $(this).attr('data-landscape');
+            let score = parseInt($(this).attr('data-score'));
+            let landscape = $(this).attr('data-landscape');
+            let cardId = $(this).attr('data-cardid');
 
-            //TODO additionner les cartes si egale ou inferieure/ retirer les anciennes si plus fortes
-            maxTilesPath = score;
             landscapePath = landscape;
+
+            $( ".card-deck" ).each(function( index ) {
+                $( this ).html($( this ).attr("data-origine"));
+            });
+
+            let min = parseInt($('#score-'+landscape).attr("data-min"));
+            if (score <= min){
+                let total = score + parseInt($('#score-'+landscape).attr("data-score"));
+                maxTilesPath = total;
+                $('#score-'+landscape).html(
+                    $('#score-'+landscape).attr("data-origine") + ' + ' + score +' = ' + total
+                );
+            } else {
+                let total = score;
+                maxTilesPath = total;
+                $('#score-'+landscape).html(
+                    score +' = ' + total
+                );
+            }
+            $('#card_id').val(cardId);
         });
     });
 }
@@ -110,11 +46,6 @@ function initLemmings() {
         currentLemming = $(this);
         $(".lemming").removeClass("selected");
         $(this).addClass("selected");
-        var hexa = $(".hex[data-x="+$(this).attr('data-x')+"][data-y="+$(this).attr('data-y')+"]");
-
-        if (hexa.length) {
-            hexa.html("<i class=\"fa fa-frog "+$(this).attr('data-color')+"\"></i>");
-        }
     });
 
     $( "#lemming2" ).on("click", function(){
@@ -122,6 +53,15 @@ function initLemmings() {
         $(".lemming").removeClass("selected");
         $(this).addClass("selected");
     });
+
+    var hexa = $(".hex[data-x="+$( "#lemming1" ).attr('data-x')+"][data-y="+$( "#lemming1" ).attr('data-y')+"]");
+    if (hexa) {
+        hexa.html("<i class=\"fa fa-frog "+$( "#lemming1" ).attr('data-color')+"\"></i>");
+    }
+    var hexa = $(".hex[data-x="+$( "#lemming2" ).attr('data-x')+"][data-y="+$( "#lemming2" ).attr('data-y')+"]");
+    if (hexa) {
+        hexa.html("<i class=\"fa fa-frog "+$( "#lemming2" ).attr('data-color')+"\"></i>");
+    }
 }
 
 function initMap() {
@@ -141,7 +81,7 @@ function initMap() {
                                 alert('Pas une case de depart');
                             }
                         } else {
-                            if (isContiguousHexa(hexa)) {
+                            if (isAdjacentHexa(hexa)) {
                                 canMove = true;
                             }
                         }
@@ -151,6 +91,13 @@ function initMap() {
                             hexa.addClass("path");
                             path.push(hexa);
                             currentTile = hexa;
+                            $('.hexa').removeClass('cursor');
+                            if (path.length < maxTilesPath){
+                                let adjacentsHexa = getAdjacentHexa(hexa);
+                                adjacentsHexa.forEach((adjacentHexa, index) => {
+                                    adjacentHexa.addClass('cursor');
+                                });
+                            }
                         } else {
                             if (currentTile) {
                                 alert("Case non adjacente");
@@ -171,47 +118,78 @@ function initMap() {
     });
 }
 
-function isContiguousHexa(newHexa) {
+function isAdjacentHexa(newHexa) {
     let canMove = false;
     //5/1 est contigue de 4/1 4/2 5/0 5/2 6/1 6/2
     //6/2 est contigue de  5/1 5/2 6/1 6/3 5 7/1 7/2
-    var contiguousHexa = [];
-    if (currentTile.attr('data-x')%2 === 0) {
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        contiguousHexa.push(hexa);
-    } else {
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        contiguousHexa.push(hexa);
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        contiguousHexa.push(hexa);
-    }
+    var contiguousHexa = getAdjacentHexa(currentTile);
 
     contiguousHexa.forEach((hexa, index) => {
         if (newHexa.attr('id') === hexa.attr('id')) {
             canMove = true;
         }
-    })
+    });
 
     return canMove;
 }
+
+function getAdjacentHexa(hexagone) {
+    let adjacentsHexa = [];
+    if (hexagone.attr('data-x')%2 === 0) {
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out'){
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+    } else {
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
+        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+            adjacentsHexa.push(hexa);
+        }
+    }
+
+    return adjacentsHexa;
+}
+
 function resetCard(){
     $(".card").removeClass("selected");
     $(".hex").removeClass("path");
@@ -219,5 +197,14 @@ function resetCard(){
 }
 
 function validateCardAndPath() {
-
+    if (path.length == 0) {
+        alert("Vous devez indiquer un itinéraire");
+        return false;
+    } else {
+        $('#path').val(JSON.stringify(path));
+        $('#hexa-x').val(currentTile.attr('data-x'));
+        $('#hexa-y').val(currentTile.attr('data-y'));
+        $("#lemming_number").val(currentLemming.attr('data-lemming'));
+        return true;
+    }
 }

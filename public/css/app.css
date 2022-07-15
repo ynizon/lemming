@@ -10098,16 +10098,20 @@ h3 {
 }
 
 .player1{
-    color: #f80031;
+    color: #f80031 !important;
 }
 .player2{
-    color: #0a53be;
+    color: #0a53be!important;
 }
 .player3{
-    color: #37be0a;
+    color: #37be0a!important;
 }
 .player4{
-    color: #d5b61a;
+    color: #d5b61a!important;
+}
+
+.cursor{
+ cursor: pointer;
 }
 
 .hex i{

@@ -2,7 +2,6 @@
 use App\Models\Card;
 use App\Models\Game;
 
-$lemmingsPositions = unserialize($game->lemmings_positions);
 ?>
 @extends('layouts.app')
 
@@ -39,11 +38,13 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                         {{$player}}
                         @if ($game->status == Game::STATUS_STARTED && $playerId == Auth::user()->id)
                             / <span class="lemming" id="lemming1"
+                                    data-lemming = "1"
                                     data-color="player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                             >Lemming 1</span>
                             - <span class="lemming" id="lemming2"
+                                    data-lemming = "2"
                                     data-color="player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
@@ -54,8 +55,16 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
             @endforeach
             </ul>
             <br/>
-            Path:
-            <input type="text" id="path" value="" />
+            <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
+                @csrf
+                Path:
+                <input type="hidden" id="path" name="path" value="" />
+                <input type="hidden" id="hexa-x" name="hexa-x" value="" />
+                <input type="hidden" id="hexa-y" name="hexa-y" value="" />
+                <input type="hidden" id="card_id" name="card_id" value="" />
+                <input type="hidden" id="lemming_number" name="lemming_number" value="" />
+                <input type="submit" value="Validate" class="btn btn-primary"/>
+            </form>
         </div>
         <div class="col-md-4">
             @if (empty($game->winner))
@@ -68,10 +77,11 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                 @foreach (Card::LANDSCAPES as $landscape)
                     @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')
                         @for ($k = 4; $k > 0; $k--)
-                            @foreach ($cards as $card)
+                            @foreach ($cards as $cardId => $card)
                                 @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['player'] == Auth()->user()->id)
                                     <li>
                                         <div class="card landscape-{{$card['landscape']}}" style="width: 10rem;"
+                                             data-cardid="{{$cardId}}"
                                              data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
                                             <div class="card-body" alt="{{$card['landscape']}}">
                                                 <h5 class="card-title">{{$card['score']}}</h5>
@@ -95,7 +105,12 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                             <li>
                                 <div class="card landscape-{{$landscape}}" style="width: 10rem;">
                                     <div class="card-body" alt="{{$landscape}}">
-                                        <h5 class="card-title">5 > 3 > 0 = 8</h5>
+                                        <h5 class="card-title card-deck" data-origine = "{{$cardsSummary['line_'.$landscape]}}"
+                                            data-score = "{{$cardsSummary['total_'.$landscape]}}"
+                                            data-min = "{{$cardsSummary['min_'.$landscape]}}"
+                                            id="score-{{$landscape}}">
+                                            {{$cardsSummary['line_'.$landscape]}}
+                                        </h5>
                                     </div>
                                 </div>
                             </li>
@@ -198,16 +213,15 @@ $lemmingsPositions = unserialize($game->lemmings_positions);
                             // --- Output the image tag for this hex
                             print "<div id='hexa$nbHexa' alt='$terrain' data-landscape='".$terrain."' data-x='".$x."'
                             data-y='".$y."' data-event='$event' class='hex hex-$img' style='$style'
-                            >&nbsp;</div>".PHP_EOL;
+                            ></div>".PHP_EOL;
                             $nbHexa++;
                         }
                     }
                 }
                 ?>
 
-                <div id='hexmap' class='hexmap' onclick='handle_map_click(event);'>
+                <div id='hexmap' class='hexmap'>
                     <?php render_map_to_html(); ?>
-                    <img id='highlight' class='hex' src='/images/hex-highlight.png' style='z-index:100;' />
                 </div>
             </div>
         </div>
