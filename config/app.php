@@ -4,7 +4,7 @@ return [
 
     'nb_cards'=> 10*5,
     'map_width'=> 13,
-    'map_height'=> 18,
+    'map_height'=> 17,
     'hex_height'=> 72,
 
     /*

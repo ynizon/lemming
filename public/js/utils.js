@@ -4,6 +4,7 @@ let currentTile = null;
 let path = [];
 let maxTilesPath = 0;
 let landscapePath = null;
+let placeMarkerLandscape = '';
 function initCards() {
     $( ".card" ).each(function(index) {
         $(this).on("click", function(){
@@ -35,6 +36,8 @@ function initCards() {
                 $('#score-'+landscape).html(
                     score +' = ' + total
                 );
+                placeMarkerLandscape = landscape;
+                alert("Vous devez placer une tuile "+landscape);
             }
             $('#card_id').val(cardId);
         });
@@ -42,14 +45,12 @@ function initCards() {
 }
 
 function initLemmings() {
-    var hexa = $(".hex[data-x="+$( "#lemming1" ).attr('data-x')+"][data-y="+$( "#lemming1" ).attr('data-y')+"]");
-    if (hexa) {
-        hexa.html("<i class=\"fa fa-frog "+$( "#lemming1" ).attr('data-color')+"\"></i>");
-    }
-    var hexa = $(".hex[data-x="+$( "#lemming2" ).attr('data-x')+"][data-y="+$( "#lemming2" ).attr('data-y')+"]");
-    if (hexa) {
-        hexa.html("<i class=\"fa fa-frog "+$( "#lemming2" ).attr('data-color')+"\"></i>");
-    }
+    $(".lemming").each(function( index ) {
+        var hexa = $(".hex[data-x="+$( this ).attr('data-x')+"][data-y="+$( this ).attr('data-y')+"]");
+        if (hexa) {
+            hexa.html("<i class=\"fa fa-frog "+$( this ).attr('data-color')+"\"></i>");
+        }
+    });
 
     $( "#lemming1" ).on("click", function(){
         currentLemming = $(this);
@@ -87,54 +88,63 @@ function initLemmings() {
 
 function initMap() {
     $( ".hex" ).on("click", function(){
-        if (currentLemming) {
-            if (currentCard) {
-                var hexa = $(this);
-                if (path.length < maxTilesPath) {
-                    if (hexa.attr('data-landscape') === 'none' ||
-                        hexa.attr('data-landscape') === landscapePath)
-                    {
-                        var canMove = false;
-                        if (!currentTile) {
-                            if (hexa.attr('data-event') === 'start') {
-                                canMove = true;
+        let hexa = $(this);
+        if (placeMarkerLandscape !== ''){
+            $("#changemap-x").val(hexa.attr('data-x'));
+            $("#changemap-y").val(hexa.attr('data-y'));
+            $("#changemap-landscape").val(placeMarkerLandscape);
+            hexa.attr('data-landscape', placeMarkerLandscape);
+            hexa.attr('class','hex hex-'+placeMarkerLandscape);
+            placeMarkerLandscape = '';
+        } else {
+            if (currentLemming) {
+                if (currentCard) {
+                    if (path.length < maxTilesPath) {
+                        if (hexa.attr('data-landscape') === 'none' ||
+                            hexa.attr('data-landscape') === 'start' ||
+                            hexa.attr('data-landscape') === 'finish' ||
+                            hexa.attr('data-landscape') === landscapePath) {
+                            var canMove = false;
+                            if (!currentTile) {
+                                if (hexa.attr('data-landscape') === 'start') {
+                                    canMove = true;
+                                } else {
+                                    alert('Pas une case de depart');
+                                }
                             } else {
-                                alert('Pas une case de depart');
+                                if (isAdjacentHexa(hexa)) {
+                                    canMove = true;
+                                }
+                            }
+                            if (canMove) {
+                                hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
+                                hexa.addClass("path");
+                                path.push(hexa);
+                                currentTile = hexa;
+                                $('.hexa').removeClass('cursor');
+                                if (path.length < maxTilesPath) {
+                                    let adjacentsHexa = getAdjacentHexa(hexa);
+                                    adjacentsHexa.forEach((adjacentHexa, index) => {
+                                        adjacentHexa.addClass('cursor');
+                                    });
+                                }
+                            } else {
+                                if (currentTile) {
+                                    alert("Case non adjacente");
+                                }
                             }
                         } else {
-                            if (isAdjacentHexa(hexa)) {
-                                canMove = true;
-                            }
-                        }
-                        if (canMove)
-                        {
-                            hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
-                            hexa.addClass("path");
-                            path.push(hexa);
-                            currentTile = hexa;
-                            $('.hexa').removeClass('cursor');
-                            if (path.length < maxTilesPath){
-                                let adjacentsHexa = getAdjacentHexa(hexa);
-                                adjacentsHexa.forEach((adjacentHexa, index) => {
-                                    adjacentHexa.addClass('cursor');
-                                });
-                            }
-                        } else {
-                            if (currentTile) {
-                                alert("Case non adjacente");
-                            }
+                            alert("Impossible de traverser cette case");
                         }
                     } else {
-                        alert("Impossible de traverser cette case");
+                        alert("Chemin maximum dépassé");
                     }
                 } else {
-                    alert("Chemin maximum dépassé");
+                    alert('Select a card before');
                 }
             } else {
-                alert('Select a card before');
+                alert("Choisi ton lemming d'abord");
             }
-        } else {
-            alert("Choisi ton lemming d'abord");
         }
     });
 }

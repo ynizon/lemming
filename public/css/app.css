@@ -10058,9 +10058,20 @@ h3 {
   background-color: inherit;
 }
 
-.card{
-    cursor:pointer;
+.cards{
+    list-style:none;
 }
+.chk{
+    float:left;
+    margin-top:10px;
+    margin-right:10px;
+}
+
+.cards .card{
+    cursor:pointer;
+    width: 10rem;
+}
+
 .cards li{
 
 }
@@ -10070,7 +10081,10 @@ h3 {
 .card.selected{
     border:1px solid #f85700;
 }
-
+.renew{
+    padding-left:25px;
+    padding-top:5px;
+}
 .lemming{
     cursor:pointer;
     padding:5px;
@@ -10126,6 +10140,9 @@ h3 {
     border: 1px solid #ffffff;
 }
 
+.hex-start{
+    background: url('/images/start.png') no-repeat;
+}
 .hex-finish{
     background: url('/images/finish.png') no-repeat;
 }

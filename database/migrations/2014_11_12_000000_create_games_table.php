@@ -20,6 +20,7 @@ class CreateGamesTable extends Migration
             $table->unsignedBigInteger('player2_id')->nullable();
 			$table->unsignedBigInteger('player3_id')->nullable();
             $table->unsignedBigInteger('player4_id')->nullable();
+            $table->unsignedBigInteger('player5_id')->nullable();
             $table->unsignedBigInteger('player')->nullable();
             $table->unsignedBigInteger('winner')->nullable();
             $table->text('earth');
@@ -28,7 +29,7 @@ class CreateGamesTable extends Migration
             $table->text('forest');
             $table->text('desert');
             $table->text('map');
-            $table->text('lemmings_positions');
+            $table->text('lemmings_positions')->comment("x & y = -1 for start and x & y = -2 for end");
 
             $table->string('name');
             $table->text('cards')->comment('All cards in the game [cardId=>card] playerId=-2 is played, -1 is in dashboard, 0 is available in deck');
@@ -40,6 +41,7 @@ class CreateGamesTable extends Migration
             $table->foreign('player2_id')->references('id')->on('users');
 			$table->foreign('player3_id')->references('id')->on('users');
 			$table->foreign('player4_id')->references('id')->on('users');
+            $table->foreign('player5_id')->references('id')->on('users');
         });
     }
 

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
+    public const NB_PLAYERS = 5;
+    public const NB_CARDS_MAX_BY_PLAYER = 6;
     public const STATUS_WAITING = 'waiting';
     public const STATUS_STARTED = 'started';
     public const STATUS_PAUSE = 'pause';
@@ -59,7 +61,7 @@ class Game extends Model
 
     public function getPlayersName(){
         $playersName = [];
-        foreach ([1, 2, 3, 4] as $i) {
+        for ($i = 1; $i<= Game::NB_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';
             if (!empty($this->$field)) {
                 $playersName[$this->$field] = User::find($this->$field)->name;
@@ -84,11 +86,21 @@ class Game extends Model
             }
         }
 
+        $map[4][1] = 'start';
+        $map[4][2] = 'start';
+        $map[4][3] = 'start';
+        $map[1][5] = 'finish';
+        $map[0][6] = "finish";
+        $map[2][5] = "finish";
+
         for ($row = 0 ; $row < 5 ; $row++) {
             for ($column = 0 ; $column < 4 ; $column++) {
                 $map[$column][$row] = "out";
             }
         }
+
+        $map[3][4] = "finish";
+        $map[0][5] = "out";
         $map[4][0] = "out";
         $map[6][0] = "out";
         $map[8][0] = "out";
@@ -102,20 +114,44 @@ class Game extends Model
         $map[12][2] = "out";
         $map[12][3] = "out";
         $map[4][4] = "out";
+        $map[4][5] = "out";
         $map[5][4] = "out";
         $map[5][5] = "out";
+        $map[5][6] = "out";
         $map[6][5] = "out";
         $map[6][6] = "out";
         $map[7][6] = "out";
         $map[7][5] = "out";
+        $map[7][10] = "out";
+        $map[7][11] = "out";
+        $map[12][15] = "out";
+        $map[11][15] = "out";
+        $map[10][16] = "out";
+        $map[9][17] = "out";
+        $map[9][16] = "out";
+        $map[10][17] = "out";
+        $map[11][17] = "out";
+        $map[12][17] = "out";
+        $map[11][16] = "out";
+        $map[12][16] = "out";
+        $map[8][17] = "out";
+        $map[7][16] = "out";
+
+        for ($row = 7 ; $row < 13; $row++){
+            $map[5][$row] = "out";
+            $map[6][$row] = "out";
+        }
 
         $map[5][1] = "desert";
-        $map[8][11] = "desert";
-        $map[8][12] = "desert";
-        $map[9][12] = "desert";
+        $map[7][12] = "desert";
+        $map[7][13] = "desert";
+        $map[8][14] = "desert";
         $map[10][13] = "desert";
-        $map[11][14] = "desert";
-        $map[12][14] = "desert";
+        $map[10][14] = "desert";
+        $map[9][14] = "desert";
+
+        $map[8][13] = "forest";
+        $map[9][13] = "forest";
 
         $map[7][3] = "rock";
         $map[7][4] = "rock";
