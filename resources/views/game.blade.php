@@ -11,7 +11,14 @@ use App\Models\Game;
         <div class="col-md-4">
             Game's status: {{$game->status}}
             @if ($game->status == Game::STATUS_WAITING)
-                <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
+                @if ($game->player1_id == Auth::user()->id)
+                    <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
+                @else
+                    @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
+                        <a class="btn btn-primary" href="/join/{{$game->id}}">Join the game</a>
+                    @endif
+                @endif
+
             @endif
             <br/>
             @if ($game->winner == Auth::user()->id)
@@ -36,7 +43,7 @@ use App\Models\Game;
                     <div class="player{{$loop->iteration}}">
                         {{$player}}
                         @if ($game->status == Game::STATUS_STARTED && $playerId == Auth::user()->id)
-                            / <span class="lemming" id="lemming1"
+                            : <span class="lemming" id="lemming1"
                                     data-lemming = "1"
                                     data-color="player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
@@ -53,16 +60,18 @@ use App\Models\Game;
                 </li>
             @endforeach
             </ul>
-            <br/>
-            <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
-                @csrf
-                <input type="hidden" id="path" name="path" value="" />
-                <input type="hidden" id="hexa-x" name="hexa-x" value="" />
-                <input type="hidden" id="hexa-y" name="hexa-y" value="" />
-                <input type="hidden" id="card_id" name="card_id" value="" />
-                <input type="hidden" id="lemming_number" name="lemming_number" value="" />
-                <input type="submit" value="Validate" class="btn btn-primary"/>
-            </form>
+            @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
+                <br/>
+                <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
+                    @csrf
+                    <input type="hidden" id="path" name="path" value="" />
+                    <input type="hidden" id="hexa-x" name="hexa-x" value="" />
+                    <input type="hidden" id="hexa-y" name="hexa-y" value="" />
+                    <input type="hidden" id="card_id" name="card_id" value="" />
+                    <input type="hidden" id="lemming_number" name="lemming_number" value="" />
+                    <input type="submit" value="Validate" class="btn btn-primary"/>
+                </form>
+            @endif
         </div>
         <div class="col-md-4">
             @if (empty($game->winner))
@@ -74,9 +83,9 @@ use App\Models\Game;
                 <ul class="cards">
                 @foreach (Card::LANDSCAPES as $landscape)
                     @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')
-                        @for ($k = 4; $k > 0; $k--)
+                        @for ($k = 4; $k >= 0; $k--)
                             @foreach ($cards as $cardId => $card)
-                                @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['player'] == Auth()->user()->id)
+                                @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['playerId'] == Auth()->user()->id)
                                     <li>
                                         <div class="card landscape-{{$card['landscape']}}" style="width: 10rem;"
                                              data-cardid="{{$cardId}}"
@@ -96,7 +105,7 @@ use App\Models\Game;
         </div>
         <div class="col-md-4">
             <div>
-                <h3>Global Deck</h3>
+                <h3>Global Deck ({{$infoCards}})</h3>
                 <ul class="deck">
                     @foreach (Card::LANDSCAPES as $landscape)
                         @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')

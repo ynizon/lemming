@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Auth;
 use App\Models\Card;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
@@ -36,14 +37,13 @@ class Game extends Model
         $this->name = date("Y-m-d H:i:s");
         $this->created_at = date("Y-m-d H:i:s");
         $this->player1_id = Auth::user()->id;
-        $this->cards_played = serialize([]);
         $this->winner = 0;
 
         $cardsInit = Card::where("game_id","=",0)->get()->shuffle()->take(config("app.nb_cards"));
         $cards = [];
         $k=0;
         foreach ($cardsInit as $card){
-            $cards[$k] = ['score'=>$card->score, 'landscape'=>$card->landscape, 'player'=>0];
+            $cards[$k] = ['score'=>$card->score, 'landscape'=>$card->landscape, 'playerId'=>0];
             $k++;
         }
         $this->earth = serialize([2]);
@@ -55,6 +55,17 @@ class Game extends Model
         $this->cards = serialize($cards);
         $this->map = serialize($this->generateOriginalMapData());
         $this->save();
+    }
+
+    public function getPlayersName(){
+        $playersName = [];
+        foreach ([1, 2, 3, 4] as $i) {
+            $field = 'player'.$i.'_id';
+            if (!empty($this->$field)) {
+                $playersName[$this->$field] = User::find($this->$field)->name;
+            }
+        }
+        return $playersName;
     }
 
     public function generateOriginalMapData() {

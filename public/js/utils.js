@@ -42,18 +42,6 @@ function initCards() {
 }
 
 function initLemmings() {
-    $( "#lemming1" ).on("click", function(){
-        currentLemming = $(this);
-        $(".lemming").removeClass("selected");
-        $(this).addClass("selected");
-    });
-
-    $( "#lemming2" ).on("click", function(){
-        currentLemming = $(this);
-        $(".lemming").removeClass("selected");
-        $(this).addClass("selected");
-    });
-
     var hexa = $(".hex[data-x="+$( "#lemming1" ).attr('data-x')+"][data-y="+$( "#lemming1" ).attr('data-y')+"]");
     if (hexa) {
         hexa.html("<i class=\"fa fa-frog "+$( "#lemming1" ).attr('data-color')+"\"></i>");
@@ -61,6 +49,39 @@ function initLemmings() {
     var hexa = $(".hex[data-x="+$( "#lemming2" ).attr('data-x')+"][data-y="+$( "#lemming2" ).attr('data-y')+"]");
     if (hexa) {
         hexa.html("<i class=\"fa fa-frog "+$( "#lemming2" ).attr('data-color')+"\"></i>");
+    }
+
+    $( "#lemming1" ).on("click", function(){
+        currentLemming = $(this);
+        $(".lemming").removeClass("selected");
+        $(this).addClass("selected");
+
+        $(".hex i").removeClass("selected");
+        currentTile = null;
+        var hexa = $(".hex[data-x="+$( "#lemming1" ).attr('data-x')+"][data-y="+$( "#lemming1" ).attr('data-y')+"]");
+        if (hexa.length > 0) {
+            currentTile = hexa;
+            currentTile.find('i').addClass('selected');
+        }
+    });
+
+    $( "#lemming2" ).on("click", function(){
+        currentLemming = $(this);
+        $(".lemming").removeClass("selected");
+        $(this).addClass("selected");
+
+        $(".hex i").removeClass("selected");
+        currentTile = null;
+        var hexa = $(".hex[data-x="+$( "#lemming2" ).attr('data-x')+"][data-y="+$( "#lemming2" ).attr('data-y')+"]");
+        if (hexa.length > 0) {
+            currentTile = hexa;
+            currentTile.find('i').addClass('selected');
+        }
+    });
+
+    //Default Lemming is 1
+    if ($('#lemming1').length > 0) {
+        $('#lemming1').click();
     }
 }
 

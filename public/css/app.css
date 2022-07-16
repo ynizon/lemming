@@ -10119,7 +10119,11 @@ h3 {
     width:100%;
     color: #fff;
     text-align: center;
-    line-height: 2em;
+    line-height: 2.5em;
+}
+.hex i.selected{
+    border-radius:45px;
+    border: 1px solid #ffffff;
 }
 
 .hex-finish{

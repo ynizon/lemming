@@ -22,10 +22,6 @@ class CreateGamesTable extends Migration
             $table->unsignedBigInteger('player4_id')->nullable();
             $table->unsignedBigInteger('player')->nullable();
             $table->unsignedBigInteger('winner')->nullable();
-            $table->unsignedBigInteger('cards1')->nullable();
-            $table->unsignedBigInteger('cards2')->nullable();
-			$table->unsignedBigInteger('cards3')->nullable();
-			$table->unsignedBigInteger('cards4')->nullable();
             $table->text('earth');
             $table->text('rock');
             $table->text('water');
@@ -35,8 +31,7 @@ class CreateGamesTable extends Migration
             $table->text('lemmings_positions');
 
             $table->string('name');
-            $table->text('cards_played')->comment('');
-            $table->text('cards')->comment('All cards in the game [cardId=>card]');
+            $table->text('cards')->comment('All cards in the game [cardId=>card] playerId=-2 is played, -1 is in dashboard, 0 is available in deck');
 
             $table->enum('status',Game::STATUS)->default("waiting");
             $table->timestamps();
