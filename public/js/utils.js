@@ -5,6 +5,8 @@ let path = [];
 let maxTilesPath = 0;
 let landscapePath = null;
 let placeMarkerLandscape = '';
+let lemmingsPositions = [];
+let tilesLandscape = {water:0, earth:0, rock:0, forest:0, desert:0};
 
 function initCards() {
     $( ".card" ).each(function(index) {
@@ -37,7 +39,11 @@ function initCards() {
                 $('#score-'+landscape).html(
                     score +' = ' + total
                 );
+                if (tilesLandscape[landscape] === "0"){
+                    landscape = 'none';
+                }
                 placeMarkerLandscape = landscape;
+
                 info("Vous devez maintenant placer une tuile "+landscape);
             }
             $('#card_id').val(cardId);
@@ -51,6 +57,7 @@ function initLemmings() {
         if (hexa) {
             hexa.html("<i class=\"fa fa-frog "+$( this ).attr('data-color')+"\"></i>");
         }
+        lemmingsPositions.push($( this ).attr('data-x')+'/'+$( this ).attr('data-y'));
     });
 
     $( "#lemming1" ).on("click", function(){
@@ -88,16 +95,27 @@ function initLemmings() {
 }
 
 function initMap() {
+    tilesLandscape.earth = $('#nb_earth').val();
+    tilesLandscape.water = $('#nb_water').val();
+    tilesLandscape.forest = $('#nb_forest').val();
+    tilesLandscape.desert = $('#nb_desert').val();
+    tilesLandscape.rock = $('#nb_rock').val();
+
     $( ".hex" ).on("click", function(){
         let hexa = $(this);
         if (placeMarkerLandscape !== ''){
-            $("#changemap-x").val(hexa.attr('data-x'));
-            $("#changemap-y").val(hexa.attr('data-y'));
-            $("#changemap-landscape").val(placeMarkerLandscape);
-            hexa.attr('data-landscape', placeMarkerLandscape);
-            hexa.attr('class','hex hex-'+placeMarkerLandscape);
-            placeMarkerLandscape = '';
-            info('');
+            if (hexa.attr('data-landscape') === 'start' || hexa.attr('data-landscape') === 'finish'
+                || hexa.attr('data-landscape') === 'out' ){
+                popin('Vous ne pouvez placer votre tuile sur cet emplacement.', 'error');
+            } else {
+                $("#changemap-x").val(hexa.attr('data-x'));
+                $("#changemap-y").val(hexa.attr('data-y'));
+                $("#changemap-landscape").val(placeMarkerLandscape);
+                hexa.attr('data-landscape', placeMarkerLandscape);
+                hexa.attr('class','hex hex-'+placeMarkerLandscape);
+                placeMarkerLandscape = '';
+                info('');
+            }
         } else {
             if (currentLemming) {
                 if (currentCard) {
@@ -119,16 +137,20 @@ function initMap() {
                                 }
                             }
                             if (canMove) {
-                                hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
-                                hexa.addClass("path");
-                                path.push(hexa);
-                                currentTile = hexa;
-                                $('.hexa').removeClass('cursor');
-                                if (path.length < maxTilesPath) {
-                                    let adjacentsHexa = getAdjacentHexa(hexa);
-                                    adjacentsHexa.forEach((adjacentHexa, index) => {
-                                        adjacentHexa.addClass('cursor');
-                                    });
+                                if (hexa.html() !== '') {
+                                    popin("Case occupée", "error");
+                                } else {
+                                    hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
+                                    hexa.addClass("path");
+                                    path.push(hexa);
+                                    currentTile = hexa;
+                                    $('.hexa').removeClass('cursor');
+                                    if (path.length < maxTilesPath) {
+                                        let adjacentsHexa = getAdjacentHexa(hexa);
+                                        adjacentsHexa.forEach((adjacentHexa, index) => {
+                                            adjacentHexa.addClass('cursor');
+                                        });
+                                    }
                                 }
                             } else {
                                 if (currentTile) {
@@ -170,52 +192,52 @@ function getAdjacentHexa(hexagone) {
     let adjacentsHexa = [];
     if (hexagone.attr('data-x')%2 === 0) {
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out'){
+        if (hexa.attr('data-landscape') !== 'out'){
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
     } else {
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
         var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.html() == '' && hexa.attr('data-landscape') !== 'out') {
+        if (hexa.attr('data-landscape') !== 'out') {
             adjacentsHexa.push(hexa);
         }
     }

@@ -80,6 +80,11 @@ use App\Models\Game;
             </ul>
             @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
                 <br/>
+                @foreach (Card::CARDS as $land)
+                    <input type="hidden" id="nb_{{$land}}" value="{{3-$mapUpdate[$land]}}" />
+                @endforeach
+
+
                 <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
                     @csrf
                     <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
@@ -107,32 +112,32 @@ use App\Models\Game;
                 <form method="POST" action="/renew/{{$game->id}}">
                     @csrf
                     <ul class="cards">
-                        @foreach (Card::LANDSCAPES as $landscape)
-                            @if ($landscape != 'none' && $landscape != 'out' && $landscape != 'finish')
-                                @for ($k = 4; $k >= 0; $k--)
-                                    @foreach ($cards as $cardId => $card)
-                                        @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['playerId'] == Auth()->user()->id)
-                                            <li>
-                                                <input type="checkbox" class="chk" value="{{$cardId}}" name="renewCards[]"/>
-                                                <div class="card landscape-{{$card['landscape']}}"
-                                                     data-cardid="{{$cardId}}"
-                                                     data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
-                                                    <div class="card-body" alt="{{$card['landscape']}}">
-                                                        <h5 class="card-title">{{$card['score']}}</h5>
-                                                    </div>
+                        @foreach (Card::CARDS as $landscape)
+                            @for ($k = 4; $k >= 0; $k--)
+                                @foreach ($cards as $cardId => $card)
+                                    @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['playerId'] == Auth()->user()->id)
+                                        <li>
+                                            <input type="checkbox" class="chk" value="{{$cardId}}" name="renewCards[]"/>
+                                            <div class="card landscape-{{$card['landscape']}}"
+                                                 data-cardid="{{$cardId}}"
+                                                 data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
+                                                <div class="card-body" alt="{{$card['landscape']}}">
+                                                    <h5 class="card-title">{{$card['score']}}</h5>
                                                 </div>
-                                            </li>
-                                        @endif
-                                    @endforeach
-                                @endfor
-                            @endif
+                                            </div>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            @endfor
                         @endforeach
-                        <li>
-                            <input type="checkbox" class="chk" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
-                            <div class="renew">
-                                <input type="submit" class="btn btn-primary" value="Renew your cards" />
-                            </div>
-                        </li>
+                        @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
+                            <li>
+                                <input type="checkbox" class="chk" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
+                                <div class="renew">
+                                    <input type="submit" class="btn btn-primary" value="Renew your cards" />
+                                </div>
+                            </li>
+                        @endif
                     </ul>
                 </form>
             @endif
@@ -173,7 +178,7 @@ use App\Models\Game;
                     $MAP_HEIGHT = config("app.map_height");
                     $HEX_HEIGHT = config("app.hex_height");
                     $terrain_images = $game->getLandscapesPictures();
-                    $map = unserialize($game->map);
+                    $map = $game->getMap();
 
                     // --- Use this to scale the hexes smaller or larger than the actual graphics
                     $HEX_SCALED_HEIGHT = $HEX_HEIGHT * 1.0;

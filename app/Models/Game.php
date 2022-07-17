@@ -35,6 +35,84 @@ class Game extends Model
         return $terrain_images;
     }
 
+    public function start()
+    {
+        $this->status = GAME::STATUS_STARTED;
+
+        $cards = unserialize($this->cards);
+        shuffle($cards);
+        $players = [];
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player'.$i.'_id';
+            if (!empty($this->$field)) {
+                $players[] = $this->$field;
+            }
+        }
+
+        foreach (Card::CARDS as $landscape) {
+            $cardTaken = false;
+            foreach ($cards as $cardId => $card) {
+                if ($card['score'] == 2 && $cardTaken == false && $card['landscape'] == $landscape) {
+                    $cards[$cardId]['playerId'] = Card::STATUS_IN_DASHBOARD;
+                    $cardTaken = true;
+                }
+            }
+        }
+
+        $lemmingsPositions = [];
+        foreach ($players as $playerId) {
+            $lemmingsPositions[$playerId] = [1 => ["x" => -1, "y" => -1], 2 => ["x" => -1, "y" => -1]];
+        }
+
+        $nbCards = 0;
+        switch (count($players)) {
+            case 1:
+            case 2:
+                $nbCards = 5;
+                break;
+            case 3:
+                $nbCards = 4;
+                break;
+            case 4:
+                $nbCards = 3;
+                break;
+            case 5:
+                $nbCards = 2;
+                break;
+        }
+
+        foreach ($players as $playerId) {
+            $nbCard = 0;
+            while ($nbCard < $nbCards) {
+                $k = 0;
+                foreach ($cards as $card) {
+                    if ($card['playerId'] == Card::STATUS_AVAILABLE && $nbCard < $nbCards) {
+                        $cards[$k]['playerId'] = $playerId;
+                        $nbCard++;
+                    }
+                    $k++;
+                }
+            }
+            $nbCards++;
+        }
+
+        $this->cards = serialize($cards);
+        $this->lemmings_positions = serialize($lemmingsPositions);
+
+        //First player
+        $playersId = [];
+        for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player'.$i.'_id';
+            if (!empty($this->$field)) {
+                $playersId[] = $this->$field;
+            }
+        }
+
+        shuffle($playersId);
+        $this->player = $playersId[0];
+        $this->save();
+    }
+
     public function init() {
         $this->name = date("Y-m-d H:i:s");
         $this->created_at = date("Y-m-d H:i:s");
@@ -85,7 +163,7 @@ class Game extends Model
         $map = [];
         for ($x=0; $x<$MAP_WIDTH; $x++) {
             for ($y=0; $y<$MAP_HEIGHT; $y++) {
-                $map[$x][$y] = "none";
+                $map[$x][$y] = "meadow";
             }
         }
 
@@ -274,6 +352,17 @@ class Game extends Model
             $map = $this->generateOriginalMapData();
         }
 
+        return $map;
+    }
+
+    public function getMap(){
+        $map = unserialize($this->map);
+        $mapUpdate = unserialize($this->map_update);
+        foreach ($mapUpdate as $rowNumber => $row) {
+            foreach ($row as $column => $land) {
+                $map[$rowNumber][$column] = $land;
+            }
+        }
         return $map;
     }
 }

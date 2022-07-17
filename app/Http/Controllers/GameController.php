@@ -15,78 +15,7 @@ class GameController extends Controller
     {
         $game = Game::findOrFail($id);
         if ($game->status == GAME::STATUS_WAITING && Auth()->user()->id == $game->player1_id){
-            $game->status = GAME::STATUS_STARTED;
-
-            $cards = unserialize($game->cards);
-            shuffle($cards);
-            $players = [];
-            for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
-                $field = 'player'.$i.'_id';
-                if (!empty($game->$field)) {
-                    $players[] = $game->$field;
-                }
-            }
-
-            foreach (Card::CARDS as $landscape) {
-                $cardTaken = false;
-                foreach ($cards as $cardId => $card) {
-                    if ($card['score'] == 2 && $cardTaken == false && $card['landscape'] == $landscape) {
-                        $cards[$cardId]['playerId'] = Card::STATUS_IN_DASHBOARD;
-                        $cardTaken = true;
-                    }
-                }
-            }
-
-            $lemmingsPositions = [];
-            foreach ($players as $playerId) {
-                $lemmingsPositions[$playerId] = [1 => ["x" => -1, "y" => -1], 2 => ["x" => -1, "y" => -1]];
-            }
-
-            $nbCards = 0;
-            switch (count($players)) {
-                case 1:
-                case 2:
-                    $nbCards = 5;
-                    break;
-                case 3:
-                    $nbCards = 4;
-                    break;
-                case 4:
-                    $nbCards = 3;
-                    break;
-                case 5:
-                    $nbCards = 2;
-                    break;
-            }
-            foreach ($players as $playerId) {
-                $nbCard = 0;
-                while ($nbCard < $nbCards) {
-                    $k = 0;
-                    foreach ($cards as $card) {
-                        if ($card['playerId'] == Card::STATUS_AVAILABLE && $nbCard < 5) {
-                            $cards[$k]['playerId'] = $playerId;
-                            $nbCard++;
-                        }
-                        $k++;
-                    }
-                }
-                $nbCards++;
-            }
-
-            $game->cards = serialize($cards);
-            $game->lemmings_positions = serialize($lemmingsPositions);
-
-            //First player
-            $playersId = [];
-            for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
-                $field = 'player'.$i.'_id';
-                if (!empty($game->$field)) {
-                    $playersId[] = $game->$field;
-                }
-            }
-            shuffle($playersId);
-            $game->player = $playersId[0];
-            $game->save();
+            $game->start();
 
             return redirect("/game/".$game->id);
         } else {
@@ -126,8 +55,20 @@ class GameController extends Controller
 
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersName = $game->getPlayersName();
+
+        $mapUpdate = [];
+        foreach (Card::CARDS as $land){
+            $mapUpdate[$land] = 0;
+        }
+        $updates = unserialize($game->map_update);
+        foreach ($updates as $updateRow => $update){
+            foreach ($update as $column => $land){
+                $mapUpdate[$land]++;
+            }
+        }
+
         return view('game',compact('cards','game', 'playersName', 'lemmingsPositions',
-            'cardsSummary', 'infoCards'));
+            'cardsSummary', 'infoCards', 'mapUpdate'));
     }
 
     public function create(){
@@ -217,9 +158,9 @@ class GameController extends Controller
         $y = (int) $request->input('changemap-y');
         $landscape = $request->input('changemap-landscape');
         if (!empty($landscape)) {
-            $map = unserialize($game->map );
+            $map = unserialize($game->map_update );
             $map[$x][$y] = $landscape;
-            $game->map = serialize($map);
+            $game->map_update = serialize($map);
         }
     }
 
@@ -311,31 +252,33 @@ class GameController extends Controller
 
     public function renew($id, Request $request) {
         $game = Game::findOrFail($id);
-        $cards = unserialize($game->cards);
-        $cardsId = $request->input("renewCards");
-        if (!empty($cardsId)) {
-            foreach ($cards as $cardId => $card) {
-                if ($card['playerId'] == Auth::user()->id && in_array($cardId, $cardsId)) {
-                    $cards[$cardId]['playerId'] = Card::STATUS_PLAYED;
+        if ($game->player == Auth::user()->id) {
+            $cards = unserialize($game->cards);
+            $cardsId = $request->input("renewCards");
+            if (!empty($cardsId)) {
+                foreach ($cards as $cardId => $card) {
+                    if ($card['playerId'] == Auth::user()->id && in_array($cardId, $cardsId)) {
+                        $cards[$cardId]['playerId'] = Card::STATUS_PLAYED;
+                    }
                 }
             }
-        }
 
-        $nbCard = 0;
-        foreach ($cards as $cardId => $card){
-            if ($card['playerId'] == Auth::user()->id){
+            $nbCard = 0;
+            foreach ($cards as $cardId => $card) {
+                if ($card['playerId'] == Auth::user()->id) {
+                    $nbCard++;
+                }
+            }
+
+            while ($nbCard < Game::NB_CARDS_MAX_BY_PLAYER) {
+                $this->takeANewCard($cards);
                 $nbCard++;
             }
+
+            $game->cards = serialize($cards);
+            $this->nextPlayer($game);
+            $game->save();
         }
-
-        while($nbCard < Game::NB_CARDS_MAX_BY_PLAYER) {
-            $this->takeANewCard($cards);
-            $nbCard++;
-        }
-
-        $game->cards = serialize($cards);
-        $game->save();
-
 
         return redirect("/game/".$game->id);
     }
