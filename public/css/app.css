@@ -10167,3 +10167,7 @@ h3 {
 .hex-water{
     background: url('/images/water.png') no-repeat;
 }
+
+#info{
+    padding: 5px 5px 5px 15px;
+}

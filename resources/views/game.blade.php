@@ -9,20 +9,23 @@ use App\Models\Game;
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            Game's status: {{$game->status}}
-            @if ($game->status == Game::STATUS_WAITING)
-                @if ($game->player1_id == Auth::user()->id)
-                    <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
-                @else
-                    @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
-                        <a class="btn btn-primary" href="/join/{{$game->id}}">Join the game</a>
+            <div id="info">
+                Game's status: {{$game->status}}
+                @if ($game->status == Game::STATUS_WAITING)
+                    @if ($game->player1_id == Auth::user()->id)
+                        <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
+                    @else
+                        @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
+                            <a class="btn btn-primary" href="/join/{{$game->id}}">Join the game</a>
+                        @endif
                     @endif
                 @endif
-            @endif
-            @if (!empty($game->player) && $game->player != Auth::user()->id)
-                <br/>{{__('Wait other player')}}<br/>
-            @endif
-            <br/>
+
+                @if (!empty($game->player) && $game->player != Auth::user()->id)
+                    <br/>{{__('Wait other player')}}<br/>
+                @endif
+            </div>
+
             @if ($game->winner == Auth::user()->id)
                 <div class="alert alert-success" role="alert">
                     {{__('Game over. You win.')}}<br/>
@@ -125,6 +128,7 @@ use App\Models\Game;
                             @endif
                         @endforeach
                         <li>
+                            <input type="checkbox" class="chk" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
                             <div class="renew">
                                 <input type="submit" class="btn btn-primary" value="Renew your cards" />
                             </div>
@@ -179,7 +183,6 @@ use App\Models\Game;
                         min-width: <?php echo $MAP_WIDTH * $HEX_SIDE * 1.5 + $HEX_SIDE/2; ?>px;
                         min-height: <?php echo $MAP_HEIGHT * $HEX_SCALED_HEIGHT + $HEX_SIDE; ?>px;
                         position: relative;
-                        background: #000;
                     }
 
                     .hex-key-element {

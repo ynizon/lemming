@@ -5,6 +5,7 @@ let path = [];
 let maxTilesPath = 0;
 let landscapePath = null;
 let placeMarkerLandscape = '';
+
 function initCards() {
     $( ".card" ).each(function(index) {
         $(this).on("click", function(){
@@ -37,7 +38,7 @@ function initCards() {
                     score +' = ' + total
                 );
                 placeMarkerLandscape = landscape;
-                alert("Vous devez placer une tuile "+landscape);
+                info("Vous devez maintenant placer une tuile "+landscape);
             }
             $('#card_id').val(cardId);
         });
@@ -96,6 +97,7 @@ function initMap() {
             hexa.attr('data-landscape', placeMarkerLandscape);
             hexa.attr('class','hex hex-'+placeMarkerLandscape);
             placeMarkerLandscape = '';
+            info('');
         } else {
             if (currentLemming) {
                 if (currentCard) {
@@ -109,7 +111,7 @@ function initMap() {
                                 if (hexa.attr('data-landscape') === 'start') {
                                     canMove = true;
                                 } else {
-                                    alert('Pas une case de depart');
+                                    info('Pas une case de depart','error');
                                 }
                             } else {
                                 if (isAdjacentHexa(hexa)) {
@@ -130,20 +132,20 @@ function initMap() {
                                 }
                             } else {
                                 if (currentTile) {
-                                    alert("Case non adjacente");
+                                    popin("Case non adjacente", "error");
                                 }
                             }
                         } else {
-                            alert("Impossible de traverser cette case");
+                            popin("Impossible de traverser cette case", "error");
                         }
                     } else {
-                        alert("Chemin maximum dépassé");
+                        popin("Chemin maximum dépassé", "error");
                     }
                 } else {
-                    alert('Select a card before');
+                    popin('Select a card before', "error");
                 }
             } else {
-                alert("Choisi ton lemming d'abord");
+                popin("Choisi ton lemming d'abord", "error");
             }
         }
     });
@@ -229,7 +231,7 @@ function resetCard(){
 
 function validateCardAndPath() {
     if (path.length == 0) {
-        alert("Vous devez indiquer un itinéraire");
+        popin("Vous devez indiquer un itinéraire.", "error");
         return false;
     } else {
         $('#path').val(JSON.stringify(path));
@@ -237,5 +239,27 @@ function validateCardAndPath() {
         $('#hexa-y').val(currentTile.attr('data-y'));
         $("#lemming_number").val(currentLemming.attr('data-lemming'));
         return true;
+    }
+}
+
+function popin(title, icon){
+    Swal.fire({
+        icon: icon,
+        title: title,
+        showDenyButton: false,
+        showCancelButton: false,
+        confirmButtonText: 'OK'
+    }).then((result) => {
+
+    });
+
+}
+
+function info(title){
+    $("#info").html("");
+    $("#info").removeClass('alert-success');
+    if (title !== ''){
+        $("#info").addClass('alert-success');
+        $("#info").html("<i class='fa fa-info'></i>&nbsp;&nbsp;"+title);
     }
 }

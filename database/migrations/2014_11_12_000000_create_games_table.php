@@ -29,6 +29,7 @@ class CreateGamesTable extends Migration
             $table->text('forest');
             $table->text('desert');
             $table->text('map');
+            $table->text('map_update');
             $table->text('lemmings_positions')->comment("x & y = -1 for start and x & y = -2 for end");
 
             $table->string('name');

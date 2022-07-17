@@ -20,6 +20,11 @@ php artisan cache:clear
 npm install
 npm run dev
 ````  
+## TODO
+Limite des tuiles de remplacement (champ map_update)
+Deplacement souris adverses
+Meilleur lib hexagones (rotation 90)
+Websocket / Chat
 
 ## License
 

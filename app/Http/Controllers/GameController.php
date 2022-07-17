@@ -20,7 +20,7 @@ class GameController extends Controller
             $cards = unserialize($game->cards);
             shuffle($cards);
             $players = [];
-            for ($i = 1; $i<=Game::NB_PLAYERS; $i++) {
+            for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
                 $field = 'player'.$i.'_id';
                 if (!empty($game->$field)) {
                     $players[] = $game->$field;
@@ -78,7 +78,7 @@ class GameController extends Controller
 
             //First player
             $playersId = [];
-            for ($i = 1; $i<= Game::NB_PLAYERS; $i++) {
+            for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
                 $field = 'player'.$i.'_id';
                 if (!empty($game->$field)) {
                     $playersId[] = $game->$field;
@@ -102,10 +102,6 @@ class GameController extends Controller
         foreach (Card::CARDS as $landscape) {
             $cardsSummary[$landscape] = unserialize($game->$landscape);
         }
-
-        //@TODO REMOVE
-        //$game->map = serialize($game->generateOriginalMapData());
-        //
 
         foreach ($cardsSummary as $landscape => $landscapeCards) {
             $cardsSummary['line_'.$landscape] = '';
@@ -317,9 +313,11 @@ class GameController extends Controller
         $game = Game::findOrFail($id);
         $cards = unserialize($game->cards);
         $cardsId = $request->input("renewCards");
-        foreach ($cards as $cardId => $card){
-            if ($card['playerId'] == Auth::user()->id && in_array($cardId, $cardsId)){
-                $cards[$cardId]['playerId'] = Card::STATUS_PLAYED;
+        if (!empty($cardsId)) {
+            foreach ($cards as $cardId => $card) {
+                if ($card['playerId'] == Auth::user()->id && in_array($cardId, $cardsId)) {
+                    $cards[$cardId]['playerId'] = Card::STATUS_PLAYED;
+                }
             }
         }
 

@@ -27,6 +27,7 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    <script src="/js/sweetalert.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
