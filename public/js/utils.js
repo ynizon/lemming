@@ -22,7 +22,7 @@ function initCards() {
 
             landscapePath = landscape;
 
-            $( ".card-deck" ).each(function( index ) {
+            $( ".cards-deck" ).each(function( index ) {
                 $( this ).html($( this ).attr("data-origine"));
             });
 
@@ -44,7 +44,7 @@ function initCards() {
                 }
                 placeMarkerLandscape = landscape;
 
-                info("Vous devez maintenant placer une tuile "+landscape);
+                info(__("You should now replace a tile by a ")+__(landscape)+".");
             }
             $('#card_id').val(cardId);
         });
@@ -106,7 +106,7 @@ function initMap() {
         if (placeMarkerLandscape !== ''){
             if (hexa.attr('data-landscape') === 'start' || hexa.attr('data-landscape') === 'finish'
                 || hexa.attr('data-landscape') === 'out' ){
-                popin('Vous ne pouvez placer votre tuile sur cet emplacement.', 'error');
+                popin(__("You can\'t put a tile on this area"), 'error');
             } else {
                 $("#changemap-x").val(hexa.attr('data-x'));
                 $("#changemap-y").val(hexa.attr('data-y'));
@@ -129,7 +129,7 @@ function initMap() {
                                 if (hexa.attr('data-landscape') === 'start') {
                                     canMove = true;
                                 } else {
-                                    info('Pas une case de depart','error');
+                                    info(__("This is not a start area"),'error');
                                 }
                             } else {
                                 if (isAdjacentHexa(hexa)) {
@@ -154,20 +154,20 @@ function initMap() {
                                 }
                             } else {
                                 if (currentTile) {
-                                    popin("Case non adjacente", "error");
+                                    popin(__("This tile is not adjacent"), "error");
                                 }
                             }
                         } else {
-                            popin("Impossible de traverser cette case", "error");
+                            popin(__("You can't cross this area"), "error");
                         }
                     } else {
-                        popin("Chemin maximum dépassé", "error");
+                        popin(__("Maximum path exceeded"), "error");
                     }
                 } else {
-                    popin('Select a card before', "error");
+                    popin(__("Select a card before"), "error");
                 }
             } else {
-                popin("Choisi ton lemming d'abord", "error");
+                popin(__("Select your lemming first"), "error");
             }
         }
     });
@@ -253,7 +253,7 @@ function resetCard(){
 
 function validateCardAndPath() {
     if (path.length == 0) {
-        popin("Vous devez indiquer un itinéraire.", "error");
+        popin(__("You need to indicate a route"), "error");
         return false;
     } else {
         $('#path').val(JSON.stringify(path));
@@ -282,6 +282,15 @@ function info(title){
     $("#info").removeClass('alert-success');
     if (title !== ''){
         $("#info").addClass('alert-success');
-        $("#info").html("<i class='fa fa-info'></i>&nbsp;&nbsp;"+title);
+        $("#info").html("<i class='fa fa-info'></i>"+title);
     }
+}
+
+function __(key, replace = {}) {
+    var translation = key.split('.').reduce((t, i) => t[i] || null, window.translations);
+
+    for (var placeholder in replace) {
+        translation = translation.replace(`:${placeholder}`, replace[placeholder]);
+    }
+    return translation;
 }

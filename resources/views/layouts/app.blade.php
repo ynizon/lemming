@@ -29,6 +29,9 @@
 
     <script src="/js/sweetalert.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
+    <script>
+        var translations = {!! \Cache::get('translations') !!};
+    </script>
 </head>
 <body>
     <div id="app_vuejs">
@@ -91,6 +94,7 @@
         </main>
     </div>
     <footer style="position:fixed;bottom:0; margin:auto;text-align:center;background:#fff;height:50px;padding:15px;width:100%">
+        <a href="http://file.trictrac.net/file-53fd903cbe6f2.pdf" target="_blank">Règles du jeu </a> -
         <a href="https://www.gameandme.fr" target="_blank">Yohann Nizon - Développeur PHP </a> - <a target="_blank" href="https://github.com/ynizon/lemming">https://github.com/ynizon/lemming</a>
     </footer>
 </body>

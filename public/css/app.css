@@ -10072,8 +10072,8 @@ h3 {
     width: 10rem;
 }
 
-.cards li{
-
+.cards li .card-title, .deck li .card-title{
+    padding-top:5px;
 }
 .card-title {
     color:#fff;
@@ -10086,7 +10086,6 @@ h3 {
     padding-top:5px;
 }
 .lemming{
-    cursor:pointer;
     padding:5px;
 }
 .lemming.selected{
@@ -10094,7 +10093,9 @@ h3 {
     border-radius:15px;
     background: #ccc;
 }
-
+.fa-info{
+    padding-right:10px;
+}
 .landscape-earth{
     background: #3a1e11;
 }

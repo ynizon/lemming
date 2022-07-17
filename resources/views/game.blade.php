@@ -9,21 +9,24 @@ use App\Models\Game;
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div id="info">
-                Game's status: {{$game->status}}
+            <div id="info" class="alert-success">
+                <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
+                <br/>
+                @if ($game->status != Game::STATUS_STARTED)
+                {{__("Game's status")}}: {{__($game->status)}}<br/>
+                @endif
                 @if ($game->status == Game::STATUS_WAITING)
                     @if ($game->player1_id == Auth::user()->id)
-                        <a class="btn btn-primary" href="/start/{{$game->id}}">Start the game</a>
+                        <a class="btn btn-primary" href="/start/{{$game->id}}">{{__("Start the game")}}</a>
                     @else
                         @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
-                            <a class="btn btn-primary" href="/join/{{$game->id}}">Join the game</a>
+                            <a class="btn btn-primary" href="/join/{{$game->id}}">{{__("Join the game")}}"</a>
                         @endif
                     @endif
                 @endif
 
-                @if (!empty($game->player) && $game->player != Auth::user()->id)
-                    <br/>{{__('Wait other player')}}<br/>
-                @endif
+                - {{__("Select your lemming")}}<br/>
+                - {{__('Choose a card')}}
             </div>
 
             @if ($game->winner == Auth::user()->id)
@@ -41,7 +44,7 @@ use App\Models\Game;
                 </div>
             @endif
             <br/>
-            Players (Select Your Lemming):
+            {{__('Players')}}:
             <ul>
             @foreach ($playersName as $playerId => $player)
                 <li>
@@ -49,13 +52,13 @@ use App\Models\Game;
                         {{$player}}
                         @if ($game->status == Game::STATUS_STARTED)
                             @if ($playerId == Auth::user()->id)
-                                : <span class="lemming" id="lemming1"
+                                : <span class="lemming cursor" id="lemming1"
                                         data-lemming = "1"
                                         data-color="player{{$loop->iteration}}"
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                                 >Lemming 1</span>
-                                - <span class="lemming" id="lemming2"
+                                - <span class="lemming cursor" id="lemming2"
                                         data-lemming = "2"
                                         data-color="player{{$loop->iteration}}"
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
@@ -98,17 +101,13 @@ use App\Models\Game;
                     <input type="hidden" id="changemap-y" name="changemap-y" value="" />
                     <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
-                    <input type="submit" value="Validate" class="btn btn-primary"/>
+                    <input type="submit" value="{{__('Validate')}}" class="btn btn-primary"/>
                 </form>
             @endif
         </div>
         <div class="col-md-4">
             @if (empty($game->winner))
-                @if (!empty($game->player) && $game->player == Auth::user()->id)
-                    {{__('Please, choose a card')}}<br/>
-                @endif
-
-                <h3>Your deck</h3>
+                <h3>{{__("Your deck")}}</h3>
                 <form method="POST" action="/renew/{{$game->id}}">
                     @csrf
                     <ul class="cards">
@@ -117,11 +116,11 @@ use App\Models\Game;
                                 @foreach ($cards as $cardId => $card)
                                     @if ($k == $card['score'] && $card['landscape'] == $landscape && $card['playerId'] == Auth()->user()->id)
                                         <li>
-                                            <input type="checkbox" class="chk" value="{{$cardId}}" name="renewCards[]"/>
+                                            <input type="checkbox" class="chk cursor" value="{{$cardId}}" name="renewCards[]"/>
                                             <div class="card landscape-{{$card['landscape']}}"
                                                  data-cardid="{{$cardId}}"
                                                  data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
-                                                <div class="card-body" alt="{{$card['landscape']}}">
+                                                <div class="card-body cursor" alt="{{$card['landscape']}}">
                                                     <h5 class="card-title">{{$card['score']}}</h5>
                                                 </div>
                                             </div>
@@ -132,9 +131,9 @@ use App\Models\Game;
                         @endforeach
                         @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
                             <li>
-                                <input type="checkbox" class="chk" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
+                                <input type="checkbox" class="chk cursor" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
                                 <div class="renew">
-                                    <input type="submit" class="btn btn-primary" value="Renew your cards" />
+                                    <input type="submit" class="btn btn-primary" value="{{__("Renew your cards")}}" />
                                 </div>
                             </li>
                         @endif
@@ -144,13 +143,13 @@ use App\Models\Game;
         </div>
         <div class="col-md-4">
             <div>
-                <h3>Global Deck ({{$infoCards}})</h3>
-                <ul class="deck">
+                <h3>{{__("Global Deck")}} ({{$infoCards}})</h3>
+                <ul class="cards deck">
                     @foreach (Card::CARDS as $landscape)
                         <li>
                             <div class="card landscape-{{$landscape}}">
                                 <div class="card-body" alt="{{$landscape}}">
-                                    <h5 class="card-title card-deck" data-origine = "{{$cardsSummary['line_'.$landscape]}}"
+                                    <h5 class="card-title cards-deck" data-origine = "{{$cardsSummary['line_'.$landscape]}}"
                                         data-score = "{{$cardsSummary['total_'.$landscape]}}"
                                         data-min = "{{$cardsSummary['min_'.$landscape]}}"
                                         id="score-{{$landscape}}">
