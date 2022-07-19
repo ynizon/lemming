@@ -13,21 +13,28 @@ use App\Models\Game;
                 <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
                 <br/>
                 @if ($game->status != Game::STATUS_STARTED)
-                {{__("Game's status")}}: {{__($game->status)}}<br/>
-                @endif
-                @if ($game->status == Game::STATUS_WAITING)
-                    @if ($game->player1_id == Auth::user()->id)
-                        <a class="btn btn-primary" href="/start/{{$game->id}}">{{__("Start the game")}}</a>
-                    @else
-                        @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
-                            <a class="btn btn-primary" href="/join/{{$game->id}}">{{__("Join the game")}}"</a>
-                        @endif
-                    @endif
+                    {{__("Game's status")}}: {{__($game->status)}}<br/>
                 @endif
 
-                - {{__("Select your lemming")}}<br/>
-                - {{__('Choose a card')}}
+                @if ($game->status == Game::STATUS_STARTED && $game->player = Auth::user()->id)
+                    - {{__("Select your lemming")}}<br/>
+                    - {{__('Choose a card')}}
+                @endif
             </div>
+
+            @if ($game->status == Game::STATUS_WAITING)
+                @if ($game->player1_id == Auth::user()->id)
+                    <br/>
+                    <div><a class="btn btn-primary" href="/start/{{$game->id}}">{{__("Start the game")}}</a><br/>
+                    </div>
+                @else
+                    @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
+                        <br/>
+                        <div><a class="btn btn-primary" href="/join/{{$game->id}}">{{__("Join the game")}}"</a><br/>
+                        </div>
+                    @endif
+                @endif
+            @endif
 
             @if ($game->winner == Auth::user()->id)
                 <div class="alert alert-success" role="alert">
@@ -46,10 +53,11 @@ use App\Models\Game;
             <br/>
             {{__('Players')}}:
             <ul>
-            @foreach ($playersName as $playerId => $player)
+            @foreach ($playersInformations as $playerId => $playerInfo)
                 <li>
                     <div class="player{{$loop->iteration}}">
-                        {{$player}}
+                        <i class="fa fa-frog player{{$loop->iteration}}"></i>&nbsp;&nbsp;
+                        {{$playerInfo['name']}} ({{$playerInfo['nbCards']}} {{__('card(s)')}})
                         @if ($game->status == Game::STATUS_STARTED)
                             @if ($playerId == Auth::user()->id)
                                 : <span class="lemming cursor" id="lemming1"
@@ -143,7 +151,8 @@ use App\Models\Game;
         </div>
         <div class="col-md-4">
             <div>
-                <h3>{{__("Global Deck")}} ({{$infoCards}})</h3>
+                <h3>{{__("Global Deck")}}</h3>
+                <h6>{{$infoCards}} {{__('remaining cards')}}</h6>
                 <ul class="cards deck">
                     @foreach (Card::CARDS as $landscape)
                         <li>

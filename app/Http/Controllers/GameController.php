@@ -54,7 +54,7 @@ class GameController extends Controller
         }
 
         $infoCards = $nbAvailableCards .'/'.count($cards);
-        $playersName = $game->getPlayersName();
+        $playersInformations = $game->getPlayersInformations($cards);
 
         $mapUpdate = [];
         foreach (Card::CARDS as $land){
@@ -67,7 +67,7 @@ class GameController extends Controller
             }
         }
 
-        return view('game',compact('cards','game', 'playersName', 'lemmingsPositions',
+        return view('game',compact('cards','game', 'playersInformations', 'lemmingsPositions',
             'cardsSummary', 'infoCards', 'mapUpdate'));
     }
 

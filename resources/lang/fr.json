@@ -222,6 +222,7 @@
     "Select your lemming": "Choisisssez votre lemming",
     "Global Deck": "Informations de jeu",
     "Your deck": "Vos cartes",
+    "card(s)": "carte(s)",
     "Players": "Joueurs",
     "Validate": "Valider",
     "Renew your cards": "Renouveller vos cartes",
@@ -241,5 +242,9 @@
     "Maximum path exceeded": "Chemin maximum dépassé",
     "Select your lemming first": "Choisissez votre lemming pour commencer",
     "Select a card before":"Choisissez une carte d'abord",
-    "You need to indicate a route": "Vous devez indiquer un itinéraire"
+    "You need to indicate a route": "Vous devez indiquer un itinéraire",
+    "remaining cards": "cartes restantes",
+    "waiting": "en attente",
+    "started": "en cours",
+    "finised": "terminé"
 }

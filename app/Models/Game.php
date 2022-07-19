@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Auth;
 use App\Models\Card;
+use Auth;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -139,12 +139,18 @@ class Game extends Model
         $this->save();
     }
 
-    public function getPlayersName(){
+    public function getPlayersInformations($cards){
         $playersName = [];
         for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';
             if (!empty($this->$field)) {
-                $playersName[$this->$field] = User::find($this->$field)->name;
+                $nbCards = 0;
+                foreach ($cards as $card) {
+                    if ($card['playerId'] == $this->$field) {
+                        $nbCards++;
+                    }
+                }
+                $playersName[$this->$field] = ['name' => User::find($this->$field)->name, 'nbCards' => $nbCards ];
             }
         }
         return $playersName;

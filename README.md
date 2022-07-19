@@ -23,7 +23,10 @@ npm run dev
 ## TODO
 Deplacement souris adverses
 Meilleur lib hexagones (rotation 90)
+Impossible de traverser la case hexa85 apres le demarrage en 69
+Remplacement case de depart non possibles
 Websocket / Chat
+
 
 ## License
 

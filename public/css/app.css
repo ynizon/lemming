@@ -10124,6 +10124,25 @@ h3 {
 .player4{
     color: #d5b61a!important;
 }
+.player5{
+    color: #4f1ad5 !important;
+}
+
+.fa-frog.player1:before {
+    content: "\f71a";/* fa-squirrel*/
+}
+.fa-frog.player2:before {
+    content: "\f6be"; /* fa-cat */
+}
+.fa-frog.player3:before {
+    content: "\f709";/* fa-rabbit-running*/
+}
+.fa-frog.player4:before {
+    content: "\f6d5";/* fa-dragon */
+}
+.fa-frog.player5:before {
+    content: "\f78e";/* fa-deer */
+}
 
 .cursor{
  cursor: pointer;
