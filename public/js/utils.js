@@ -5,7 +5,6 @@ let path = [];
 let maxTilesPath = 0;
 let landscapePath = null;
 let placeMarkerLandscape = '';
-let lemmingsPositions = [];
 let tilesLandscape = {water:0, earth:0, rock:0, forest:0, desert:0};
 
 function initCards() {
@@ -53,44 +52,69 @@ function initCards() {
 
 function initLemmings() {
     $(".lemming").each(function( index ) {
-        var hexa = $(".hex[data-x="+$( this ).attr('data-x')+"][data-y="+$( this ).attr('data-y')+"]");
-        if (hexa) {
-            hexa.html("<i class=\"fa fa-frog "+$( this ).attr('data-color')+"\"></i>");
+        if ($( this ).attr('data-x') !== "-1" && $( this ).attr('data-y') !== "-1") {
+            let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
+            let hex = grid.get(coord);
+            if (!hex.start) {
+                hex.text = $(this).attr("data-content");
+                hex.addMarker();
+            }
         }
-        lemmingsPositions.push($( this ).attr('data-x')+'/'+$( this ).attr('data-y'));
     });
 
     $( "#lemming1" ).on("click", function(){
-        currentLemming = $(this);
-        $(".lemming").removeClass("selected");
-        $(this).addClass("selected");
-
-        $(".hex i").removeClass("selected");
-        currentTile = null;
-        var hexa = $(".hex[data-x="+$( "#lemming1" ).attr('data-x')+"][data-y="+$( "#lemming1" ).attr('data-y')+"]");
-        if (hexa.length > 0) {
-            currentTile = hexa;
-            currentTile.find('i').addClass('selected');
-        }
+        lemmingClick(this.id);
     });
 
     $( "#lemming2" ).on("click", function(){
-        currentLemming = $(this);
-        $(".lemming").removeClass("selected");
-        $(this).addClass("selected");
-
-        $(".hex i").removeClass("selected");
-        currentTile = null;
-        var hexa = $(".hex[data-x="+$( "#lemming2" ).attr('data-x')+"][data-y="+$( "#lemming2" ).attr('data-y')+"]");
-        if (hexa.length > 0) {
-            currentTile = hexa;
-            currentTile.find('i').addClass('selected');
-        }
+        lemmingClick(this.id);
     });
 
     //Default Lemming is 1
     if ($('#lemming1').length > 0) {
         $('#lemming1').click();
+    }
+}
+
+function lemmingClick(lemmingId) {
+    if (path.length > 0) {
+        popin(__("You can't move 2 lemmings"), "error");
+    } else {
+        let allHexa = document.querySelectorAll("polygon.cursor");
+        allHexa.forEach((adjacentHexa, index) => {
+            adjacentHexa.classList.remove('cursor');
+        });
+        currentLemming = $("#" + lemmingId);
+        $(".lemming").removeClass("selected");
+        $("#" + lemmingId).addClass("selected");
+
+        $("polygon").removeClass("selected");
+        let adjacentsHexa = [];
+        currentTile = null;
+        if ($("#" + lemmingId).attr('data-x') !== "-1" && $("#" + lemmingId).attr('data-y') !== "-1") {
+            let coord = {
+                x: parseInt($("#" + lemmingId).attr('data-x')),
+                y: parseInt($("#" + lemmingId).attr('data-y'))
+            };
+            let hex = grid.get(coord);
+            document.getElementById(hex.draw.node.id).classList.add('selected');
+            currentTile = hex;
+            adjacentsHexa = getAdjacentHexa(hex);
+        } else {
+            adjacentsHexa = getStartHexa();
+        }
+
+        icons = document.querySelectorAll("text");
+        icons.forEach((icon, index) => {
+            icon.classList.remove('cursor');
+        });
+        adjacentsHexa.forEach((adjacentHexa, index) => {
+            document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
+            icons = document.querySelectorAll("text.x-" + adjacentHexa.x + "_y-" + adjacentHexa.y);
+            icons.forEach((icon, index) => {
+                icon.classList.add('cursor');
+            });
+        });
     }
 }
 
@@ -101,86 +125,140 @@ function initMap() {
     tilesLandscape.desert = $('#nb_desert').val();
     tilesLandscape.rock = $('#nb_rock').val();
 
-    $( ".hex" ).on("click", function(){
-        let hexa = $(this);
-        if (placeMarkerLandscape !== ''){
-            if (hexa.attr('data-landscape') === 'start' || hexa.attr('data-landscape') === 'finish'
-                || hexa.attr('data-landscape') === 'out' ){
-                popin(__("You can\'t put a tile on this area"), 'error');
+    grid.forEach((hexa, index) => {
+        if (hexa.start) {
+            hexa.text = '🚦';
+            hexa.addMarker();
+        }
+    });
+
+    var hexmap = document.querySelector('#hexmap');
+    document.addEventListener('click', ({ offsetX, offsetY }) => {
+        if (hexmap.contains(event.target)) {
+            const hexCoordinates = Grid.pointToHex([offsetX, offsetY])
+            const hex = grid.get(hexCoordinates)
+
+            if (placeMarkerLandscape !== '') {
+                if (hex.start || hex.finish) {
+                    popin(__("You can\'t put a tile on this area"), 'error');
+                } else {
+                    $("#changemap-x").val(hex.x);
+                    $("#changemap-y").val(hex.y);
+                    $("#changemap-landscape").val(placeMarkerLandscape);
+
+                    grid.get(hex).landscape = placeMarkerLandscape;
+                    grid.get(hex).draw.fill('/images/' + placeMarkerLandscape + '.png');
+
+                    placeMarkerLandscape = '';
+                    info('');
+                }
             } else {
-                $("#changemap-x").val(hexa.attr('data-x'));
-                $("#changemap-y").val(hexa.attr('data-y'));
-                $("#changemap-landscape").val(placeMarkerLandscape);
-                hexa.attr('data-landscape', placeMarkerLandscape);
-                hexa.attr('class','hex hex-'+placeMarkerLandscape);
-                placeMarkerLandscape = '';
-                info('');
-            }
-        } else {
-            if (currentLemming) {
-                if (currentCard) {
-                    if (path.length < maxTilesPath) {
-                        if (hexa.attr('data-landscape') === 'none' ||
-                            hexa.attr('data-landscape') === 'start' ||
-                            hexa.attr('data-landscape') === 'finish' ||
-                            hexa.attr('data-landscape') === landscapePath) {
-                            var canMove = false;
-                            if (!currentTile) {
-                                if (hexa.attr('data-landscape') === 'start') {
-                                    canMove = true;
+                if (currentLemming) {
+                    if (currentCard) {
+                        if (path.length < maxTilesPath) {
+                            if (hex.landscape === 'none' ||
+                                hex.landscape === landscapePath ||
+                                hex.start ||
+                                hex.finish) {
+                                var canMove = false;
+                                if (!currentTile) {
+                                    if (hex.start) {
+                                        canMove = true;
+                                    } else {
+                                        info(__("This is not a start area"),'error');
+                                    }
                                 } else {
-                                    info(__("This is not a start area"),'error');
+                                    if (isAdjacentHexa(hex)) {
+                                        canMove = true;
+                                    }
                                 }
-                            } else {
-                                if (isAdjacentHexa(hexa)) {
-                                    canMove = true;
-                                }
-                            }
-                            if (canMove) {
-                                if (hexa.html() !== '') {
-                                    popin("Case occupée", "error");
+                                if (canMove) {
+                                    let direction = getDirection(currentTile, hex);
+                                    if (hex.text !== '') {
+                                        askPushLemming(__("Do you want push the other lemming ?"), "warning", hex, direction);
+                                    } else {
+                                        updateLemmingPosition(hex, currentLemming, direction);
+                                    }
                                 } else {
-                                    hexa.html("<i class=\"fa fa-map-marker-alt\"></i>");
-                                    hexa.addClass("path");
-                                    path.push(hexa);
-                                    currentTile = hexa;
-                                    $('.hexa').removeClass('cursor');
-                                    if (path.length < maxTilesPath) {
-                                        let adjacentsHexa = getAdjacentHexa(hexa);
-                                        adjacentsHexa.forEach((adjacentHexa, index) => {
-                                            adjacentHexa.addClass('cursor');
-                                        });
+                                    if (currentTile) {
+                                        popin(__("This tile is not accessible"), "error");
                                     }
                                 }
                             } else {
-                                if (currentTile) {
-                                    popin(__("This tile is not adjacent"), "error");
+                                if (hex.landscape !== 'out') {
+                                    popin(__("You can't cross this area"), "error");
                                 }
                             }
                         } else {
-                            popin(__("You can't cross this area"), "error");
+                            popin(__("Maximum path exceeded"), "error");
                         }
                     } else {
-                        popin(__("Maximum path exceeded"), "error");
+                        popin(__("Select a card before"), "error");
                     }
                 } else {
-                    popin(__("Select a card before"), "error");
+                    popin(__("Select your lemming first"), "error");
                 }
-            } else {
-                popin(__("Select your lemming first"), "error");
             }
         }
     });
 }
 
+function updateLemmingPosition(hex, lemming, direction) {
+    //hex = new position
+    hex.text = lemming.attr("data-content");
+    currentTile = hex;
+
+    //Remove position for the other lemming (contains class)
+    let coord = "x-"+lemming.attr("data-x")+"_y-"+lemming.attr("data-y");
+    grid.get({x:parseInt(lemming.attr("data-x")), y:parseInt(lemming.attr("data-y"))}).text = '';
+    document.querySelectorAll("text[class*='" + coord + "']").forEach(function (e) {
+        e.parentElement.removeChild(e);
+    });
+
+    //Update lemming
+    $('#hexa-'+lemming.attr("data-player")+'-'+lemming.attr("data-lemming")+'-x').val(hex.x);
+    $('#hexa-'+lemming.attr("data-player")+'-'+lemming.attr("data-lemming")+'-y').val(hex.y);
+    lemming.attr("data-x", hex.x);
+    lemming.attr("data-y", hex.y);
+
+    let allHexa = document.querySelectorAll("polygon.cursor");
+    allHexa.forEach((adjacentHexa, index) => {
+        adjacentHexa.classList.remove('cursor');
+    });
+    if (path.length < maxTilesPath) {
+        let adjacentsHexa = getAdjacentHexa(hex);
+        adjacentsHexa.forEach((adjacentHexa, index) => {
+            document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
+            //Wait a little
+            try{
+                if ($("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y)) {
+                    $("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y).classList.add('cursor');
+                }
+            }catch(e){
+                //@TODO pq ca plante ???
+                //console.error(e);
+            }
+        });
+    }
+
+    //Add new position
+    hex.addMarker();
+    path.push(hex);
+
+    if (path.length === maxTilesPath) {
+        let allHexa = document.querySelectorAll("polygon.cursor");
+        allHexa.forEach((adjacentHexa, index) => {
+            adjacentHexa.classList.remove('cursor');
+        });
+    }
+}
+
 function isAdjacentHexa(newHexa) {
     let canMove = false;
-    //5/1 est contigue de 4/1 4/2 5/0 5/2 6/1 6/2
-    //6/2 est contigue de  5/1 5/2 6/1 6/3 5 7/1 7/2
     var contiguousHexa = getAdjacentHexa(currentTile);
 
     contiguousHexa.forEach((hexa, index) => {
-        if (newHexa.attr('id') === hexa.attr('id')) {
+        if (newHexa.x === hexa.x && newHexa.y === hexa.y) {
             canMove = true;
         }
     });
@@ -190,57 +268,25 @@ function isAdjacentHexa(newHexa) {
 
 function getAdjacentHexa(hexagone) {
     let adjacentsHexa = [];
-    if (hexagone.attr('data-x')%2 === 0) {
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.attr('data-landscape') !== 'out'){
+    let hexagones = grid.neighborsOf(hexagone, 'all');
+
+    hexagones.forEach((hexa, index) => {
+        if (hexa && hexa.landscape !== 'out') {
             adjacentsHexa.push(hexa);
         }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
+    });
+
+    return adjacentsHexa;
+}
+
+function getStartHexa() {
+    let adjacentsHexa = [];
+
+    grid.forEach((hexa, index) => {
+        if (hexa && hexa.start) {
             adjacentsHexa.push(hexa);
         }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-    } else {
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))-1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))-1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x')))+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y')))+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-        var hexa = $(".hex[data-x="+(parseInt(currentTile.attr('data-x'))+1)+"][data-y="+(parseInt(currentTile.attr('data-y'))+1)+"]");
-        if (hexa.attr('data-landscape') !== 'out') {
-            adjacentsHexa.push(hexa);
-        }
-    }
+    });
 
     return adjacentsHexa;
 }
@@ -252,14 +298,20 @@ function resetCard(){
 }
 
 function validateCardAndPath() {
-    if (path.length == 0) {
+    if (path.length === 0) {
         popin(__("You need to indicate a route"), "error");
         return false;
     } else {
-        $('#path').val(JSON.stringify(path));
-        $('#hexa-x').val(currentTile.attr('data-x'));
-        $('#hexa-y').val(currentTile.attr('data-y'));
-        $("#lemming_number").val(currentLemming.attr('data-lemming'));
+        let serializedPath = [];
+        path.forEach((hexa, index) => {
+            serializedPath.push(
+                {
+                    x: hexa.x,
+                    y: hexa.y,
+                });
+        });
+
+        $('#path').val(JSON.stringify(serializedPath));
         return true;
     }
 }
@@ -274,7 +326,78 @@ function popin(title, icon){
     }).then((result) => {
 
     });
+}
 
+function askPushLemming(title, icon, hex, direction){
+    Swal.fire({
+        icon: icon,
+        title: title,
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: __('Yes'),
+        denyButtonText: __('No')
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if ((path.length+1) >= maxTilesPath) {
+                popin(__("You don't have enough moves to push the other lemming"), "error");
+            }
+            if (hex.landscape === 'none' ||
+                hex.landscape === landscapePath ||
+                hex.start ||
+                hex.finish) {
+
+                let hexagone = grid.neighborsOf(hex,  [direction])[0];
+                if (hexagone.text === '') {
+                    if (hexagone.landscape !== 'out') {
+                        //Move the other lemming
+                        let otherLemmings = document.querySelectorAll(".lemming");
+                        let otherLemming;
+                        otherLemmings.forEach((lemming, index) => {
+                            if (parseInt($(lemming).attr("data-x")) === hex.x &&
+                                parseInt($(lemming).attr("data-y")) === hex.y){
+                                otherLemming = lemming;
+                            }
+                        });
+                        updateLemmingPosition(hexagone, $(otherLemming), direction);
+
+                        //Move your lemming
+                        updateLemmingPosition(hex, currentLemming, direction);
+                    } else {
+                        popin(__("You can't push the other lemming out of the map"), "error");
+                    }
+                } else {
+                    popin(__("You can't push 2 lemmings"), "error");
+                }
+            } else {
+                if (hex.landscape !== 'out') {
+                    popin(__("You can't cross this area"), "error");
+                }
+            }
+        }
+    });
+}
+
+function getDirection(oldTile, nextTile) {
+    let direction = '';
+    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y-1)) {
+        direction = 'NE';
+    }
+    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y+1)) {
+        direction = 'SW';
+    }
+    if (oldTile.x === (nextTile.x-1) && oldTile.y === nextTile.y) {
+        direction = 'W';
+    }
+    if (oldTile.x === (nextTile.x+1) && oldTile.y === (nextTile.y+1)) {
+        direction = 'SE';
+    }
+    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y+1)) {
+        direction = 'NW';
+    }
+    if (oldTile.x === (nextTile.x+1) && oldTile.y === nextTile.y) {
+        direction = 'E';
+    }
+    return direction;
 }
 
 function info(title){
@@ -293,4 +416,135 @@ function __(key, replace = {}) {
         translation = translation.replace(`:${placeholder}`, replace[placeholder]);
     }
     return translation;
+}
+
+function createOriginalMap() {
+    //x = column, y = row
+    let tiles = [
+        {x: 0, y: 0 },{x: 1, y: 0 },{x: 2, y: 0 },{x: 3, y: 0 },{x: 4, y: 0 },{x: 5, y: 0 },{x: 6, y: 0 },{x: 7, y: 0 },{x: 8, y: 0 },{x: 9, y: 0 },{x: 10, y: 0 },{x: 11, y: 0 },{x: 12, y: 0 },{x: 13, y: 0 },{x: 14, y: 0 },{x: 15, y: 0 },{x: 16, y: 0 },
+        {x: 0, y: 1 },{x: 1, y: 1 },{x: 2, y: 1 },{x: 3, y: 1 },{x: 4, y: 1 },{x: 5, y: 1 },{x: 13, y: 1 },{x: 14, y: 1 }, {x: 15, y: 1 },{x: 16, y: 1 },
+        {x: 0, y: 2 },{x: 1, y: 2 },{x: 2, y: 2 },{x: 3, y: 2 },{x: 4, y: 2 },{x: 5, y: 2 }, {x: 15, y: 2 },{x: 16, y: 2 },
+        {x: 0, y: 3 },{x: 1, y: 3 }, {x: 2, y: 3 },{x: 3, y: 3 },{x: 4, y: 3 }, {x: 15, y: 3 },{x: 16, y: 3 },
+        {x: 0, y: 4 },{x: 1, y: 4 }, {x: 2, y: 4 },{x: 3, y: 4 },{x: 4, y: 4 }, {x: 16, y: 4 },
+        {x: 3, y: 5 },{x: 4, y: 5 },{x: 16, y: 5 },
+        {x: 4, y: 6 },{x: 5, y: 6 },{x: 6, y: 6 },{x: 7, y: 6 },{x: 8, y: 6 },{x: 9, y: 6 },{x: 10, y: 6 },{x: 11, y: 6 },{x: 16, y: 6 },
+        {x: 4, y: 7 },{x: 5, y: 7 },{x: 6, y: 7 },{x: 7, y: 7 },{x: 8, y: 7 },{x: 9, y: 7 },{x: 10, y: 7 },{x: 11, y: 7 },{x: 16, y: 7 },
+        {x: 5, y: 8 },{x: 6, y: 8 },{x: 10, y: 8 },{x: 11, y: 8 },{x: 16, y: 8 },
+        {x: 16, y: 9 },
+        {x: 0, y: 10 },{x: 16, y: 10 },
+        {x: 0, y: 11 },{x: 15, y: 11 },{x: 16, y: 11 },
+        {x: 0, y: 12 },{x: 1, y: 12 },{x: 15, y: 12 },{x: 16, y: 12 },
+        {x: 0, y: 13 },{x: 1, y: 13 },{x: 2, y: 13 },{x: 13, y: 13 },{x: 14, y: 13 },{x: 15, y: 13 },{x: 16, y: 13 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "out";
+        grid.get(hexa).picture = 'none';
+    });
+
+    tiles = [
+        {x: 9, y: 1 },{x: 10, y: 1 },
+        {x: 10, y: 2 },
+        {x: 3, y: 8 },{x: 4, y: 8 },
+        {x: 4, y: 9 },
+        {x: 5, y: 13 },{x: 6, y: 13 },{x: 7, y: 13 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "rock";
+        grid.get(hexa).picture = '/images/rock.png';
+    });
+
+    tiles = [
+        {x: 15, y: 5 },
+        {x: 1, y: 6 },{x: 15, y: 6 },
+        {x: 15, y: 7 },
+        {x: 12, y: 8 },{x: 13, y: 8 },
+        {x: 13, y: 9 },
+        {x: 14, y: 10 },
+        {x: 12, y: 11 },{x: 13, y: 11 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "desert";
+        grid.get(hexa).picture = '/images/desert.png';
+    });
+
+    tiles = [
+        {x: 8, y: 2 },{x: 7, y: 2 },
+        {x: 6, y: 3 },{x: 7, y: 3 },
+        {x: 1, y: 9 },{x: 5, y: 9 },
+        {x: 2, y: 10 },{x: 3, y: 10 },{x: 4, y: 10 },
+        {x: 3, y: 11 },
+        {x: 3, y: 13 },{x: 4, y: 13 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "earth";
+        grid.get(hexa).picture = '/images/earth.png';
+    });
+
+    tiles = [
+        {x: 12, y: 4 },
+        {x: 11, y: 5 },{x: 12, y: 5 },{x: 13, y: 5 },
+        {x: 11, y: 13 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "water";
+        grid.get(hexa).picture = '/images/water.png';
+    });
+
+    tiles = [
+        {x: 12, y: 2 },
+        {x: 12, y: 3 },{x: 13, y: 3 },
+        {x: 13, y: 4 },{x: 14, y: 4 },
+        {x: 7, y: 5 },{x: 8, y: 5 },
+        {x: 12, y: 6 },{x: 13, y: 6 },
+        {x: 12, y: 7 },
+        {x: 12, y: 9 },
+        {x: 13, y: 10 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).landscape = "forest";
+        grid.get(hexa).picture = '/images/forest.png';
+    });
+
+    tiles = [
+        {x: 0, y: 5 },
+        {x: 1, y: 5 },
+        {x: 2, y: 5 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).start = true;
+        grid.get(hexa).landscape = "none";
+        grid.get(hexa).picture = '/images/start.png';
+    });
+
+    tiles = [
+        {x: 6, y: 1 },
+        {x: 6, y: 2 },
+        {x: 5, y: 3 },
+        {x: 5, y: 4 },
+    ];
+    tiles.forEach((hexa, index) => {
+        grid.get(hexa).finish = true;
+        grid.get(hexa).landscape = "none";
+        grid.get(hexa).picture = '/images/finish.png';
+    });
+
+    let serializedGrid = [];
+    grid.forEach((hexa, index) => {
+        hexa.draw.fill(hexa.picture) ;
+
+        serializedGrid.push(
+            {
+                picture: hexa.picture,
+                landscape: hexa.landscape,
+                x: hexa.x,
+                y: hexa.y,
+                coordX: hexa.coordX,
+                coordY: hexa.coordY,
+                start: hexa.start,
+                finish: hexa.finish,
+                text: hexa.text
+            });
+    });
+    serializedGrid = JSON.stringify(serializedGrid);
+    return JSON.parse(serializedGrid);
 }

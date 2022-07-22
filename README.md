@@ -21,8 +21,9 @@ npm install
 npm run dev
 ````  
 ## TODO
+retrouver ou on met la class x-1_y-1 pour le remove position au depart
 Deplacement souris adverses
-Meilleur lib hexagones (rotation 90)
+Meilleur lib hexagones (rotation 90) https://github.com/flauwekeul/honeycomb#grid
 Impossible de traverser la case hexa85 apres le demarrage en 69
 Remplacement case de depart non possibles
 Websocket / Chat

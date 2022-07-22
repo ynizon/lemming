@@ -1,226 +1,2620 @@
-0-0-out
-0-1-out
-0-2-out
-0-3-out
-0-4-out
-0-5-out
-0-6-finish
-0-7-meadow
-0-8-meadow
-0-9-meadow
-0-10-rock
-0-11-rock
-0-12-meadow
-0-13-meadow
-0-14-out
-0-15-out
-0-16-out
-1-0-out
-1-1-out
-1-2-out
-1-3-out
-1-4-out
-1-5-finish
-1-6-meadow
-1-7-earth
-1-8-earth
-1-9-meadow
-1-10-rock
-1-11-meadow
-1-12-forest
-1-13-meadow
-1-14-meadow
-1-15-out
-1-16-out
-2-0-out
-2-1-out
-2-2-out
-2-3-out
-2-4-out
-2-5-finish
-2-6-meadow
-2-7-earth
-2-8-earth
-2-9-meadow
-2-10-meadow
-2-11-meadow
-2-12-meadow
-2-13-forest
-2-14-forest
-2-15-meadow
-2-16-out
-3-0-out
-3-1-out
-3-2-out
-3-3-out
-3-4-finish
-3-5-meadow
-3-6-meadow
-3-7-meadow
-3-8-meadow
-3-9-meadow
-3-10-meadow
-3-11-meadow
-3-12-water
-3-13-forest
-3-14-forest
-3-15-meadow
-3-16-out
-4-0-out
-4-1-start
-4-2-start
-4-3-start
-4-4-out
-4-5-out
-4-6-meadow
-4-7-meadow
-4-8-forest
-4-9-forest
-4-10-meadow
-4-11-meadow
-4-12-water
-4-13-water
-4-14-water
-4-15-meadow
-4-16-desert
-5-0-meadow
-5-1-desert
-5-2-meadow
-5-3-meadow
-5-4-out
-5-5-out
-5-6-out
-5-7-out
-5-8-out
-5-9-out
-5-10-out
-5-11-out
-5-12-forest
-5-13-forest
-5-14-meadow
-5-15-desert
-5-16-out
-6-0-out
-6-1-meadow
-6-2-meadow
-6-3-meadow
-6-4-meadow
-6-5-out
-6-6-out
-6-7-out
-6-8-out
-6-9-out
-6-10-out
-6-11-out
-6-12-out
-6-13-forest
-6-14-meadow
-6-15-meadow
-6-16-desert
-7-0-meadow
-7-1-meadow
-7-2-meadow
-7-3-rock
-7-4-rock
-7-5-out
-7-6-out
-7-7-meadow
-7-8-meadow
-7-9-meadow
-7-10-out
-7-11-out
-7-12-desert
-7-13-desert
-7-14-meadow
-7-15-meadow
-7-16-out
-8-0-out
-8-1-meadow
-8-2-earth
-8-3-meadow
-8-4-meadow
-8-5-rock
-8-6-earth
-8-7-meadow
-8-8-water
-8-9-water
-8-10-meadow
-8-11-meadow
-8-12-meadow
-8-13-forest
-8-14-desert
-8-15-meadow
-8-16-meadow
-8-17-out
-9-0-out
-9-1-meadow
-9-2-earth
-9-3-earth
-9-4-earth
-9-5-meadow
-9-6-meadow
-9-7-water
-9-8-water
-9-9-water
-9-10-water
-9-11-meadow
-9-12-meadow
-9-13-forest
-9-14-desert
-9-15-meadow
-9-16-out
-9-17-out
-10-0-out
-10-1-out
-10-2-meadow
-10-3-meadow
-10-4-earth
-10-5-meadow
-10-6-meadow
-10-7-meadow
-10-8-water
-10-9-water
-10-10-water
-10-11-meadow
-10-12-meadow
-10-13-desert
-10-14-desert
-10-15-meadow
-10-16-out
-10-17-out
-11-0-out
-11-1-out
-11-2-meadow
-11-3-meadow
-11-4-meadow
-11-5-meadow
-11-6-meadow
-11-7-water
-11-8-water
-11-9-meadow
-11-10-meadow
-11-11-meadow
-11-12-meadow
-11-13-meadow
-11-14-meadow
-11-15-out
-11-16-out
-11-17-out
-12-0-out
-12-1-out
-12-2-out
-12-3-out
-12-4-earth
-12-5-earth
-12-6-rock
-12-7-rock
-12-8-rock
-12-9-meadow
-12-10-meadow
-12-11-meadow
-12-12-water
-12-13-meadow
-12-14-meadow
-12-15-out
-12-16-out
-12-17-out
+[
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 0,
+        "coordX": 0,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 0,
+        "coordX": 60.6217782649107,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 0,
+        "coordX": 121.2435565298214,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 0,
+        "coordX": 181.86533479473212,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 0,
+        "coordX": 242.4871130596428,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 0,
+        "coordX": 303.1088913245535,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 6,
+        "y": 0,
+        "coordX": 363.73066958946424,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 7,
+        "y": 0,
+        "coordX": 424.35244785437493,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 8,
+        "y": 0,
+        "coordX": 484.9742261192856,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 9,
+        "y": 0,
+        "coordX": 545.5960043841964,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 10,
+        "y": 0,
+        "coordX": 606.217782649107,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 11,
+        "y": 0,
+        "coordX": 666.8395609140177,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 12,
+        "y": 0,
+        "coordX": 727.4613391789285,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 13,
+        "y": 0,
+        "coordX": 788.0831174438391,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 14,
+        "y": 0,
+        "coordX": 848.7048957087499,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 0,
+        "coordX": 909.3266739736605,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 0,
+        "coordX": 969.9484522385712,
+        "coordY": 0,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 1,
+        "coordX": 30.31088913245535,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 1,
+        "coordX": 90.93266739736606,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 1,
+        "coordX": 151.55444566227675,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 1,
+        "coordX": 212.17622392718746,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 1,
+        "coordX": 272.7980021920982,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 1,
+        "coordX": 333.41978045700887,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/finish.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 1,
+        "coordX": 394.04155872191956,
+        "coordY": 52.5,
+        "start": false,
+        "finish": true,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 1,
+        "coordX": 454.66333698683025,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 1,
+        "coordX": 515.285115251741,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 9,
+        "y": 1,
+        "coordX": 575.9068935166516,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 10,
+        "y": 1,
+        "coordX": 636.5286717815624,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 1,
+        "coordX": 697.1504500464731,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 12,
+        "y": 1,
+        "coordX": 757.7722283113837,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 13,
+        "y": 1,
+        "coordX": 818.3940065762945,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 14,
+        "y": 1,
+        "coordX": 879.0157848412052,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 1,
+        "coordX": 939.6375631061159,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 1,
+        "coordX": 1000.2593413710266,
+        "coordY": 52.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 2,
+        "coordX": 0,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 2,
+        "coordX": 60.6217782649107,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 2,
+        "coordX": 121.2435565298214,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 2,
+        "coordX": 181.86533479473212,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 2,
+        "coordX": 242.4871130596428,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 2,
+        "coordX": 303.1088913245535,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/finish.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 2,
+        "coordX": 363.73066958946424,
+        "coordY": 105,
+        "start": false,
+        "finish": true,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 7,
+        "y": 2,
+        "coordX": 424.35244785437493,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 8,
+        "y": 2,
+        "coordX": 484.9742261192856,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 2,
+        "coordX": 545.5960043841964,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 10,
+        "y": 2,
+        "coordX": 606.217782649107,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 2,
+        "coordX": 666.8395609140177,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 12,
+        "y": 2,
+        "coordX": 727.4613391789285,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 13,
+        "y": 2,
+        "coordX": 788.0831174438391,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 2,
+        "coordX": 848.7048957087499,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 2,
+        "coordX": 909.3266739736605,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 2,
+        "coordX": 969.9484522385712,
+        "coordY": 105,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 3,
+        "coordX": 30.31088913245535,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 3,
+        "coordX": 90.93266739736606,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 3,
+        "coordX": 151.55444566227675,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 3,
+        "coordX": 212.17622392718746,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 3,
+        "coordX": 272.7980021920982,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/finish.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 3,
+        "coordX": 333.41978045700887,
+        "coordY": 157.5,
+        "start": false,
+        "finish": true,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 6,
+        "y": 3,
+        "coordX": 394.04155872191956,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 7,
+        "y": 3,
+        "coordX": 454.66333698683025,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 3,
+        "coordX": 515.285115251741,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 3,
+        "coordX": 575.9068935166516,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 3,
+        "coordX": 636.5286717815624,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 3,
+        "coordX": 697.1504500464731,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 12,
+        "y": 3,
+        "coordX": 757.7722283113837,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 13,
+        "y": 3,
+        "coordX": 818.3940065762945,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 3,
+        "coordX": 879.0157848412052,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 3,
+        "coordX": 939.6375631061159,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 3,
+        "coordX": 1000.2593413710266,
+        "coordY": 157.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 4,
+        "coordX": 0,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 4,
+        "coordX": 60.6217782649107,
+        "coordY": 210,
+        "start": true,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 4,
+        "coordX": 121.2435565298214,
+        "coordY": 210,
+        "start": true,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 4,
+        "coordX": 181.86533479473212,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 4,
+        "coordX": 242.4871130596428,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/finish.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 4,
+        "coordX": 303.1088913245535,
+        "coordY": 210,
+        "start": false,
+        "finish": true,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 4,
+        "coordX": 363.73066958946424,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 4,
+        "coordX": 424.35244785437493,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 4,
+        "coordX": 484.9742261192856,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 4,
+        "coordX": 545.5960043841964,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 4,
+        "coordX": 606.217782649107,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 4,
+        "coordX": 666.8395609140177,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/water.png",
+        "landscape": "water",
+        "x": 12,
+        "y": 4,
+        "coordX": 727.4613391789285,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 13,
+        "y": 4,
+        "coordX": 788.0831174438391,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 14,
+        "y": 4,
+        "coordX": 848.7048957087499,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 15,
+        "y": 4,
+        "coordX": 909.3266739736605,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 4,
+        "coordX": 969.9484522385712,
+        "coordY": 210,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 0,
+        "y": 5,
+        "coordX": 30.31088913245535,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 1,
+        "y": 5,
+        "coordX": 90.93266739736606,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 5,
+        "coordX": 151.55444566227675,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 3,
+        "y": 5,
+        "coordX": 212.17622392718746,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 5,
+        "coordX": 272.7980021920982,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 5,
+        "coordX": 333.41978045700887,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 5,
+        "coordX": 394.04155872191956,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 7,
+        "y": 5,
+        "coordX": 454.66333698683025,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 8,
+        "y": 5,
+        "coordX": 515.285115251741,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 5,
+        "coordX": 575.9068935166516,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 5,
+        "coordX": 636.5286717815624,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/water.png",
+        "landscape": "water",
+        "x": 11,
+        "y": 5,
+        "coordX": 697.1504500464731,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/water.png",
+        "landscape": "water",
+        "x": 12,
+        "y": 5,
+        "coordX": 757.7722283113837,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/water.png",
+        "landscape": "water",
+        "x": 13,
+        "y": 5,
+        "coordX": 818.3940065762945,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 5,
+        "coordX": 879.0157848412052,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 15,
+        "y": 5,
+        "coordX": 939.6375631061159,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 5,
+        "coordX": 1000.2593413710266,
+        "coordY": 262.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 0,
+        "y": 6,
+        "coordX": 0,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 1,
+        "y": 6,
+        "coordX": 60.6217782649107,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 6,
+        "coordX": 121.2435565298214,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 3,
+        "y": 6,
+        "coordX": 181.86533479473212,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 6,
+        "coordX": 242.4871130596428,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 6,
+        "coordX": 303.1088913245535,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 6,
+        "y": 6,
+        "coordX": 363.73066958946424,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 7,
+        "y": 6,
+        "coordX": 424.35244785437493,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 8,
+        "y": 6,
+        "coordX": 484.9742261192856,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 9,
+        "y": 6,
+        "coordX": 545.5960043841964,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 10,
+        "y": 6,
+        "coordX": 606.217782649107,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 11,
+        "y": 6,
+        "coordX": 666.8395609140177,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 12,
+        "y": 6,
+        "coordX": 727.4613391789285,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 13,
+        "y": 6,
+        "coordX": 788.0831174438391,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 6,
+        "coordX": 848.7048957087499,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 15,
+        "y": 6,
+        "coordX": 909.3266739736605,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 6,
+        "coordX": 969.9484522385712,
+        "coordY": 315,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 0,
+        "y": 7,
+        "coordX": 30.31088913245535,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 1,
+        "y": 7,
+        "coordX": 90.93266739736606,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 7,
+        "coordX": 151.55444566227675,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 3,
+        "y": 7,
+        "coordX": 212.17622392718746,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 4,
+        "y": 7,
+        "coordX": 272.7980021920982,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 7,
+        "coordX": 333.41978045700887,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 6,
+        "y": 7,
+        "coordX": 394.04155872191956,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 7,
+        "y": 7,
+        "coordX": 454.66333698683025,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 8,
+        "y": 7,
+        "coordX": 515.285115251741,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 9,
+        "y": 7,
+        "coordX": 575.9068935166516,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 10,
+        "y": 7,
+        "coordX": 636.5286717815624,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 11,
+        "y": 7,
+        "coordX": 697.1504500464731,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 12,
+        "y": 7,
+        "coordX": 757.7722283113837,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 13,
+        "y": 7,
+        "coordX": 818.3940065762945,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 7,
+        "coordX": 879.0157848412052,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 15,
+        "y": 7,
+        "coordX": 939.6375631061159,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 7,
+        "coordX": 1000.2593413710266,
+        "coordY": 367.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 0,
+        "y": 8,
+        "coordX": 0,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 1,
+        "y": 8,
+        "coordX": 60.6217782649107,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 8,
+        "coordX": 121.2435565298214,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 3,
+        "y": 8,
+        "coordX": 181.86533479473212,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 4,
+        "y": 8,
+        "coordX": 242.4871130596428,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 5,
+        "y": 8,
+        "coordX": 303.1088913245535,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 6,
+        "y": 8,
+        "coordX": 363.73066958946424,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 8,
+        "coordX": 424.35244785437493,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 8,
+        "coordX": 484.9742261192856,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 8,
+        "coordX": 545.5960043841964,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 10,
+        "y": 8,
+        "coordX": 606.217782649107,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 11,
+        "y": 8,
+        "coordX": 666.8395609140177,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 12,
+        "y": 8,
+        "coordX": 727.4613391789285,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 13,
+        "y": 8,
+        "coordX": 788.0831174438391,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 8,
+        "coordX": 848.7048957087499,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 15,
+        "y": 8,
+        "coordX": 909.3266739736605,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 8,
+        "coordX": 969.9484522385712,
+        "coordY": 420,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 0,
+        "y": 9,
+        "coordX": 30.31088913245535,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 1,
+        "y": 9,
+        "coordX": 90.93266739736606,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 9,
+        "coordX": 151.55444566227675,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 3,
+        "y": 9,
+        "coordX": 212.17622392718746,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 4,
+        "y": 9,
+        "coordX": 272.7980021920982,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 5,
+        "y": 9,
+        "coordX": 333.41978045700887,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 9,
+        "coordX": 394.04155872191956,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 9,
+        "coordX": 454.66333698683025,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 9,
+        "coordX": 515.285115251741,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 9,
+        "coordX": 575.9068935166516,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 9,
+        "coordX": 636.5286717815624,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 9,
+        "coordX": 697.1504500464731,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 12,
+        "y": 9,
+        "coordX": 757.7722283113837,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 13,
+        "y": 9,
+        "coordX": 818.3940065762945,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 9,
+        "coordX": 879.0157848412052,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 15,
+        "y": 9,
+        "coordX": 939.6375631061159,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 9,
+        "coordX": 1000.2593413710266,
+        "coordY": 472.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 10,
+        "coordX": 0,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 1,
+        "y": 10,
+        "coordX": 60.6217782649107,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 2,
+        "y": 10,
+        "coordX": 121.2435565298214,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 3,
+        "y": 10,
+        "coordX": 181.86533479473212,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 4,
+        "y": 10,
+        "coordX": 242.4871130596428,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 10,
+        "coordX": 303.1088913245535,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 10,
+        "coordX": 363.73066958946424,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 10,
+        "coordX": 424.35244785437493,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 10,
+        "coordX": 484.9742261192856,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 10,
+        "coordX": 545.5960043841964,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 10,
+        "coordX": 606.217782649107,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 10,
+        "coordX": 666.8395609140177,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 12,
+        "y": 10,
+        "coordX": 727.4613391789285,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/forest.png",
+        "landscape": "forest",
+        "x": 13,
+        "y": 10,
+        "coordX": 788.0831174438391,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 14,
+        "y": 10,
+        "coordX": 848.7048957087499,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 15,
+        "y": 10,
+        "coordX": 909.3266739736605,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 10,
+        "coordX": 969.9484522385712,
+        "coordY": 525,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 11,
+        "coordX": 30.31088913245535,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 1,
+        "y": 11,
+        "coordX": 90.93266739736606,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 11,
+        "coordX": 151.55444566227675,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 3,
+        "y": 11,
+        "coordX": 212.17622392718746,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 4,
+        "y": 11,
+        "coordX": 272.7980021920982,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 11,
+        "coordX": 333.41978045700887,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 11,
+        "coordX": 394.04155872191956,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 11,
+        "coordX": 454.66333698683025,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 11,
+        "coordX": 515.285115251741,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 11,
+        "coordX": 575.9068935166516,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 11,
+        "coordX": 636.5286717815624,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 11,
+        "coordX": 697.1504500464731,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 12,
+        "y": 11,
+        "coordX": 757.7722283113837,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/desert.png",
+        "landscape": "desert",
+        "x": 13,
+        "y": 11,
+        "coordX": 818.3940065762945,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 11,
+        "coordX": 879.0157848412052,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 11,
+        "coordX": 939.6375631061159,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 11,
+        "coordX": 1000.2593413710266,
+        "coordY": 577.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 12,
+        "coordX": 0,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 12,
+        "coordX": 60.6217782649107,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 2,
+        "y": 12,
+        "coordX": 121.2435565298214,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 3,
+        "y": 12,
+        "coordX": 181.86533479473212,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 4,
+        "y": 12,
+        "coordX": 242.4871130596428,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 5,
+        "y": 12,
+        "coordX": 303.1088913245535,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 6,
+        "y": 12,
+        "coordX": 363.73066958946424,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 7,
+        "y": 12,
+        "coordX": 424.35244785437493,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 12,
+        "coordX": 484.9742261192856,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 12,
+        "coordX": 545.5960043841964,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 12,
+        "coordX": 606.217782649107,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 11,
+        "y": 12,
+        "coordX": 666.8395609140177,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 12,
+        "y": 12,
+        "coordX": 727.4613391789285,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 13,
+        "y": 12,
+        "coordX": 788.0831174438391,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 14,
+        "y": 12,
+        "coordX": 848.7048957087499,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 12,
+        "coordX": 909.3266739736605,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 12,
+        "coordX": 969.9484522385712,
+        "coordY": 630,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 0,
+        "y": 13,
+        "coordX": 30.31088913245535,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 1,
+        "y": 13,
+        "coordX": 90.93266739736606,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 2,
+        "y": 13,
+        "coordX": 151.55444566227675,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 3,
+        "y": 13,
+        "coordX": 212.17622392718746,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/earth.png",
+        "landscape": "earth",
+        "x": 4,
+        "y": 13,
+        "coordX": 272.7980021920982,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 5,
+        "y": 13,
+        "coordX": 333.41978045700887,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 6,
+        "y": 13,
+        "coordX": 394.04155872191956,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/rock.png",
+        "landscape": "rock",
+        "x": 7,
+        "y": 13,
+        "coordX": 454.66333698683025,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 8,
+        "y": 13,
+        "coordX": 515.285115251741,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 9,
+        "y": 13,
+        "coordX": 575.9068935166516,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 10,
+        "y": 13,
+        "coordX": 636.5286717815624,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/water.png",
+        "landscape": "water",
+        "x": 11,
+        "y": 13,
+        "coordX": 697.1504500464731,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "/images/meadow.png",
+        "landscape": "none",
+        "x": 12,
+        "y": 13,
+        "coordX": 757.7722283113837,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 13,
+        "y": 13,
+        "coordX": 818.3940065762945,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 14,
+        "y": 13,
+        "coordX": 879.0157848412052,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 15,
+        "y": 13,
+        "coordX": 939.6375631061159,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    },
+    {
+        "picture": "none",
+        "landscape": "out",
+        "x": 16,
+        "y": 13,
+        "coordX": 1000.2593413710266,
+        "coordY": 682.5,
+        "start": false,
+        "finish": false,
+        "text": ""
+    }
+]

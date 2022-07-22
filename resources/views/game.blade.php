@@ -16,7 +16,7 @@ use App\Models\Game;
                     {{__("Game's status")}}: {{__($game->status)}}<br/>
                 @endif
 
-                @if ($game->status == Game::STATUS_STARTED && $game->player = Auth::user()->id)
+                @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
                     - {{__("Select your lemming")}}<br/>
                     - {{__('Choose a card')}}
                 @endif
@@ -30,7 +30,7 @@ use App\Models\Game;
                 @else
                     @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
                         <br/>
-                        <div><a class="btn btn-primary" href="/join/{{$game->id}}">{{__("Join the game")}}"</a><br/>
+                        <div><a class="btn btn-primary" href="/join/{{$game->id}}">{{__("Join the game")}}</a><br/>
                         </div>
                     @endif
                 @endif
@@ -56,18 +56,22 @@ use App\Models\Game;
             @foreach ($playersInformations as $playerId => $playerInfo)
                 <li>
                     <div class="player{{$loop->iteration}}">
-                        <i class="fa fa-frog player{{$loop->iteration}}"></i>&nbsp;&nbsp;
+                        <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{config("app.icons")[$loop->iteration-1]}}</span>
                         {{$playerInfo['name']}} ({{$playerInfo['nbCards']}} {{__('card(s)')}})
                         @if ($game->status == Game::STATUS_STARTED)
                             @if ($playerId == Auth::user()->id)
                                 : <span class="lemming cursor" id="lemming1"
                                         data-lemming = "1"
+                                        data-player = "{{$playerId}}"
+                                        data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-color="player{{$loop->iteration}}"
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                                 >Lemming 1</span>
                                 - <span class="lemming cursor" id="lemming2"
                                         data-lemming = "2"
+                                        data-player = "{{$playerId}}"
+                                        data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-color="player{{$loop->iteration}}"
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
@@ -75,11 +79,17 @@ use App\Models\Game;
                             @else
                                 : <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
+                                        data-lemming = "1"
+                                        data-player = "{{$playerId}}"
+                                        data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                                 >Lemming 1</span>
                                 - <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
+                                        data-lemming = "2"
+                                        data-player = "{{$playerId}}"
+                                        data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                                 >Lemming 2</span>
@@ -100,22 +110,25 @@ use App\Models\Game;
                     @csrf
                     <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
                     <input type="hidden" id="path" name="path" value="" />
-                    <input type="hidden" id="hexa-x" name="hexa-x" value="" />
-                    <input type="hidden" id="hexa-y" name="hexa-y" value="" />
                     <input type="hidden" id="card_id" name="card_id" value="" />
-                    <input type="hidden" id="lemming_number" name="lemming_number" value="" />
-
+                    @foreach ($playersInformations as $playerId => $playerInfo)
+                        <input type="hidden" id="hexa-{{$playerId}}-1-x" name="hexa-{{$playerId}}-1-x" value="" />
+                        <input type="hidden" id="hexa-{{$playerId}}-1-y" name="hexa-{{$playerId}}-1-y" value="" />
+                        <input type="hidden" id="hexa-{{$playerId}}-2-x" name="hexa-{{$playerId}}-2-x" value="" />
+                        <input type="hidden" id="hexa-{{$playerId}}-2-y" name="hexa-{{$playerId}}-2-y" value="" />
+                    @endforeach
                     <input type="hidden" id="changemap-x" name="changemap-x" value="" />
                     <input type="hidden" id="changemap-y" name="changemap-y" value="" />
                     <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
+                    <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="btn btn-secondary"/>
                     <input type="submit" value="{{__('Validate')}}" class="btn btn-primary"/>
                 </form>
             @endif
         </div>
         <div class="col-md-4">
             @if (empty($game->winner))
-                <h3>{{__("Your deck")}}</h3>
+                <h3 class="padleft">{{__("Your deck")}}</h3>
                 <form method="POST" action="/renew/{{$game->id}}">
                     @csrf
                     <ul class="cards">
@@ -151,8 +164,10 @@ use App\Models\Game;
         </div>
         <div class="col-md-4">
             <div>
-                <h3>{{__("Global Deck")}}</h3>
-                <h6>{{$infoCards}} {{__('remaining cards')}}</h6>
+                <div class="padleft">
+                    <h3>{{__("Global Deck")}}</h3>
+                    <h6>{{$infoCards}} {{__('remaining cards')}}</h6>
+                </div>
                 <ul class="cards deck">
                     @foreach (Card::CARDS as $landscape)
                         <li>
@@ -172,98 +187,84 @@ use App\Models\Game;
             </div>
         </div>
     </div>
-    <br/>
+
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="mygrid">
-                <style type="text/css">
-                    <?php
-                    // --- Define some constants
-                    global $MAP_WIDTH, $MAP_HEIGHT;
-                    global $HEX_HEIGHT, $HEX_SCALED_HEIGHT, $HEX_SIDE;
-                    global $map, $terrain_images;
-                    $MAP_WIDTH = config("app.map_width");
-                    $MAP_HEIGHT = config("app.map_height");
-                    $HEX_HEIGHT = config("app.hex_height");
-                    $terrain_images = $game->getLandscapesPictures();
-                    $map = $game->getMap();
-
-                    // --- Use this to scale the hexes smaller or larger than the actual graphics
-                    $HEX_SCALED_HEIGHT = $HEX_HEIGHT * 1.0;
-                    $HEX_SIDE = $HEX_SCALED_HEIGHT / 2;
-                    ?>
-                    .hexmap {
-                        min-width: <?php echo $MAP_WIDTH * $HEX_SIDE * 1.5 + $HEX_SIDE/2; ?>px;
-                        min-height: <?php echo $MAP_HEIGHT * $HEX_SCALED_HEIGHT + $HEX_SIDE; ?>px;
-                        position: relative;
-                    }
-
-                    .hex-key-element {
-                        width: <?php echo $HEX_HEIGHT * 1.5; ?>px;
-                        height: <?php echo $HEX_HEIGHT * 1.5; ?>px;
-                        border: 1px solid #fff;
-                        float: left;
-                        text-align: center;
-                    }
-
-                    .hex {
-                        position: absolute;
-                        width: <?php echo $HEX_SCALED_HEIGHT ?>px;
-                        height: <?php echo $HEX_SCALED_HEIGHT ?>px;
-                    }
-                </style>
-                <script type="text/javascript">
-                    var hex_height = <?php echo $HEX_SCALED_HEIGHT; ?>;
-                    var hex_side = <?php echo $HEX_SIDE; ?>;
-                </script>
                 <script src="/js/utils.js"></script>
+                <div id='hexmap' class='hexmap' style="width:100%;height:1000px;">
 
-                <?php
-                // ==================================================================
-
-                function render_map_to_html() {
-                    // -------------------------------------------------------------
-                    // --- This function renders the map to HTML.  It uses the $map
-                    // --- array to determine what is in each hex, and the
-                    // --- $terrain_images array to determine what type of image to
-                    // --- draw in each cell.
-                    // -------------------------------------------------------------
-                    global $MAP_WIDTH, $MAP_HEIGHT;
-                    global $HEX_HEIGHT, $HEX_SCALED_HEIGHT, $HEX_SIDE;
-                    global $map, $terrain_images;
-
-                    // -------------------------------------------------------------
-                    // --- Draw each hex in the map
-                    // -------------------------------------------------------------
-                    $nbHexa = 0;
-                    for ($x=0; $x<$MAP_WIDTH; $x++) {
-                        for ($y=0; $y<$MAP_HEIGHT; $y++) {
-                            // --- Terrain type in this hex
-                            $terrain = $map[$x][$y];
-
-                            // --- Image to draw
-                            $img = $terrain_images[$terrain];
-
-                            // --- Coordinates to place hex on the screen
-                            $tx = $x * $HEX_SIDE * 1.5;
-                            $ty = $y * $HEX_SCALED_HEIGHT + ($x % 2) * $HEX_SCALED_HEIGHT / 2 -30;
-
-                            // --- Style values to position hex image in the right location
-                            $style = sprintf("left:%dpx;top:%dpx", $tx, $ty);
-
-                            // --- Output the image tag for this hex
-                            print "<div id='hexa$nbHexa' alt='$terrain' data-landscape='".$terrain."' data-x='".$x."'
-                            data-y='".$y."' class='hex hex-$img' style='$style'
-                            ></div>".PHP_EOL;
-                            $nbHexa++;
-                        }
-                    }
-                }
-                ?>
-
-                <div id='hexmap' class='hexmap'>
-                    <?php render_map_to_html(); ?>
                 </div>
+                <script src="/js/svg.min.js"></script>
+                <script src="/js/honeycomb.min.js"></script>
+                <script>
+                    const draw = SVG(document.getElementById('hexmap'))
+                    const Hex = Honeycomb.extendHex({
+                        size: 35,
+                        mydraw: null,
+
+                        addMarker() {
+                            if (this.text !== '') {
+                                this.mydraw.text(this.text).font({ fill: this.color })
+                                    .addClass('x-'+this.x+'_y-'+this.y)
+                                    .move(this.coordX+3, this.coordY+10);
+                            }
+                        },
+
+                        render(draw) {
+                            const { x, y } = this.toPoint()
+                            const corners = this.corners()
+                            this.mydraw = draw;
+                            this.start = false;
+                            this.finish = false;
+                            this.landscape = "none";
+                            this.picture = "/images/meadow.png";
+                            this.text = "";
+                            this.color=  "#000000";
+                            this.coordX = x;
+                            this.coordY = y;
+
+                            this.draw = draw
+                                .polygon(corners.map(({ x, y }) => `${x},${y}`))
+                                .fill(this.picture)
+                                .stroke({ width: 1, color: '#fff' })
+                                .addClass('poly-x-'+this.x+'_y-'+this.y)
+                                .translate(x, y);
+                        },
+                        highlight() {
+                            this.draw
+                                // stop running animation
+                                .stop(true, true)
+                                .fill({ opacity: 1, color: 'aquamarine' })
+                                .animate(1000)
+                                .fill({ opacity: 0, color: 'none' })
+                        }
+                    })
+                    const Grid = Honeycomb.defineGrid(Hex);
+
+                    const grid = Grid.rectangle({
+                        width: {{config("app.map_width")}},
+                        height: {{config("app.map_height")}},
+                        // render each hex, passing the draw instance
+                        onCreate(hex) {
+                            hex.render(draw);
+                        }
+                    })
+
+                    // For create new Map see utils.js
+                    // var deserializedGrid=createOriginalMap()
+                    let deserializedGrid = JSON.parse('{!! str_replace("\n",'',$map) !!}');
+
+                    deserializedGrid.forEach((hexa, index) => {
+                        let coord = {x: hexa.x, y:hexa.y};
+                        grid.get(coord).landscape = hexa.landscape;
+                        grid.get(coord).picture = hexa.picture;
+                        grid.get(coord).finish = hexa.finish;
+                        grid.get(coord).start = hexa.start;
+                        grid.get(coord).text = hexa.text;
+                        grid.get(coord).draw.fill(grid.get(coord).picture) ;
+                    });
+                </script>
             </div>
         </div>
     </div>
@@ -271,8 +272,8 @@ use App\Models\Game;
     <!--Change player -> reload page -->
     <script>
         initCards();
-        initLemmings();
         initMap();
+        initLemmings();
 
         /*
         let timer = 2000;

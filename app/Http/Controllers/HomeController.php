@@ -26,9 +26,13 @@ class HomeController extends Controller
     public function index()
     {
         $yesterday = date('Y-m-d H:i:s', ( time() - 86400) );
-        DB::delete("delete from games where created_at < ?", [$yesterday]);
+        Game::where("updated_at","<", $yesterday)->delete();
 
         $mygames = Game::where('player1_id','=',Auth::user()->id)
+        ->orWhere('player2_id','=',Auth::user()->id)
+        ->orWhere('player3_id','=',Auth::user()->id)
+        ->orWhere('player4_id','=',Auth::user()->id)
+        ->orWhere('player5_id','=',Auth::user()->id)
         ->orderBy('created_at','desc')->paginate(10);
 
         $games = Game::whereNull('player2_id')

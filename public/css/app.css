@@ -10128,6 +10128,32 @@ h3 {
     color: #4f1ad5 !important;
 }
 
+h3.padleft{
+    padding-left: 60px;
+}
+div.padleft{
+    padding-left: 20px;
+}
+
+.icon-player{
+    font-size:20px;
+}
+.hexmap text{
+    font-size:40px;
+}
+@-moz-document url-prefix() {
+    .hexmap text:hover {
+        /* Need for Firefox for pushing other lemmings
+        hex.OffsetX & hex.OffsetY = 0 if text is displayed
+        */
+        display: none;
+    }
+}
+
+polygon.selected {
+    opacity:0.5;
+}
+
 .fa-frog.player1:before {
     content: "\f71a";/* fa-squirrel*/
 }

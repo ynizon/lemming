@@ -3,9 +3,11 @@
 return [
 
     'nb_cards'=> 10*5,
-    'map_width'=> 13,
-    'map_height'=> 17,
-    'hex_height'=> 72,
+    'map_width'=> 17,
+    'map_height'=> 14,
+    'icons' => ['🦝', '🐋', '🦊', '🦁', '🐇', '🦖'],//https://emojicombos.com/animal
+    'start' => '🚦',
+    'finish' => '🏁',
 
     /*
     |--------------------------------------------------------------------------

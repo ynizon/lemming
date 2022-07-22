@@ -56,19 +56,29 @@ class GameController extends Controller
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersInformations = $game->getPlayersInformations($cards);
 
+        $map = json_decode($game->map, true);
         $mapUpdate = [];
         foreach (Card::CARDS as $land){
             $mapUpdate[$land] = 0;
         }
         $updates = unserialize($game->map_update);
-        foreach ($updates as $updateRow => $update){
+        foreach ($updates as $row => $update){
             foreach ($update as $column => $land){
+                $k = 0;
+                foreach ($map as $tile) {
+                    if ($tile["y"] == $column && $tile["x"] == $row) {
+                        $map[$k]["picture"] = "/images/".$land.".png";
+                        $map[$k]["landscape"] = $land;
+                    }
+                    $k++;
+                }
                 $mapUpdate[$land]++;
             }
         }
+        $map = json_encode($map);
 
         return view('game',compact('cards','game', 'playersInformations', 'lemmingsPositions',
-            'cardsSummary', 'infoCards', 'mapUpdate'));
+            'cardsSummary', 'infoCards', 'mapUpdate', 'map'));
     }
 
     public function create(){
@@ -123,11 +133,20 @@ class GameController extends Controller
     private function moveLemming(&$game, $request) {
         //@TODO Check le path (hack possible ?)
         $path = $request->input('path');
-        $lemmingNumber = (int) $request->input('lemming_number');
-        $x = (int) $request->input('hexa-x');
-        $y = (int) $request->input('hexa-y');
         $lemmingsPositions = unserialize($game->lemmings_positions);
-        $lemmingsPositions[Auth::user()->id][$lemmingNumber] = ["x"=>$x, "y"=>$y];
+        $cards = unserialize($game->cards);
+        $playersInformations = $game->getPlayersInformations($cards);
+        foreach ($playersInformations as $playerId => $playerInfo) {
+            for ($numLemming = 1; $numLemming <3; $numLemming++) {
+                if ($request->input('hexa-'.$playerId.'-'.$numLemming.'-x') != '' &&
+                    $request->input('hexa-'.$playerId.'-'.$numLemming.'-y') != '' ) {
+                    $x = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-x');
+                    $y = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-y');
+                    $lemmingsPositions[$playerId][$numLemming] = ["x" => $x, "y" => $y];
+                }
+            }
+        }
+
         $game->lemmings_positions = serialize($lemmingsPositions);
     }
 

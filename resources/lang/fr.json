@@ -237,7 +237,7 @@
     "finish": "fin",
     "You can't put a tile on this area":"Vous ne pouvez placer votre tuile sur cet emplacement",
     "This is not a start area": "Ceci n'est pas une case de depart",
-    "This tile is not adjacent": "Cette case n'est pas adjacente",
+    "This tile is not accessible": "Cette case n'est pas accessible",
     "You can't cross this area": "Impossible de traverser cette case",
     "Maximum path exceeded": "Chemin maximum dépassé",
     "Select your lemming first": "Choisissez votre lemming pour commencer",
@@ -246,5 +246,13 @@
     "remaining cards": "cartes restantes",
     "waiting": "en attente",
     "started": "en cours",
-    "finised": "terminé"
+    "finised": "terminé",
+    "Restart": "Recommencer",
+    "Yes": "Oui",
+    "No": "Non",
+    "Do you want push the other lemming ?": "Voulez-vous poussez l'autre lemming ?",
+    "You don't have enough moves to push the other lemming":"Vous n'avez pas assez de déplacement pour pousser l'autre lemming",
+    "You can't push the other lemming out of the map": "Vous ne pouvez pas pousser l'autre lemming en dehors de la carte",
+    "You can't push 2 lemmings": "Vous ne pouvez pas pousser 2 lemmings",
+    "You can't move 2 lemmings": "Vous ne pouvez déplacer qu'un seul lemming"
 }
