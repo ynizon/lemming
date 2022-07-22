@@ -50,15 +50,30 @@ function initCards() {
     });
 }
 
+function InitStartAndFinish(){
+    window.setTimeout(function(){
+        grid.forEach((hexa, index) => {
+            if (hexa.start) {
+                hexa.text = '🚦';
+                hexa.addMarker();
+                hexa.draw.fill("#DDDDDD") ;
+            }
+            if (hexa.finish) {
+                hexa.text = '🏁';
+                hexa.addMarker();
+                hexa.draw.fill("#DDDDDD") ;
+            }
+        });
+    }, 2000);
+}
+
 function initLemmings() {
     $(".lemming").each(function( index ) {
         if ($( this ).attr('data-x') !== "-1" && $( this ).attr('data-y') !== "-1") {
             let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
             let hex = grid.get(coord);
-            if (!hex.start) {
-                hex.text = $(this).attr("data-content");
-                hex.addMarker();
-            }
+            hex.text = $(this).attr("data-content");
+            hex.addMarker();
         }
     });
 
@@ -124,13 +139,6 @@ function initMap() {
     tilesLandscape.forest = $('#nb_forest').val();
     tilesLandscape.desert = $('#nb_desert').val();
     tilesLandscape.rock = $('#nb_rock').val();
-
-    grid.forEach((hexa, index) => {
-        if (hexa.start) {
-            hexa.text = '🚦';
-            hexa.addMarker();
-        }
-    });
 
     var hexmap = document.querySelector('#hexmap');
     document.addEventListener('click', ({ offsetX, offsetY }) => {

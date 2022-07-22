@@ -223,12 +223,21 @@ use App\Models\Game;
                             this.color=  "#000000";
                             this.coordX = x;
                             this.coordY = y;
+                            let allClasses = 'poly-x-'+this.x+'_y-'+this.y;
+                            if (this.start) {
+                                allClasses = this.allClasses + ' start ';
+                            }
+                            if (this.finish) {
+                                allClasses = this.allClasses + ' finish ';
+                            }
+
+                            this.allClasses = allClasses;
 
                             this.draw = draw
                                 .polygon(corners.map(({ x, y }) => `${x},${y}`))
                                 .fill(this.picture)
                                 .stroke({ width: 1, color: '#fff' })
-                                .addClass('poly-x-'+this.x+'_y-'+this.y)
+                                .addClass(this.allClasses)
                                 .translate(x, y);
                         },
                         highlight() {
@@ -274,6 +283,7 @@ use App\Models\Game;
         initCards();
         initMap();
         initLemmings();
+        InitStartAndFinish();
 
         /*
         let timer = 2000;

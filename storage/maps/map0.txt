@@ -249,18 +249,18 @@
         "coordX": 333.41978045700887,
         "coordY": 52.5,
         "start": false,
-        "finish": false,
+        "finish": true,
         "text": ""
     },
     {
-        "picture": "/images/finish.png",
+        "picture": "/images/meadow.png",
         "landscape": "none",
         "x": 6,
         "y": 1,
         "coordX": 394.04155872191956,
         "coordY": 52.5,
         "start": false,
-        "finish": true,
+        "finish": false,
         "text": ""
     },
     {
@@ -436,18 +436,18 @@
         "coordX": 303.1088913245535,
         "coordY": 105,
         "start": false,
-        "finish": false,
+        "finish": true,
         "text": ""
     },
     {
-        "picture": "/images/finish.png",
+        "picture": "/images/meadow.png",
         "landscape": "none",
         "x": 6,
         "y": 2,
         "coordX": 363.73066958946424,
         "coordY": 105,
         "start": false,
-        "finish": true,
+        "finish": false,
         "text": ""
     },
     {
@@ -612,18 +612,18 @@
         "coordX": 272.7980021920982,
         "coordY": 157.5,
         "start": false,
-        "finish": false,
+        "finish": true,
         "text": ""
     },
     {
-        "picture": "/images/finish.png",
+        "picture": "/images/meadow.png",
         "landscape": "none",
         "x": 5,
         "y": 3,
         "coordX": 333.41978045700887,
         "coordY": 157.5,
         "start": false,
-        "finish": true,
+        "finish": false,
         "text": ""
     },
     {
@@ -803,14 +803,14 @@
         "text": ""
     },
     {
-        "picture": "/images/finish.png",
+        "picture": "/images/meadow.png",
         "landscape": "none",
         "x": 5,
         "y": 4,
         "coordX": 303.1088913245535,
         "coordY": 210,
         "start": false,
-        "finish": true,
+        "finish": false,
         "text": ""
     },
     {
