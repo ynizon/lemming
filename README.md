@@ -21,18 +21,16 @@ npm install
 npm run dev
 ````  
 ## TODO
-retrouver ou on met la class x-1_y-1 pour le remove position au depart
 Deplacement souris adverses
-Meilleur lib hexagones (rotation 90) https://github.com/flauwekeul/honeycomb#grid
-Impossible de traverser la case hexa85 apres le demarrage en 69
-Remplacement case de depart non possibles
+Meilleur lib hexagones (rotation 90) 
+Remplacement case de depart non possibles (fixé dans la map au depart)
 Websocket / Chat
-
 
 ## License
 
 Cette application est open-source et utilise la licence [MIT].
 
+## Thanks for lib
+Hexagon JS : https://github.com/flauwekeul/honeycomb#grid
+Laravel Echo : https://grafikart.fr/tutoriels/messagerie-echo-977
 
-## Thanks
-https://grafikart.fr/tutoriels/messagerie-echo-977
