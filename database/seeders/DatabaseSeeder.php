@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Card;
+use App\Models\Game;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i<=4; $i++) {
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
             DB::table('users')->insert([
                 'name' => 'CPU' . $i,
                 'email' => 'cpu'.$i.'@gmail.com',
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($i = 1; $i<=4; $i++) {
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
             DB::table('users')->insert([
                 'name' => 'Player '.$i,
                 'email' => 'player'.$i.'@gmail.com',

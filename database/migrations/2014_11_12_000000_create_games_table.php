@@ -23,6 +23,7 @@ class CreateGamesTable extends Migration
             $table->unsignedBigInteger('player5_id')->nullable();
             $table->unsignedBigInteger('player')->nullable();
             $table->unsignedBigInteger('winner')->nullable();
+            $table->integer('same')->default(0);
             $table->text('earth');
             $table->text('rock');
             $table->text('water');

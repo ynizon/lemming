@@ -234,7 +234,6 @@ function lemmingClick(lemmingId) {
             adjacentsHexa.forEach((adjacentHexa, index) => {
                 document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
                 icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y+"']");
-                console.log(icons);
                 icons.forEach((icon, index) => {
                     icon.classList.add('cursor');
                 });

@@ -248,7 +248,8 @@
     "remaining cards": "cartes restantes",
     "waiting": "en attente",
     "started": "en cours",
-    "finised": "terminé",
+    "ended": "terminé",
+    "pause": "en pause",
     "Restart": "Recommencer",
     "Yes": "Oui",
     "No": "Non",
@@ -261,5 +262,7 @@
     "It's you turn": "C'est à vous de jouer",
     "This lemming has already finished": "Ce lemming a déjà terminé",
     "The winner is": "La vainqueur est",
-    "Select cards before renew them": "Sélectionnez des cartes avant de les renouveller"
+    "Select cards before renew them": "Sélectionnez des cartes avant de les renouveller",
+    "Start the game on the same PC": "Démarrer la partie sur le même ordinateur",
+    "players": "joueurs"
 }

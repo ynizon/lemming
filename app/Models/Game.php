@@ -115,7 +115,8 @@ class Game extends Model
             }
         }
 
-        shuffle($playersId);
+        //No shuffle because first player have less cards...
+        //shuffle($playersId);
         $this->player = $playersId[0];
         $this->save();
     }

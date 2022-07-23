@@ -11,12 +11,19 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    public function start($id)
+    public function start($id, Request $request)
     {
         $game = Game::findOrFail($id);
         if ($game->status == GAME::STATUS_WAITING && Auth()->user()->id == $game->player1_id){
+            if ($request->input("same") == "1") {
+                $nbPlayers = $request->input("nb_players");
+                for ($k= 1; $k <= $nbPlayers; $k++){
+                    $field = 'player'.$k.'_id';
+                    $game->$field = $k;//Player par defaut
+                }
+                $game->same = 1;
+            }
             $game->start();
-
             return redirect("/game/".$game->id);
         } else {
             return redirect("/game/".$game->id)->withError("This game is already started.");
@@ -129,7 +136,7 @@ class GameController extends Controller
     public function update($id, Request $request){
         $game = Game::findOrFail($id);
 
-        if (!empty($request->input('path')) && Auth::user()->id == $game->player){
+        if (!empty($request->input('path')) && (Auth::user()->id == $game->player || $game->same)){
             $cardId = (int) $request->input('card_id');
             $cards = unserialize($game->cards);
             $this->moveLemming($game, $request);
@@ -257,12 +264,16 @@ class GameController extends Controller
         return $cards;
     }
 
-    private function takeANewCard(&$cards){
+    private function takeANewCard(&$cards, $game){
         $this->renewTheDeck($cards);
         $cardAffected = false;
         foreach ($cards as $cardIdTmp =>$card){
             if ($card['playerId'] == Card::STATUS_AVAILABLE && $cardAffected == false){
-                $cards[$cardIdTmp]['playerId'] = Auth::user()->id;
+                $playerId = Auth::user()->id;
+                if ($game->same) {
+                    $playerId = $game->player;
+                }
+                $cards[$cardIdTmp]['playerId'] = $playerId;
                 $cardAffected = true;
             }
         }
@@ -308,12 +319,16 @@ class GameController extends Controller
 
     public function renew($id, Request $request) {
         $game = Game::findOrFail($id);
-        if ($game->player == Auth::user()->id) {
+        if ($game->same || $game->player == Auth::user()->id) {
+            $playerId = Auth::user()->id;
+            if ($game->same) {
+                $playerId = Auth::user()->id;
+            }
             $cards = unserialize($game->cards);
             $cardsId = $request->input("renewCards");
             if (!empty($cardsId)) {
                 foreach ($cards as $cardId => $card) {
-                    if ($card['playerId'] == Auth::user()->id && in_array($cardId, $cardsId)) {
+                    if ($card['playerId'] == $playerId && in_array($cardId, $cardsId)) {
                         $cards[$cardId]['playerId'] = Card::STATUS_PLAYED;
                     }
                 }
@@ -321,13 +336,13 @@ class GameController extends Controller
 
             $nbCard = 0;
             foreach ($cards as $cardId => $card) {
-                if ($card['playerId'] == Auth::user()->id) {
+                if ($card['playerId'] == $playerId) {
                     $nbCard++;
                 }
             }
 
             while ($nbCard < Game::NB_CARDS_MAX_BY_PLAYER) {
-                $this->takeANewCard($cards);
+                $this->takeANewCard($cards, $game);
                 $nbCard++;
             }
 

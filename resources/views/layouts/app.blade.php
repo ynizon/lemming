@@ -16,18 +16,16 @@
     <!-- Styles -->
     <link rel="stylesheet" href={{ asset('css/bootstrap.min.css') }}>
     <!-- Favicon -->
-    <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
+    <link href="/favicon.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
     <link href="/fontawesome/css/all.min.css" rel="stylesheet">
-    <!-- Argon CSS -->
-    <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <script src="/js/sweetalert.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script>
         var translations = {!! \Cache::get('translations') !!};
     </script>
@@ -84,9 +82,7 @@
             </div>
         </nav>
 
-        <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
-        <script src="{{ asset('/js/app.js')}}"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
 
         <main class="py-4">
             @yield('content')
