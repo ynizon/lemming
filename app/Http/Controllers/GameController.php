@@ -133,6 +133,15 @@ class GameController extends Controller
     private function moveLemming(&$game, $request) {
         //@TODO Check le path (hack possible ?)
         $path = $request->input('path');
+
+        $map = json_decode($game->map,true);
+        $finishTiles = [];
+        foreach ($map as $tile) {
+            if ($tile["finish"]) {
+                $finishTiles[] = $tile["x"]."/".$tile["y"];
+            }
+        }
+
         $lemmingsPositions = unserialize($game->lemmings_positions);
         $cards = unserialize($game->cards);
         $playersInformations = $game->getPlayersInformations($cards);
@@ -142,7 +151,11 @@ class GameController extends Controller
                     $request->input('hexa-'.$playerId.'-'.$numLemming.'-y') != '' ) {
                     $x = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-x');
                     $y = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-y');
-                    $lemmingsPositions[$playerId][$numLemming] = ["x" => $x, "y" => $y];
+                    $finish = 0;
+                    if (in_array($x.'/'.$y, $finishTiles)) {
+                        $finish = 1;
+                    }
+                    $lemmingsPositions[$playerId][$numLemming] = ["x" => $x, "y" => $y, "finish" => $finish];
                 }
             }
         }
@@ -184,11 +197,20 @@ class GameController extends Controller
     }
 
     private function hasWinner(&$game, $lemmingsPositions) {
+
+        $map = json_decode($game->map,true);
+        $finishTiles = [];
+        foreach ($map as $tile) {
+            if ($tile["finish"]) {
+                $finishTiles[] = $tile["x"]."/".$tile["y"];
+            }
+        }
+
         $winnerId = 0;
         foreach ($lemmingsPositions as $playerId => $lemmings) {
-            if ($lemmings[1]['x'] == -2 && $lemmings[1]['y'] == -2 &&
-                $lemmings[2]['x'] == -2 && $lemmings[2]['y'] == -2
-            ) {
+            $lemming1 = $lemmings[1]['x']."/".$lemmings[1]['y'];
+            $lemming2 = $lemmings[2]['x']."/".$lemmings[2]['y'];
+            if ($winnerId == 0 && in_array($lemming1, $finishTiles) && in_array($lemming2, $finishTiles)) {
                 $winnerId = $playerId;
             }
         }

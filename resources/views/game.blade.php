@@ -10,15 +10,20 @@ use App\Models\Game;
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div id="info" class="alert-success">
-                <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
-                <br/>
                 @if ($game->status != Game::STATUS_STARTED)
+                    <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
+                    <br/>
                     {{__("Game's status")}}: {{__($game->status)}}<br/>
                 @endif
 
-                @if ($game->status == Game::STATUS_STARTED && $game->player == Auth::user()->id)
-                    - {{__("Select your lemming")}}<br/>
-                    - {{__('Choose a card')}}
+                @if ($game->status == Game::STATUS_STARTED)
+                    @if ($game->player == Auth::user()->id)
+                        {{__("It's you turn")}} :<br/>
+                        - {{__("Select your lemming")}}<br/>
+                        - {{__('Choose a card')}}
+                    @else
+                        {{__('Waiting the other player')}}
+                    @endif
                 @endif
             </div>
 
@@ -62,6 +67,7 @@ use App\Models\Game;
                             @if ($playerId == Auth::user()->id)
                                 : <span class="lemming cursor" id="lemming1"
                                         data-lemming = "1"
+                                        data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                         data-player = "{{$playerId}}"
                                         data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-color="player{{$loop->iteration}}"
@@ -70,6 +76,7 @@ use App\Models\Game;
                                 >Lemming 1</span>
                                 - <span class="lemming cursor" id="lemming2"
                                         data-lemming = "2"
+                                        data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                         data-player = "{{$playerId}}"
                                         data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-color="player{{$loop->iteration}}"
@@ -80,6 +87,7 @@ use App\Models\Game;
                                 : <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
                                         data-lemming = "1"
+                                        data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                         data-player = "{{$playerId}}"
                                         data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
@@ -88,11 +96,20 @@ use App\Models\Game;
                                 - <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
                                         data-lemming = "2"
+                                        data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                         data-player = "{{$playerId}}"
                                         data-content="{{config("app.icons")[$loop->iteration-1]}}"
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                                 >Lemming 2</span>
+                            @endif
+                        @endif
+
+                        @if ($game->status == Game::STATUS_STARTED)
+                            @if ($playerId == $game->player)
+                                ⬅️
+                            @else
+                                ⏳
                             @endif
                         @endif
                     </div>
@@ -191,122 +208,34 @@ use App\Models\Game;
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="mygrid">
-                <script src="/js/utils.js"></script>
-                <div id='hexmap' class='hexmap' style="width:100%;height:1000px;">
+                <div id='hexmap' class='hexmap'>
 
                 </div>
                 <script src="/js/svg.min.js"></script>
                 <script src="/js/honeycomb.min.js"></script>
+                <script src="/js/utils.js"></script>
                 <script>
-                    const draw = SVG(document.getElementById('hexmap'))
-                    const Hex = Honeycomb.extendHex({
-                        size: 35,
-                        mydraw: null,
+                    loadGame({{config("app.map_width")}}, {{config("app.map_height")}}, '{!! str_replace("\n",'',$map) !!}');
 
-                        addMarker() {
-                            if (this.text !== '') {
-                                this.mydraw.text(this.text).font({ fill: this.color })
-                                    .addClass('x-'+this.x+'_y-'+this.y)
-                                    .move(this.coordX+3, this.coordY+10);
-                            }
-                        },
 
-                        render(draw) {
-                            const { x, y } = this.toPoint()
-                            const corners = this.corners()
-                            this.mydraw = draw;
-                            this.start = false;
-                            this.finish = false;
-                            this.landscape = "none";
-                            this.picture = "/images/meadow.png";
-                            this.text = "";
-                            this.color=  "#000000";
-                            this.coordX = x;
-                            this.coordY = y;
-                            let allClasses = 'poly-x-'+this.x+'_y-'+this.y;
-                            if (this.start) {
-                                allClasses = this.allClasses + ' start ';
-                            }
-                            if (this.finish) {
-                                allClasses = this.allClasses + ' finish ';
-                            }
+                    let timer = 10000;
+                    @if (!empty(env('PUSHER_APP_ID')))
+                                Echo.channel(`game-{{$game->id}}`)
+                            .listen('.NextPlayer', (event) => {
+                                console.log("public");
+                                window.location.reload();
+                            });
+                        timer = 30000;
+                    @endif
 
-                            this.allClasses = allClasses;
-
-                            this.draw = draw
-                                .polygon(corners.map(({ x, y }) => `${x},${y}`))
-                                .fill(this.picture)
-                                .stroke({ width: 1, color: '#fff' })
-                                .addClass(this.allClasses)
-                                .translate(x, y);
-                        },
-                        highlight() {
-                            this.draw
-                                // stop running animation
-                                .stop(true, true)
-                                .fill({ opacity: 1, color: 'aquamarine' })
-                                .animate(1000)
-                                .fill({ opacity: 0, color: 'none' })
-                        }
-                    })
-                    const Grid = Honeycomb.defineGrid(Hex);
-
-                    const grid = Grid.rectangle({
-                        width: {{config("app.map_width")}},
-                        height: {{config("app.map_height")}},
-                        // render each hex, passing the draw instance
-                        onCreate(hex) {
-                            hex.render(draw);
-                        }
-                    })
-
-                    // For create new Map see utils.js
-                    // var deserializedGrid=createOriginalMap()
-                    let deserializedGrid = JSON.parse('{!! str_replace("\n",'',$map) !!}');
-
-                    deserializedGrid.forEach((hexa, index) => {
-                        let coord = {x: hexa.x, y:hexa.y};
-                        grid.get(coord).landscape = hexa.landscape;
-                        grid.get(coord).picture = hexa.picture;
-                        grid.get(coord).finish = hexa.finish;
-                        grid.get(coord).start = hexa.start;
-                        grid.get(coord).text = hexa.text;
-                        grid.get(coord).draw.fill(grid.get(coord).picture) ;
-                    });
+                    @if (($game->status !== Game::STATUS_STARTED) || ($game->player !== Auth::user()->id))
+                        window.setInterval(function() {
+                            window.location.reload();
+                        },timer)
+                    @endif
                 </script>
             </div>
         </div>
     </div>
-
-    <!--Change player -> reload page -->
-    <script>
-        initCards();
-        initMap();
-        initLemmings();
-        InitStartAndFinish();
-
-        /*
-        let timer = 2000;
-        @if (!empty(env('PUSHER_APP_ID')))
-            Echo.channel(`game-{{$game->id}}`)
-                .listen('.NextPlayer', (event) => {
-                    console.log("public");
-                    window.location.reload();
-                });
-            timer = 30000;
-        @endif
-
-        window.setInterval(function() {
-            let isFocused = (document.activeElement === document.getElementById('question'));
-            if (!isFocused){
-                jQuery.ajax('{{env('APP_URL')}}/whoplay/{{$game->id}}').done(function(response) {
-                    if (response.player == <?php echo Auth::user()->id;?>){
-                        window.location.reload();
-                    }
-                })
-            }
-        },timer)
-        */
-    </script>
 </div>
 @endsection

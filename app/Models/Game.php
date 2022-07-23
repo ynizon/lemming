@@ -62,7 +62,7 @@ class Game extends Model
         $lemmingsPositions = [];
         foreach ($players as $playerId) {
             //@TODO update (it depends from start tiles from map)
-            $lemmingsPositions[$playerId] = [1 => ["x" => 1, "y" => 4], 2 => ["x" => 2, "y" => 4]];
+            $lemmingsPositions[$playerId] = [1 => ["x" => 1, "y" => 4, "finish" =>0], 2 => ["x" => 2, "y" => 4, "finish" =>0]];
         }
 
         $nbCards = 0;

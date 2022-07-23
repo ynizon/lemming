@@ -7,6 +7,102 @@ let landscapePath = null;
 let placeMarkerLandscape = '';
 let tilesLandscape = {water:0, earth:0, rock:0, forest:0, desert:0};
 
+const draw = SVG(document.getElementById('hexmap'))
+const Hex = Honeycomb.extendHex({
+    size: 35,
+    mydraw: null,
+
+    addMarker() {
+        if (this.text !== '') {
+            let updateCoordY = 10;
+            if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+                updateCoordY = 5;
+            }
+            let allClasses = 'x-'+this.x+'_y-'+this.y;
+            if (this.start && this.text === '🚦') {
+                allClasses = allClasses + ' start ';
+            }
+            if (this.finish && this.text === '🏁') {
+                allClasses = allClasses + ' finish ';
+            }
+
+            this.mydraw.text(this.text).font({ fill: this.color })
+                .addClass(allClasses)
+                .move(this.coordX+3, this.coordY+updateCoordY);
+        }
+    },
+
+    render(draw) {
+        const { x, y } = this.toPoint()
+        const corners = this.corners()
+        this.mydraw = draw;
+        this.start = false;
+        this.finish = false;
+        this.landscape = "none";
+        this.picture = "/images/meadow.png";
+        this.text = "";
+        this.color=  "#000000";
+        this.coordX = x;
+        this.coordY = y;
+        let allClasses = 'poly-x-'+this.x+'_y-'+this.y;
+        if (this.start) {
+            allClasses = this.allClasses + ' start ';
+        }
+        if (this.finish) {
+            allClasses = this.allClasses + ' finish ';
+        }
+
+        this.allClasses = allClasses;
+
+        this.draw = draw
+            .polygon(corners.map(({ x, y }) => `${x},${y}`))
+            .fill(this.picture)
+            .stroke({ width: 1, color: '#fff' })
+            .addClass(this.allClasses)
+            .translate(x, y);
+    },
+    highlight() {
+        this.draw
+            // stop running animation
+            .stop(true, true)
+            .fill({ opacity: 1, color: 'aquamarine' })
+            .animate(1000)
+            .fill({ opacity: 0, color: 'none' })
+    }
+})
+const Grid = Honeycomb.defineGrid(Hex);
+let grid;
+
+function loadGame(width, height, map) {
+    grid = Grid.rectangle({
+        width: width,
+        height: height,
+        // render each hex, passing the draw instance
+        onCreate(hex) {
+            hex.render(draw);
+        }
+    })
+
+    // For create new Map see utils.js
+    // var deserializedGrid=createOriginalMap()
+    let deserializedGrid = JSON.parse(map);
+
+    deserializedGrid.forEach((hexa, index) => {
+        let coord = {x: hexa.x, y:hexa.y};
+        grid.get(coord).landscape = hexa.landscape;
+        grid.get(coord).picture = hexa.picture;
+        grid.get(coord).finish = hexa.finish;
+        grid.get(coord).start = hexa.start;
+        grid.get(coord).text = hexa.text;
+        grid.get(coord).draw.fill(grid.get(coord).picture) ;
+    });
+
+    initCards();
+    initMap();
+    initLemmings();
+    InitStartAndFinish();
+}
+
 function initCards() {
     $( ".card" ).each(function(index) {
         $(this).on("click", function(){
@@ -43,7 +139,7 @@ function initCards() {
                 }
                 placeMarkerLandscape = landscape;
 
-                info(__("You should now replace a tile by a ")+__(landscape)+".");
+                popin(__("You should now replace a tile by a ")+__(landscape)+".","warning");
             }
             $('#card_id').val(cardId);
         });
@@ -64,6 +160,18 @@ function InitStartAndFinish(){
                 hexa.draw.fill("#DDDDDD") ;
             }
         });
+
+        //Default Lemming is 1
+        if ($('#lemming1').length > 0) {
+            if ($('#lemming1').attr("data-finish") === "0"){
+                $('#lemming1').click();
+            }
+        }
+        if ($('#lemming2').length > 0) {
+            if ($('#lemming2').attr("data-finish") === "0") {
+                $('#lemming2').click();
+            }
+        }
     }, 2000);
 }
 
@@ -84,11 +192,6 @@ function initLemmings() {
     $( "#lemming2" ).on("click", function(){
         lemmingClick(this.id);
     });
-
-    //Default Lemming is 1
-    if ($('#lemming1').length > 0) {
-        $('#lemming1').click();
-    }
 }
 
 function lemmingClick(lemmingId) {
@@ -119,13 +222,14 @@ function lemmingClick(lemmingId) {
             adjacentsHexa = getStartHexa();
         }
 
-        icons = document.querySelectorAll("text");
+        let icons = document.querySelectorAll("text");
         icons.forEach((icon, index) => {
             icon.classList.remove('cursor');
         });
         adjacentsHexa.forEach((adjacentHexa, index) => {
             document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
-            icons = document.querySelectorAll("text.x-" + adjacentHexa.x + "_y-" + adjacentHexa.y);
+            icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y+"']");
+            console.log(icons);
             icons.forEach((icon, index) => {
                 icon.classList.add('cursor');
             });
@@ -164,37 +268,39 @@ function initMap() {
                 if (currentLemming) {
                     if (currentCard) {
                         if (path.length < maxTilesPath) {
-                            if (hex.landscape === 'none' ||
-                                hex.landscape === landscapePath ||
-                                hex.start ||
-                                hex.finish) {
-                                var canMove = false;
-                                if (!currentTile) {
-                                    if (hex.start) {
-                                        canMove = true;
+                            if (hex) {
+                                if (hex.landscape === 'none' ||
+                                    hex.landscape === landscapePath ||
+                                    hex.start ||
+                                    hex.finish) {
+                                    var canMove = false;
+                                    if (!currentTile) {
+                                        if (hex.start) {
+                                            canMove = true;
+                                        } else {
+                                            info(__("This is not a start area"), 'error');
+                                        }
                                     } else {
-                                        info(__("This is not a start area"),'error');
+                                        if (isAdjacentHexa(hex)) {
+                                            canMove = true;
+                                        }
+                                    }
+                                    if (canMove) {
+                                        let direction = getDirection(currentTile, hex);
+                                        if (hex.text !== '' && !hex.finish) {
+                                            askPushLemming(__("Do you want push the other lemming ?"), "warning", hex, direction);
+                                        } else {
+                                            updateLemmingPosition(hex, currentLemming);
+                                        }
+                                    } else {
+                                        if (currentTile) {
+                                            popin(__("This tile is not accessible"), "error");
+                                        }
                                     }
                                 } else {
-                                    if (isAdjacentHexa(hex)) {
-                                        canMove = true;
+                                    if (hex.landscape !== 'out') {
+                                        popin(__("You can't cross this area"), "error");
                                     }
-                                }
-                                if (canMove) {
-                                    let direction = getDirection(currentTile, hex);
-                                    if (hex.text !== '') {
-                                        askPushLemming(__("Do you want push the other lemming ?"), "warning", hex, direction);
-                                    } else {
-                                        updateLemmingPosition(hex, currentLemming, direction);
-                                    }
-                                } else {
-                                    if (currentTile) {
-                                        popin(__("This tile is not accessible"), "error");
-                                    }
-                                }
-                            } else {
-                                if (hex.landscape !== 'out') {
-                                    popin(__("You can't cross this area"), "error");
                                 }
                             }
                         } else {
@@ -211,7 +317,7 @@ function initMap() {
     });
 }
 
-function updateLemmingPosition(hex, lemming, direction) {
+function updateLemmingPosition(hex, lemming) {
     //hex = new position
     hex.text = lemming.attr("data-content");
     currentTile = hex;
@@ -219,8 +325,12 @@ function updateLemmingPosition(hex, lemming, direction) {
     //Remove position for the other lemming (contains class)
     let coord = "x-"+lemming.attr("data-x")+"_y-"+lemming.attr("data-y");
     grid.get({x:parseInt(lemming.attr("data-x")), y:parseInt(lemming.attr("data-y"))}).text = '';
+    grid.get({x:parseInt(lemming.attr("data-x")), y:parseInt(lemming.attr("data-y"))}).draw.fill({ opacity: 1});
     document.querySelectorAll("text[class*='" + coord + "']").forEach(function (e) {
-        e.parentElement.removeChild(e);
+        if (e.getAttribute("class").indexOf("start") === -1 &&
+            e.getAttribute("class").indexOf("finish") === -1){
+            e.parentElement.removeChild(e);
+        }
     });
 
     //Update lemming
@@ -236,16 +346,13 @@ function updateLemmingPosition(hex, lemming, direction) {
     if (path.length < maxTilesPath) {
         let adjacentsHexa = getAdjacentHexa(hex);
         adjacentsHexa.forEach((adjacentHexa, index) => {
+            //Polygon (tile)
             document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
-            //Wait a little
-            try{
-                if ($("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y)) {
-                    $("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y).classList.add('cursor');
-                }
-            }catch(e){
-                //@TODO pq ca plante ???
-                //console.error(e);
-            }
+            //And text (lemming)
+            allHexa = document.querySelectorAll("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y);
+            allHexa.forEach((adjacentHexa, index) => {
+                adjacentHexa.classList.add('cursor');
+            });
         });
     }
 
@@ -279,8 +386,10 @@ function getAdjacentHexa(hexagone) {
     let hexagones = grid.neighborsOf(hexagone, 'all');
 
     hexagones.forEach((hexa, index) => {
-        if (hexa && hexa.landscape !== 'out') {
-            adjacentsHexa.push(hexa);
+        if (hexa) {
+            if (hexa.landscape !== 'out' || hexa.finish) {
+                adjacentsHexa.push(hexa);
+            }
         }
     });
 
@@ -346,65 +455,65 @@ function askPushLemming(title, icon, hex, direction){
         denyButtonText: __('No')
     }).then((result) => {
         if (result.isConfirmed) {
-            if ((path.length+1) >= maxTilesPath) {
-                popin(__("You don't have enough moves to push the other lemming"), "error");
-            }
-            if (hex.landscape === 'none' ||
-                hex.landscape === landscapePath ||
-                hex.start ||
-                hex.finish) {
-
-                let hexagone = grid.neighborsOf(hex,  [direction])[0];
-                if (hexagone.text === '') {
-                    if (hexagone.landscape !== 'out') {
-                        //Move the other lemming
-                        let otherLemmings = document.querySelectorAll(".lemming");
-                        let otherLemming;
-                        otherLemmings.forEach((lemming, index) => {
-                            if (parseInt($(lemming).attr("data-x")) === hex.x &&
-                                parseInt($(lemming).attr("data-y")) === hex.y){
-                                otherLemming = lemming;
-                            }
-                        });
-                        updateLemmingPosition(hexagone, $(otherLemming), direction);
-
-                        //Move your lemming
-                        updateLemmingPosition(hex, currentLemming, direction);
-                    } else {
-                        popin(__("You can't push the other lemming out of the map"), "error");
-                    }
-                } else {
-                    popin(__("You can't push 2 lemmings"), "error");
-                }
+            let otherLemmings = getOtherLemmingsForPush([], hex, direction);
+            let nbMoves = otherLemmings.length;
+            if (!checkPositionsForPushingLemmings(otherLemmings, direction)) {
+                popin(__("You can't push the other lemming out of the map"), "error");
             } else {
-                if (hex.landscape !== 'out') {
-                    popin(__("You can't cross this area"), "error");
+                if ((path.length+nbMoves) >= maxTilesPath) {
+                    popin(__("You don't have enough moves to push the other lemming(s)"), "error");
+                } else {
+                    //Start by the end
+                    for (let k = otherLemmings.length -1; k >= 0; k--) {
+                        let otherLemming = otherLemmings[k];
+                        let hexagone = grid.neighborsOf(otherLemming,  [direction])[0];
+                        let lemming = document.querySelectorAll(".lemming[data-x='"+otherLemming.x+"'][data-y='"+otherLemming.y+"']")[0];
+                        updateLemmingPosition(hexagone, $(lemming));
+                    }
+
+                    //Move your current lemming
+                    updateLemmingPosition(hex, currentLemming);
                 }
             }
         }
     });
 }
 
+function getOtherLemmingsForPush(otherLemmings, hex, direction) {
+    if (hex.text !== '') {
+        let hexagone = grid.neighborsOf(hex,  [direction])[0];
+        otherLemmings.push(hex);
+        otherLemmings = getOtherLemmingsForPush(otherLemmings, hexagone, direction);
+    }
+    return otherLemmings;
+}
+
+function checkPositionsForPushingLemmings(otherLemmings, direction) {
+    let canMove = true;
+    otherLemmings.forEach((lemming, index) => {
+        let hexagone = grid.neighborsOf(lemming,  [direction])[0];
+        if (hexagone.landscape === 'out'){
+            canMove = false;
+        }
+    });
+
+    return canMove;
+}
+
 function getDirection(oldTile, nextTile) {
     let direction = '';
-    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y-1)) {
-        direction = 'NE';
-    }
-    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y+1)) {
-        direction = 'SW';
-    }
-    if (oldTile.x === (nextTile.x-1) && oldTile.y === nextTile.y) {
-        direction = 'W';
-    }
-    if (oldTile.x === (nextTile.x+1) && oldTile.y === (nextTile.y+1)) {
-        direction = 'SE';
-    }
-    if (oldTile.x === nextTile.x && oldTile.y === (nextTile.y+1)) {
-        direction = 'NW';
-    }
-    if (oldTile.x === (nextTile.x+1) && oldTile.y === nextTile.y) {
-        direction = 'E';
-    }
+    let directions = ['SE','SW','E','W','NW','NE'];
+    directions.forEach((onlyDirection, index) => {
+        let neighbors = grid.neighborsOf(oldTile, [onlyDirection]);
+        neighbors.forEach((hexa, index) => {
+            if (hexa){
+                if (hexa.x === nextTile.x && hexa.y === nextTile.y ) {
+                    direction = onlyDirection;
+                }
+            }
+        });
+    });
+
     return direction;
 }
 

@@ -232,6 +232,7 @@
     "water": "lac",
     "rock": "montagne",
     "meadow": "prairie",
+    "earth": "terre",
     "desert": "désert",
     "start": "début",
     "finish": "fin",
@@ -251,8 +252,10 @@
     "Yes": "Oui",
     "No": "Non",
     "Do you want push the other lemming ?": "Voulez-vous poussez l'autre lemming ?",
-    "You don't have enough moves to push the other lemming":"Vous n'avez pas assez de déplacement pour pousser l'autre lemming",
+    "You don't have enough moves to push the other lemming(s)":"Vous n'avez pas assez de déplacement pour pousser l'autre lemming",
     "You can't push the other lemming out of the map": "Vous ne pouvez pas pousser l'autre lemming en dehors de la carte",
     "You can't push 2 lemmings": "Vous ne pouvez pas pousser 2 lemmings",
-    "You can't move 2 lemmings": "Vous ne pouvez déplacer qu'un seul lemming"
+    "You can't move 2 lemmings": "Vous ne pouvez déplacer qu'un seul lemming",
+    "Waiting the other player": "En attente des autres joueurs",
+    "It's you turn": "C'est à vous de jouer"
 }

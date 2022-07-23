@@ -37,6 +37,7 @@ class HomeController extends Controller
 
         $games = Game::whereNull('player2_id')
             ->where('player1_id','!=',Auth::user()->id)
+            ->where('status','=','waiting')
             ->orderBy('created_at','desc')->paginate(10);
 
         return view('home',compact('mygames', 'games'));
