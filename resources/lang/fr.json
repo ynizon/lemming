@@ -208,8 +208,8 @@
     "Wait other player": "En attente de l'adversaire",
     "Please, select a question": "Merci de choisir une question",
     "Player": "Joueur",
-    "Game over. You win.": "Partie terminée, tu as gagné.",
-    "Game over. You loose.": "Partie terminée, tu as perdu.",
+    "Game over. You win.": "Partie terminée, vous avez gagné.",
+    "Game over. You loose.": "Partie terminée, vous avez perdu.",
     "Play again": "Rejouer",
     "Your opponent have": "Votre adversaire a",
     "card(s).": "carte(s).",
@@ -231,6 +231,7 @@
     "forest": "forêt",
     "water": "lac",
     "rock": "montagne",
+    "none": "prairie",
     "meadow": "prairie",
     "earth": "terre",
     "desert": "désert",
@@ -257,5 +258,8 @@
     "You can't push 2 lemmings": "Vous ne pouvez pas pousser 2 lemmings",
     "You can't move 2 lemmings": "Vous ne pouvez déplacer qu'un seul lemming",
     "Waiting the other player": "En attente des autres joueurs",
-    "It's you turn": "C'est à vous de jouer"
+    "It's you turn": "C'est à vous de jouer",
+    "This lemming has already finished": "Ce lemming a déjà terminé",
+    "The winner is": "La vainqueur est",
+    "Select cards before renew them": "Sélectionnez des cartes avant de les renouveller"
 }

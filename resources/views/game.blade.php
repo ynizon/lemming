@@ -9,14 +9,14 @@ use App\Models\Game;
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div id="info" class="alert-success">
+            <div id="info" class="">
                 @if ($game->status != Game::STATUS_STARTED)
                     <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
                     <br/>
                     {{__("Game's status")}}: {{__($game->status)}}<br/>
                 @endif
 
-                @if ($game->status == Game::STATUS_STARTED)
+                @if ($game->status == Game::STATUS_STARTED && $game->winner == 0)
                     @if ($game->player == Auth::user()->id)
                         {{__("It's you turn")}} :<br/>
                         - {{__("Select your lemming")}}<br/>
@@ -51,8 +51,8 @@ use App\Models\Game;
             @if ($game->winner != Auth::user()->id && !empty($game->winner))
                 <div class="alert alert-danger" role="alert">
                     {{__('Game over. You loose.')}}<br/>
-                    {{__('It was')}}
-                    @if (0 != $game->winner)) {{ $playersName[$game->winner] }}. @endif
+                    {{__('The winner is')}}
+                    @if (0 != $game->winner) {{ $playersInformations[$game->winner]['name'] }}. @endif
                 </div>
             @endif
             <br/>
@@ -74,6 +74,9 @@ use App\Models\Game;
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                                 >Lemming 1</span>
+                                @if ($lemmingsPositions[$playerId][1]["finish"])
+                                    🏁
+                                @endif
                                 - <span class="lemming cursor" id="lemming2"
                                         data-lemming = "2"
                                         data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
@@ -83,6 +86,9 @@ use App\Models\Game;
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                                 >Lemming 2</span>
+                                @if ($lemmingsPositions[$playerId][2]["finish"])
+                                    🏁
+                                @endif
                             @else
                                 : <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
@@ -93,6 +99,9 @@ use App\Models\Game;
                                         data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                                 >Lemming 1</span>
+                                @if ($lemmingsPositions[$playerId][1]["finish"])
+                                    🏁
+                                @endif
                                 - <span class="lemming"
                                         data-color="player{{$loop->iteration}}"
                                         data-lemming = "2"
@@ -102,6 +111,9 @@ use App\Models\Game;
                                         data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                         data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                                 >Lemming 2</span>
+                                @if ($lemmingsPositions[$playerId][2]["finish"])
+                                    🏁
+                                @endif
                             @endif
                         @endif
 
@@ -146,9 +158,9 @@ use App\Models\Game;
         <div class="col-md-4">
             @if (empty($game->winner))
                 <h3 class="padleft">{{__("Your deck")}}</h3>
-                <form method="POST" action="/renew/{{$game->id}}">
+                <form method="POST" action="/renew/{{$game->id}}" onsubmit="return checkNbCardsToRenew()">
                     @csrf
-                    <ul class="cards">
+                    <ul class="cards" id="mycard">
                         @foreach (Card::CARDS as $landscape)
                             @for ($k = 4; $k >= 0; $k--)
                                 @foreach ($cards as $cardId => $card)

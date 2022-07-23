@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Card;
+use App\Models\Map;
 use Auth;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,11 @@ class Game extends Model
     public function cards()
     {
         return $this->hasMany(Card::class);
+    }
+
+    public function map()
+    {
+        return $this->belongsTo(Map::class);
     }
 
     public function getLandscapesPictures() {
@@ -118,6 +124,7 @@ class Game extends Model
         $this->name = date("Y-m-d H:i:s");
         $this->created_at = date("Y-m-d H:i:s");
         $this->player1_id = Auth::user()->id;
+        $this->status = Game::STATUS_WAITING;
         $this->winner = 0;
 
         $cardsInit = Card::where("game_id","=",0)->get()->shuffle()->take(config("app.nb_cards"));
@@ -134,7 +141,7 @@ class Game extends Model
         $this->desert = serialize([2]);
         $this->lemmings_positions = serialize([]);
         $this->cards = serialize($cards);
-        $this->map = $this->importMap(0);
+        $this->map_id = 1;
         $this->map_update = serialize([]);
         $this->save();
     }
@@ -154,33 +161,5 @@ class Game extends Model
             }
         }
         return $playersInformations;
-    }
-
-    public function exportMap() {
-        $map = $this->map;
-        $file = fopen(storage_path("maps/map".$this->id.".txt"), "w+");
-        fclose($file);
-    }
-
-    public function importMap($id = 0) {
-        $file = fopen(storage_path("maps/map" . $id . ".txt"), "r");
-        $map = '';
-        while (!feof($file)) {
-            $map .= fgets($file);
-        }
-        fclose($file);
-
-        return $map;
-    }
-
-    public function getMap(){
-        $map = unserialize($this->map);
-        $mapUpdate = unserialize($this->map_update);
-        foreach ($mapUpdate as $rowNumber => $row) {
-            foreach ($row as $column => $land) {
-                $map[$rowNumber][$column] = $land;
-            }
-        }
-        return $map;
     }
 }

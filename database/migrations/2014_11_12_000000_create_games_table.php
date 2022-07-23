@@ -28,8 +28,8 @@ class CreateGamesTable extends Migration
             $table->text('water');
             $table->text('forest');
             $table->text('desert');
-            $table->text('map');
             $table->text('map_update');
+            $table->unsignedBigInteger('map_id')->nullable();
             $table->text('lemmings_positions')->comment("x & y = -1 for start and x & y = -2 for end");
 
             $table->string('name');
@@ -43,6 +43,7 @@ class CreateGamesTable extends Migration
 			$table->foreign('player3_id')->references('id')->on('users');
 			$table->foreign('player4_id')->references('id')->on('users');
             $table->foreign('player5_id')->references('id')->on('users');
+            $table->foreign('map_id')->references('id')->on('maps');
         });
     }
 

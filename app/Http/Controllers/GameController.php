@@ -56,12 +56,14 @@ class GameController extends Controller
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersInformations = $game->getPlayersInformations($cards);
 
-        $map = json_decode($game->map, true);
+        $map = json_decode($game->map->map, true);
         $mapUpdate = [];
         foreach (Card::CARDS as $land){
             $mapUpdate[$land] = 0;
         }
+        $mapUpdate["meadow"] = 0;
         $updates = unserialize($game->map_update);
+
         foreach ($updates as $row => $update){
             foreach ($update as $column => $land){
                 $k = 0;
@@ -83,6 +85,20 @@ class GameController extends Controller
 
     public function create(){
         $game = new Game();
+        $game->init();
+
+        return redirect("/game/".$game->id);
+    }
+
+    public function replay($id){
+        $oldGame = Game::findOrFail($id);
+        $game = new Game();
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player' . $i . '_id';
+            if (!empty($oldGame->$field)) {
+                $game->$field = $oldGame->$field;
+            }
+        }
         $game->init();
 
         return redirect("/game/".$game->id);
@@ -116,12 +132,10 @@ class GameController extends Controller
         if (!empty($request->input('path')) && Auth::user()->id == $game->player){
             $cardId = (int) $request->input('card_id');
             $cards = unserialize($game->cards);
-            $lemmingsPositions = unserialize($game->lemmings_positions);
-
             $this->moveLemming($game, $request);
             $this->playACard($game, $cards, $cardId);
             $this->updateMap($game, $request);
-            $this->hasWinner($game, $lemmingsPositions);
+            $this->hasWinner($game, unserialize($game->lemmings_positions));
 
             $game->cards = serialize($cards);
             $game->save();
@@ -134,7 +148,7 @@ class GameController extends Controller
         //@TODO Check le path (hack possible ?)
         $path = $request->input('path');
 
-        $map = json_decode($game->map,true);
+        $map = json_decode($game->map->map,true);
         $finishTiles = [];
         foreach ($map as $tile) {
             if ($tile["finish"]) {
@@ -197,8 +211,7 @@ class GameController extends Controller
     }
 
     private function hasWinner(&$game, $lemmingsPositions) {
-
-        $map = json_decode($game->map,true);
+        $map = json_decode($game->map->map,true);
         $finishTiles = [];
         foreach ($map as $tile) {
             if ($tile["finish"]) {
@@ -210,12 +223,14 @@ class GameController extends Controller
         foreach ($lemmingsPositions as $playerId => $lemmings) {
             $lemming1 = $lemmings[1]['x']."/".$lemmings[1]['y'];
             $lemming2 = $lemmings[2]['x']."/".$lemmings[2]['y'];
+
             if ($winnerId == 0 && in_array($lemming1, $finishTiles) && in_array($lemming2, $finishTiles)) {
                 $winnerId = $playerId;
             }
         }
         if (!empty($winnerId)){
             $game->winner = $winnerId;
+            $game->status = Game::STATUS_ENDED;
         } else {
             $this->nextPlayer($game);
         }
@@ -232,7 +247,7 @@ class GameController extends Controller
         //@TODO Shuffle
 
         if ($nbCardAvailable == 0){
-            foreach ($cards as $cardIdTmp=>$card){
+            foreach ($cards as $cardIdTmp=>$card) {
                 if ($card['playerId'] == Card::STATUS_PLAYED){
                     $cards[$cardIdTmp]['playerId'] = Card::STATUS_AVAILABLE;
                 }
@@ -246,7 +261,7 @@ class GameController extends Controller
         $this->renewTheDeck($cards);
         $cardAffected = false;
         foreach ($cards as $cardIdTmp =>$card){
-            if ($card['playerId'] == 0 && $cardAffected == false){
+            if ($card['playerId'] == Card::STATUS_AVAILABLE && $cardAffected == false){
                 $cards[$cardIdTmp]['playerId'] = Auth::user()->id;
                 $cardAffected = true;
             }

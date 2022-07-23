@@ -135,7 +135,7 @@ function initCards() {
                     score +' = ' + total
                 );
                 if (tilesLandscape[landscape] === "0"){
-                    landscape = 'none';
+                    landscape = 'meadow';
                 }
                 placeMarkerLandscape = landscape;
 
@@ -162,12 +162,14 @@ function InitStartAndFinish(){
         });
 
         //Default Lemming is 1
+        let start = false;
         if ($('#lemming1').length > 0) {
             if ($('#lemming1').attr("data-finish") === "0"){
                 $('#lemming1').click();
+                start = true;
             }
         }
-        if ($('#lemming2').length > 0) {
+        if (!start && $('#lemming2').length > 0) {
             if ($('#lemming2').attr("data-finish") === "0") {
                 $('#lemming2').click();
             }
@@ -195,45 +197,49 @@ function initLemmings() {
 }
 
 function lemmingClick(lemmingId) {
-    if (path.length > 0) {
-        popin(__("You can't move 2 lemmings"), "error");
+    if ($("#" + lemmingId).attr("data-finish") === "1") {
+        popin(__("This lemming has already finished"), "error");
     } else {
-        let allHexa = document.querySelectorAll("polygon.cursor");
-        allHexa.forEach((adjacentHexa, index) => {
-            adjacentHexa.classList.remove('cursor');
-        });
-        currentLemming = $("#" + lemmingId);
-        $(".lemming").removeClass("selected");
-        $("#" + lemmingId).addClass("selected");
-
-        $("polygon").removeClass("selected");
-        let adjacentsHexa = [];
-        currentTile = null;
-        if ($("#" + lemmingId).attr('data-x') !== "-1" && $("#" + lemmingId).attr('data-y') !== "-1") {
-            let coord = {
-                x: parseInt($("#" + lemmingId).attr('data-x')),
-                y: parseInt($("#" + lemmingId).attr('data-y'))
-            };
-            let hex = grid.get(coord);
-            document.getElementById(hex.draw.node.id).classList.add('selected');
-            currentTile = hex;
-            adjacentsHexa = getAdjacentHexa(hex);
+        if (path.length > 0) {
+            popin(__("You can't move 2 lemmings"), "error");
         } else {
-            adjacentsHexa = getStartHexa();
-        }
-
-        let icons = document.querySelectorAll("text");
-        icons.forEach((icon, index) => {
-            icon.classList.remove('cursor');
-        });
-        adjacentsHexa.forEach((adjacentHexa, index) => {
-            document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
-            icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y+"']");
-            console.log(icons);
-            icons.forEach((icon, index) => {
-                icon.classList.add('cursor');
+            let allHexa = document.querySelectorAll("polygon.cursor");
+            allHexa.forEach((adjacentHexa, index) => {
+                adjacentHexa.classList.remove('cursor');
             });
-        });
+            currentLemming = $("#" + lemmingId);
+            $(".lemming").removeClass("selected");
+            $("#" + lemmingId).addClass("selected");
+
+            $("polygon").removeClass("selected");
+            let adjacentsHexa = [];
+            currentTile = null;
+            if ($("#" + lemmingId).attr('data-x') !== "-1" && $("#" + lemmingId).attr('data-y') !== "-1") {
+                let coord = {
+                    x: parseInt($("#" + lemmingId).attr('data-x')),
+                    y: parseInt($("#" + lemmingId).attr('data-y'))
+                };
+                let hex = grid.get(coord);
+                document.getElementById(hex.draw.node.id).classList.add('selected');
+                currentTile = hex;
+                adjacentsHexa = getAdjacentHexa(hex);
+            } else {
+                adjacentsHexa = getStartHexa();
+            }
+
+            let icons = document.querySelectorAll("text");
+            icons.forEach((icon, index) => {
+                icon.classList.remove('cursor');
+            });
+            adjacentsHexa.forEach((adjacentHexa, index) => {
+                document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
+                icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y+"']");
+                console.log(icons);
+                icons.forEach((icon, index) => {
+                    icon.classList.add('cursor');
+                });
+            });
+        }
     }
 }
 
@@ -526,6 +532,15 @@ function info(title){
     }
 }
 
+function checkNbCardsToRenew(){
+    if ($("#mycard li").length === 7 && $("#mycard li input:checked").length === 0) {
+        popin(__("Select cards before renew them"), "error");
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function __(key, replace = {}) {
     var translation = key.split('.').reduce((t, i) => t[i] || null, window.translations);
 
@@ -623,9 +638,8 @@ function createOriginalMap() {
     });
 
     tiles = [
-        {x: 0, y: 5 },
-        {x: 1, y: 5 },
-        {x: 2, y: 5 },
+        {x: 1, y: 4 },
+        {x: 2, y: 4 },
     ];
     tiles.forEach((hexa, index) => {
         grid.get(hexa).start = true;
@@ -634,10 +648,9 @@ function createOriginalMap() {
     });
 
     tiles = [
-        {x: 6, y: 1 },
-        {x: 6, y: 2 },
-        {x: 5, y: 3 },
-        {x: 5, y: 4 },
+        {x: 5, y: 1 },
+        {x: 5, y: 2 },
+        {x: 4, y: 3 },
     ];
     tiles.forEach((hexa, index) => {
         grid.get(hexa).finish = true;

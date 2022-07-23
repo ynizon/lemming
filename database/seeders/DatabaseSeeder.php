@@ -49,5 +49,9 @@ class DatabaseSeeder extends Seeder
                 $card->save();
             }
         }
+
+        DB::table('maps')->insert([
+            'map' => file_get_contents(storage_path("maps/map0.txt"))
+        ]);
     }
 }
