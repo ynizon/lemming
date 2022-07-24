@@ -17,6 +17,17 @@ php artisan migrate --seed
 php artisan config:clear
 php artisan cache:clear   
 ````  
+
+## Maps
+- For create new map, modify the utils.js > createOriginalMap function
+- Start a new game
+- Edit the json from the map table
+
+## Quality
+- PHPCodeSniffer
+- PHPCS
+- PHPMD
+
 ## TODO
 - Add Websocket / Chat
 

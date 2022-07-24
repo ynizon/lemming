@@ -15,7 +15,7 @@ const Hex = Honeycomb.extendHex({
     addMarker() {
         if (this.text !== '') {
             let updateCoordY = 10;
-            if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+            if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
                 updateCoordY = 5;
             }
             let allClasses = 'x-'+this.x+'_y-'+this.y;
@@ -73,7 +73,8 @@ const Hex = Honeycomb.extendHex({
 const Grid = Honeycomb.defineGrid(Hex);
 let grid;
 
-function loadGame(width, height, map) {
+function loadGame(width, height, map)
+{
     grid = Grid.rectangle({
         width: width,
         height: height,
@@ -103,9 +104,10 @@ function loadGame(width, height, map) {
     InitStartAndFinish();
 }
 
-function initCards() {
-    $( ".card" ).each(function(index) {
-        $(this).on("click", function(){
+function initCards()
+{
+    $(".card").each(function (index) {
+        $(this).on("click", function () {
             if (currentCard) {
                 resetCard();
             }
@@ -117,12 +119,12 @@ function initCards() {
 
             landscapePath = landscape;
 
-            $( ".cards-deck" ).each(function( index ) {
-                $( this ).html($( this ).attr("data-origine"));
+            $(".cards-deck").each(function ( index ) {
+                $(this).html($(this).attr("data-origine"));
             });
 
             let min = parseInt($('#score-'+landscape).attr("data-min"));
-            if (score <= min){
+            if (score <= min) {
                 let total = score + parseInt($('#score-'+landscape).attr("data-score"));
                 maxTilesPath = total;
                 $('#score-'+landscape).html(
@@ -134,7 +136,7 @@ function initCards() {
                 $('#score-'+landscape).html(
                     score +' = ' + total
                 );
-                if (tilesLandscape[landscape] === "0"){
+                if (tilesLandscape[landscape] === "0") {
                     landscape = 'meadow';
                 }
                 placeMarkerLandscape = landscape;
@@ -146,8 +148,9 @@ function initCards() {
     });
 }
 
-function InitStartAndFinish(){
-    window.setTimeout(function(){
+function InitStartAndFinish()
+{
+    window.setTimeout(function () {
         grid.forEach((hexa, index) => {
             if (hexa.start) {
                 hexa.text = '🚦';
@@ -164,7 +167,7 @@ function InitStartAndFinish(){
         //Default Lemming is 1
         let start = false;
         if ($('#lemming1').length > 0) {
-            if ($('#lemming1').attr("data-finish") === "0"){
+            if ($('#lemming1').attr("data-finish") === "0") {
                 $('#lemming1').click();
                 start = true;
             }
@@ -177,9 +180,10 @@ function InitStartAndFinish(){
     }, 2000);
 }
 
-function initLemmings() {
-    $(".lemming").each(function( index ) {
-        if ($( this ).attr('data-x') !== "-1" && $( this ).attr('data-y') !== "-1") {
+function initLemmings()
+{
+    $(".lemming").each(function ( index ) {
+        if ($(this).attr('data-x') !== "-1" && $(this).attr('data-y') !== "-1") {
             let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
             let hex = grid.get(coord);
             hex.text = $(this).attr("data-content");
@@ -187,16 +191,17 @@ function initLemmings() {
         }
     });
 
-    $( "#lemming1" ).on("click", function(){
+    $("#lemming1").on("click", function () {
         lemmingClick(this.id);
     });
 
-    $( "#lemming2" ).on("click", function(){
+    $("#lemming2").on("click", function () {
         lemmingClick(this.id);
     });
 }
 
-function lemmingClick(lemmingId) {
+function lemmingClick(lemmingId)
+{
     if ($("#" + lemmingId).attr("data-finish") === "1") {
         popin(__("This lemming has already finished"), "error");
     } else {
@@ -242,7 +247,8 @@ function lemmingClick(lemmingId) {
     }
 }
 
-function initMap() {
+function initMap()
+{
     tilesLandscape.earth = $('#nb_earth').val();
     tilesLandscape.water = $('#nb_water').val();
     tilesLandscape.forest = $('#nb_forest').val();
@@ -254,7 +260,7 @@ function initMap() {
     document.addEventListener('click', ({ offsetX, offsetY }) => {
         let correctOffsetX = offsetX;
         let correctOffsetY = offsetY;
-        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
             //Spec Bugs for FF: https://github.com/w3c/csswg-drafts/issues/1508
             correctOffsetX = event.clientX-$('#hexmap').offset().left;
             correctOffsetY = event.clientY-$('#hexmap').offset().top;
@@ -332,7 +338,8 @@ function initMap() {
     });
 }
 
-function updateLemmingPosition(hex, lemming) {
+function updateLemmingPosition(hex, lemming)
+{
     //hex = new position
     hex.text = lemming.attr("data-content");
     currentTile = hex;
@@ -343,7 +350,7 @@ function updateLemmingPosition(hex, lemming) {
     grid.get({x:parseInt(lemming.attr("data-x")), y:parseInt(lemming.attr("data-y"))}).draw.fill({ opacity: 1});
     document.querySelectorAll("text[class*='" + coord + "']").forEach(function (e) {
         if (e.getAttribute("class").indexOf("start") === -1 &&
-            e.getAttribute("class").indexOf("finish") === -1){
+            e.getAttribute("class").indexOf("finish") === -1) {
             e.parentElement.removeChild(e);
         }
     });
@@ -383,7 +390,8 @@ function updateLemmingPosition(hex, lemming) {
     }
 }
 
-function isAdjacentHexa(newHexa) {
+function isAdjacentHexa(newHexa)
+{
     let canMove = false;
     var contiguousHexa = getAdjacentHexa(currentTile);
 
@@ -396,7 +404,8 @@ function isAdjacentHexa(newHexa) {
     return canMove;
 }
 
-function getAdjacentHexa(hexagone) {
+function getAdjacentHexa(hexagone)
+{
     let adjacentsHexa = [];
     let hexagones = grid.neighborsOf(hexagone, 'all');
 
@@ -411,7 +420,8 @@ function getAdjacentHexa(hexagone) {
     return adjacentsHexa;
 }
 
-function getStartHexa() {
+function getStartHexa()
+{
     let adjacentsHexa = [];
 
     grid.forEach((hexa, index) => {
@@ -423,13 +433,15 @@ function getStartHexa() {
     return adjacentsHexa;
 }
 
-function resetCard(){
+function resetCard()
+{
     $(".card").removeClass("selected");
     $(".hex").removeClass("path");
     path = [];
 }
 
-function validateCardAndPath() {
+function validateCardAndPath()
+{
     if (path.length === 0) {
         popin(__("You need to indicate a route"), "error");
         return false;
@@ -440,7 +452,8 @@ function validateCardAndPath() {
                 {
                     x: hexa.x,
                     y: hexa.y,
-                });
+                }
+            );
         });
 
         $('#path').val(JSON.stringify(serializedPath));
@@ -448,7 +461,8 @@ function validateCardAndPath() {
     }
 }
 
-function popin(title, icon){
+function popin(title, icon)
+{
     Swal.fire({
         icon: icon,
         title: title,
@@ -460,7 +474,8 @@ function popin(title, icon){
     });
 }
 
-function askPushLemming(title, icon, hex, direction){
+function askPushLemming(title, icon, hex, direction)
+{
     Swal.fire({
         icon: icon,
         title: title,
@@ -494,7 +509,8 @@ function askPushLemming(title, icon, hex, direction){
     });
 }
 
-function getOtherLemmingsForPush(otherLemmings, hex, direction) {
+function getOtherLemmingsForPush(otherLemmings, hex, direction)
+{
     if (hex.text !== '') {
         let hexagone = grid.neighborsOf(hex,  [direction])[0];
         otherLemmings.push(hex);
@@ -503,11 +519,12 @@ function getOtherLemmingsForPush(otherLemmings, hex, direction) {
     return otherLemmings;
 }
 
-function checkPositionsForPushingLemmings(otherLemmings, direction) {
+function checkPositionsForPushingLemmings(otherLemmings, direction)
+{
     let canMove = true;
     otherLemmings.forEach((lemming, index) => {
         let hexagone = grid.neighborsOf(lemming,  [direction])[0];
-        if (hexagone.landscape === 'out'){
+        if (hexagone.landscape === 'out') {
             canMove = false;
         }
     });
@@ -515,13 +532,14 @@ function checkPositionsForPushingLemmings(otherLemmings, direction) {
     return canMove;
 }
 
-function getDirection(oldTile, nextTile) {
+function getDirection(oldTile, nextTile)
+{
     let direction = '';
     let directions = ['SE','SW','E','W','NW','NE'];
     directions.forEach((onlyDirection, index) => {
         let neighbors = grid.neighborsOf(oldTile, [onlyDirection]);
         neighbors.forEach((hexa, index) => {
-            if (hexa){
+            if (hexa) {
                 if (hexa.x === nextTile.x && hexa.y === nextTile.y ) {
                     direction = onlyDirection;
                 }
@@ -532,16 +550,18 @@ function getDirection(oldTile, nextTile) {
     return direction;
 }
 
-function info(title){
+function info(title)
+{
     $("#info").html("");
     $("#info").removeClass('alert-success');
-    if (title !== ''){
+    if (title !== '') {
         $("#info").addClass('alert-success');
         $("#info").html("<i class='fa fa-info'></i>"+title);
     }
 }
 
-function checkNbCardsToRenew(){
+function checkNbCardsToRenew()
+{
     if ($("#mycard li").length === 7 && $("#mycard li input:checked").length === 0) {
         popin(__("Select cards before renew them"), "error");
         return false;
@@ -550,7 +570,8 @@ function checkNbCardsToRenew(){
     }
 }
 
-function __(key, replace = {}) {
+function __(key, replace = {})
+{
     var translation = key.split('.').reduce((t, i) => t[i] || null, window.translations);
 
     for (var placeholder in replace) {
@@ -559,7 +580,8 @@ function __(key, replace = {}) {
     return translation;
 }
 
-function createOriginalMap() {
+function createOriginalMap()
+{
     //x = column, y = row
     let tiles = [
         {x: 0, y: 0 },{x: 1, y: 0 },{x: 2, y: 0 },{x: 3, y: 0 },{x: 4, y: 0 },{x: 5, y: 0 },{x: 6, y: 0 },{x: 7, y: 0 },{x: 8, y: 0 },{x: 9, y: 0 },{x: 10, y: 0 },{x: 11, y: 0 },{x: 12, y: 0 },{x: 13, y: 0 },{x: 14, y: 0 },{x: 15, y: 0 },{x: 16, y: 0 },
@@ -646,6 +668,7 @@ function createOriginalMap() {
         grid.get(hexa).picture = '/images/forest.png';
     });
 
+    //Needs to have 2 starting points !
     tiles = [
         {x: 1, y: 4 },
         {x: 2, y: 4 },
@@ -682,7 +705,8 @@ function createOriginalMap() {
                 start: hexa.start,
                 finish: hexa.finish,
                 text: hexa.text
-            });
+            }
+        );
     });
     serializedGrid = JSON.stringify(serializedGrid);
     return JSON.parse(serializedGrid);

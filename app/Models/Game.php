@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Card;
-use App\Models\Map;
 use Auth;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
@@ -51,15 +48,16 @@ class Game extends Model
         return $cardsSummary;
     }
 
-    public function getMapWithUpdate(&$map, &$mapUpdate) {
-        foreach (Card::CARDS as $land){
+    public function getMapWithUpdate(&$map, &$mapUpdate)
+    {
+        foreach (Card::CARDS as $land) {
             $mapUpdate[$land] = 0;
         }
         $mapUpdate["meadow"] = 0;
         $updates = unserialize($this->map_update);
 
-        foreach ($updates as $row => $update){
-            foreach ($update as $column => $land){
+        foreach ($updates as $row => $update) {
+            foreach ($update as $column => $land) {
                 $k = 0;
                 foreach ($map as $tile) {
                     if ($tile["y"] == $column && $tile["x"] == $row) {
@@ -98,10 +96,22 @@ class Game extends Model
             }
         }
 
+        //Needs to have 2 starting points
+        $map = json_decode($this->map->map, true);
+        $startTiles = [];
+        foreach ($map as $tile) {
+            if ($tile["start"]) {
+                $startTiles[] = ["x"=>$tile["x"], "y"=>$tile["y"]];
+            }
+        }
+
         $lemmingsPositions = [];
         foreach ($players as $playerId) {
-            //@TODO update (it depends from start tiles from map)
-            $lemmingsPositions[$playerId] = [1 => ["x" => 1, "y" => 4, "finish" =>0], 2 => ["x" => 2, "y" => 4, "finish" =>0]];
+            $lemmingsPositions[$playerId] =
+                [
+                    1 => ["x" => $startTiles[0]["x"], "y" => $startTiles[0]["y"], "finish" =>0],
+                    2 => ["x" => $startTiles[1]["x"], "y" => $startTiles[1]["y"], "finish" =>0]
+                ];
         }
 
         $nbCards = 0;
@@ -154,7 +164,8 @@ class Game extends Model
         $this->save();
     }
 
-    public function init($oldGame = null) {
+    public function init($oldGame = null)
+    {
         $this->map_id = 1;
         $this->player1_id = Auth::user()->id;
 
@@ -173,10 +184,10 @@ class Game extends Model
         $this->status = Game::STATUS_WAITING;
         $this->winner = 0;
 
-        $cardsInit = Card::where("game_id","=",0)->get()->shuffle()->take(config("app.nb_cards"));
+        $cardsInit = Card::where("game_id", "=", 0)->get()->shuffle()->take(config("app.nb_cards"));
         $cards = [];
         $k=0;
-        foreach ($cardsInit as $card){
+        foreach ($cardsInit as $card) {
             $cards[$k] = ['score'=>$card->score, 'landscape'=>$card->landscape, 'playerId'=>0];
             $k++;
         }
@@ -204,7 +215,8 @@ class Game extends Model
                         $nbCards++;
                     }
                 }
-                $playersInformations[$this->$field] = ['name' => User::find($this->$field)->name, 'nbCards' => $nbCards ];
+                $playersInformations[$this->$field] =
+                    ['name' => User::find($this->$field)->name, 'nbCards' => $nbCards ];
             }
         }
         return $playersInformations;
