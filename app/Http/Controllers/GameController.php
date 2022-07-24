@@ -280,7 +280,7 @@ class GameController extends Controller
         if ($game->same || $game->player == Auth::user()->id) {
             $playerId = Auth::user()->id;
             if ($game->same) {
-                $playerId = Auth::user()->id;
+                $playerId = $game->player;
             }
             $cards = unserialize($game->cards);
             $cardsId = $request->input("renewCards");

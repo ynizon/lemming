@@ -2,11 +2,14 @@
 
 ## About
 
-Lemming Game revisited in PHP / JS.<br/>
+Lemming Game (not Lemmings) revisited in PHP / JS.<br/>
+It's a race on an hexagon map.
 See https://www.trictrac.net/jeu-de-societe/lemming
+<img src="/public/images/screenshot.png" />
 
 ## Installation
-- Fill .env file (see .env.example)
+- create the database lemming
+- copy .env.example to .env and configure it.
 ````  
 composer install    
 php artisan key:generate
@@ -15,11 +18,9 @@ php artisan config:clear
 php artisan cache:clear   
 ````  
 ## TODO
-- Update shuffle start case (fixed in map at the beginning)
 - Add Websocket / Chat
 
 ## License
-
 This application use the [MIT] licence.
 
 ## Thanks

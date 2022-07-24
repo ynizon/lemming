@@ -4,6 +4,7 @@
 @endphp
 
 @if ($game->status != Game::STATUS_WAITING)
+    <br/>
     <div class="padleft">
         <h3>{{__("Global Deck")}}</h3>
         <h6>{{$infoCards}} {{__('remaining cards')}}</h6>
@@ -24,4 +25,5 @@
             </li>
         @endforeach
     </ul>
+    <br/>
 @endif

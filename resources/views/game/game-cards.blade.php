@@ -4,6 +4,7 @@
 @endphp
 
 @if (empty($game->winner))
+    <br/>
     <h3 class="padleft">{{__("Your deck")}}</h3>
     <h6>&nbsp;</h6>
     <form method="POST" action="/renew/{{$game->id}}" onsubmit="return checkNbCardsToRenew()">
@@ -27,7 +28,7 @@
                     @endforeach
                 @endfor
             @endforeach
-            @if ($game->status == Game::STATUS_STARTED && (($game->same && $game->player == $game->id) || (!$game->same && $game->player == Auth::user()->id)))
+            @if ($game->status == Game::STATUS_STARTED && (($game->same) || (!$game->same && $game->player == Auth::user()->id)))
                 <li>
                     <input type="checkbox" class="chk cursor" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
                     <div class="renew">
