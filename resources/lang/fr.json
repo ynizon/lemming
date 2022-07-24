@@ -226,7 +226,7 @@
     "Players": "Joueurs",
     "Validate": "Valider",
     "Renew your cards": "Renouveller vos cartes",
-    "Rules are available in the footer": "Les règles sont disponibles en pied de page",
+    "Rules are available in the footer": "Les règles officielles sont disponibles en pied de page",
     "You should now replace a tile by a ": "Vous devez maintenant remplacer une tuile par une ",
     "forest": "forêt",
     "water": "lac",
@@ -264,5 +264,6 @@
     "The winner is": "La vainqueur est",
     "Select cards before renew them": "Sélectionnez des cartes avant de les renouveller",
     "Start the game on the same PC": "Démarrer la partie sur le même ordinateur",
-    "players": "joueurs"
+    "players": "joueurs",
+    "Rules": "Règles"
 }

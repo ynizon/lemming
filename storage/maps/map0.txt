@@ -799,7 +799,7 @@
         "coordX": 242.4871130596428,
         "coordY": 210,
         "start": false,
-        "finish": false,
+        "finish": true,
         "text": ""
     },
     {

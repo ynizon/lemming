@@ -34,24 +34,7 @@ class GameController extends Controller
         $game = Game::findOrFail($id);
         $cards = unserialize($game->cards);
         $lemmingsPositions = unserialize($game->lemmings_positions);
-        $cardsSummary = [];
-        foreach (Card::CARDS as $landscape) {
-            $cardsSummary[$landscape] = unserialize($game->$landscape);
-        }
-
-        foreach ($cardsSummary as $landscape => $landscapeCards) {
-            $cardsSummary['line_'.$landscape] = '';
-            $cardsSummary['total_'.$landscape] = 0;
-            $cardsSummary['min_'.$landscape] = 0;
-            foreach ($landscapeCards as $landscapeCard) {
-                if (!empty($cardsSummary['line_'.$landscape])) {
-                    $cardsSummary['line_'.$landscape] .= ' + ';
-                }
-                $cardsSummary['total_'.$landscape] += $landscapeCard;
-                $cardsSummary['line_'.$landscape] .= $landscapeCard;
-                $cardsSummary['min_'.$landscape] = $landscapeCard;
-            }
-        }
+        $cardsSummary = $game->getCardsSummary();
 
         $nbAvailableCards = 0;
         foreach ($cards as $card) {
@@ -63,28 +46,9 @@ class GameController extends Controller
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersInformations = $game->getPlayersInformations($cards);
 
-        $map = json_decode($game->map->map, true);
         $mapUpdate = [];
-        foreach (Card::CARDS as $land){
-            $mapUpdate[$land] = 0;
-        }
-        $mapUpdate["meadow"] = 0;
-        $updates = unserialize($game->map_update);
-
-        foreach ($updates as $row => $update){
-            foreach ($update as $column => $land){
-                $k = 0;
-                foreach ($map as $tile) {
-                    if ($tile["y"] == $column && $tile["x"] == $row) {
-                        $map[$k]["picture"] = "/images/".$land.".png";
-                        $map[$k]["landscape"] = $land;
-                    }
-                    $k++;
-                }
-                $mapUpdate[$land]++;
-            }
-        }
-        $map = json_encode($map);
+        $map = json_decode($game->map->map, true);
+        $game->getMapWithUpdate($map, $mapUpdate);
 
         return view('game',compact('cards','game', 'playersInformations', 'lemmingsPositions',
             'cardsSummary', 'infoCards', 'mapUpdate', 'map'));
@@ -100,13 +64,7 @@ class GameController extends Controller
     public function replay($id){
         $oldGame = Game::findOrFail($id);
         $game = new Game();
-        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
-            $field = 'player' . $i . '_id';
-            if (!empty($oldGame->$field)) {
-                $game->$field = $oldGame->$field;
-            }
-        }
-        $game->init();
+        $game->init($oldGame);
 
         return redirect("/game/".$game->id);
     }

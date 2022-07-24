@@ -249,10 +249,20 @@ function initMap() {
     tilesLandscape.desert = $('#nb_desert').val();
     tilesLandscape.rock = $('#nb_rock').val();
 
-    var hexmap = document.querySelector('#hexmap');
+    let gameIsStarted = parseInt(document.getElementById("is_started").value);
+    let hexmap = document.querySelector('#hexmap');
     document.addEventListener('click', ({ offsetX, offsetY }) => {
-        if (hexmap.contains(event.target)) {
-            const hexCoordinates = Grid.pointToHex([offsetX, offsetY])
+        let correctOffsetX = offsetX;
+        let correctOffsetY = offsetY;
+        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+            //Spec Bugs for FF: https://github.com/w3c/csswg-drafts/issues/1508
+            correctOffsetX = event.clientX-$('#hexmap').offset().left;
+            correctOffsetY = event.clientY-$('#hexmap').offset().top;
+        }
+
+        console.log(correctOffsetX+'/'+correctOffsetY);
+        if (hexmap.contains(event.target) && gameIsStarted) {
+            const hexCoordinates = Grid.pointToHex([correctOffsetX, correctOffsetY])
             const hex = grid.get(hexCoordinates)
 
             if (placeMarkerLandscape !== '') {

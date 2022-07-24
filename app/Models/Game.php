@@ -28,17 +28,50 @@ class Game extends Model
         return $this->belongsTo(Map::class);
     }
 
-    public function getLandscapesPictures() {
-
-        // ----------------------------------------------------------------------
-        // --- This is a list of possible terrain types and the
-        // --- image to use to render the hex.
-        // ----------------------------------------------------------------------
-        $terrain_images = [];
-        foreach (Card::LANDSCAPES as $landscape) {
-            $terrain_images[$landscape] = $landscape;
+    public function getCardsSummary(): array
+    {
+        $cardsSummary = [];
+        foreach (Card::CARDS as $landscape) {
+            $cardsSummary[$landscape] = unserialize($this->$landscape);
         }
-        return $terrain_images;
+
+        foreach ($cardsSummary as $landscape => $landscapeCards) {
+            $cardsSummary['line_'.$landscape] = '';
+            $cardsSummary['total_'.$landscape] = 0;
+            $cardsSummary['min_'.$landscape] = 0;
+            foreach ($landscapeCards as $landscapeCard) {
+                if (!empty($cardsSummary['line_'.$landscape])) {
+                    $cardsSummary['line_'.$landscape] .= ' + ';
+                }
+                $cardsSummary['total_'.$landscape] += $landscapeCard;
+                $cardsSummary['line_'.$landscape] .= $landscapeCard;
+                $cardsSummary['min_'.$landscape] = $landscapeCard;
+            }
+        }
+        return $cardsSummary;
+    }
+
+    public function getMapWithUpdate(&$map, &$mapUpdate) {
+        foreach (Card::CARDS as $land){
+            $mapUpdate[$land] = 0;
+        }
+        $mapUpdate["meadow"] = 0;
+        $updates = unserialize($this->map_update);
+
+        foreach ($updates as $row => $update){
+            foreach ($update as $column => $land){
+                $k = 0;
+                foreach ($map as $tile) {
+                    if ($tile["y"] == $column && $tile["x"] == $row) {
+                        $map[$k]["picture"] = "/images/".$land.".png";
+                        $map[$k]["landscape"] = $land;
+                    }
+                    $k++;
+                }
+                $mapUpdate[$land]++;
+            }
+        }
+        $map = json_encode($map);
     }
 
     public function start()
@@ -121,10 +154,22 @@ class Game extends Model
         $this->save();
     }
 
-    public function init() {
+    public function init($oldGame = null) {
+        $this->map_id = 1;
+        $this->player1_id = Auth::user()->id;
+
+        if (!empty($oldGame)) {
+            for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+                $field = 'player' . $i . '_id';
+                if (!empty($oldGame->$field)) {
+                    $this->$field = $oldGame->$field;
+                }
+            }
+            $this->map_id = $oldGame->map_id;
+            $this->same  = $oldGame->same;
+        }
         $this->name = date("Y-m-d H:i:s");
         $this->created_at = date("Y-m-d H:i:s");
-        $this->player1_id = Auth::user()->id;
         $this->status = Game::STATUS_WAITING;
         $this->winner = 0;
 
@@ -142,12 +187,13 @@ class Game extends Model
         $this->desert = serialize([2]);
         $this->lemmings_positions = serialize([]);
         $this->cards = serialize($cards);
-        $this->map_id = 1;
         $this->map_update = serialize([]);
+
         $this->save();
     }
 
-    public function getPlayersInformations($cards){
+    public function getPlayersInformations($cards): array
+    {
         $playersInformations = [];
         for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';

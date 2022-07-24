@@ -10014,6 +10014,7 @@ h3 {
 .mygrid {
   display: flex;
   flex-wrap: wrap;
+  overflow: auto;
 }
 
 .card {
@@ -10140,18 +10141,14 @@ div.padleft{
 }
 .hexmap{
     width:100%;
+    min-width:1050px;
     height:800px;
+    overflow: auto;
+    position:relative;
+    top:-50px;
 }
 .hexmap text{
     font-size:40px;
-}
-@-moz-document url-prefix() {
-    .hexmap text:hover {
-        /* Need for Firefox for pushing other lemmings
-        hex.OffsetX & hex.OffsetY = 0 if text is displayed
-        */
-        display: none;
-    }
 }
 
 polygon.selected {
@@ -10220,4 +10217,27 @@ polygon.selected {
 
 #info{
     padding: 5px 5px 5px 15px;
+}
+
+.scroll{
+    overflow-x:scroll;
+}
+
+@media (max-width: 1024px) {
+    .container{
+        margin-left:10px;
+        margin-right:10px;
+    }
+}
+
+@media (min-width: 768px){
+    .container-md, .container-sm, .container {
+         max-width: initial;
+    }
+}
+
+@media (min-width: 576px){
+    .container-sm, .container {
+        max-width: initial;
+    }
 }
