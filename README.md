@@ -7,12 +7,14 @@ It's a race on an hexagon map.
 See https://www.trictrac.net/jeu-de-societe/lemming
 <img src="/public/images/screenshot.png" />
 
-## Installation with Docker
+## Installation with Docker (only on Linux)
+- copy .env.docker.example to .env .
 ./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate --seed
 
 ## Installation witout Docker
-- create the database lemming
 - copy .env.example to .env and configure it.
+- create the lemming database 
 ````  
 composer install    
 php artisan key:generate
