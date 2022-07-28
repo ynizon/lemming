@@ -72,9 +72,52 @@ const Hex = Honeycomb.extendHex({
 })
 const Grid = Honeycomb.defineGrid(Hex);
 let grid;
+let isYourTurn = 0;
 
-function loadGame(width, height, map)
+function sendMessage(gameId)
 {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        type: "POST",
+        url: "/message/"+gameId,
+        data: {message: document.getElementById("message").value},
+        success: function () {
+            loadMessages(gameId);
+        }
+    });
+    document.getElementById("message").value = '';
+}
+
+function loadMessages(gameId)
+{
+    if (document.getElementById("message")) {
+        $.getJSON("/messages/" + gameId, function (data) {
+            let items = [];
+            let ul = document.getElementById("messages");
+            ul.innerHTML = '';
+            $.each(data, function (key, val) {
+                let li = document.createElement("li");
+                li.appendChild(document.createTextNode(val.user.name + ": " + val.message));
+                ul.appendChild(li);
+            });
+        });
+
+        document.querySelector('#message').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage(gameId);
+            }
+        });
+    }
+}
+
+function loadGame(width, height, map, gameId)
+{
+    loadMessages(gameId)
+    isYourTurn = parseInt(document.getElementById('is_your_turn').value);
     grid = Grid.rectangle({
         width: width,
         height: height,
@@ -106,44 +149,46 @@ function loadGame(width, height, map)
 
 function initCards()
 {
-    $(".card").each(function (index) {
+    $(".yourcard").each(function (index) {
         $(this).on("click", function () {
-            if (currentCard) {
-                resetCard();
-            }
-            currentCard = $(this);
-            $(this).addClass("selected");
-            let score = parseInt($(this).attr('data-score'));
-            let landscape = $(this).attr('data-landscape');
-            let cardId = $(this).attr('data-cardid');
-
-            landscapePath = landscape;
-
-            $(".cards-deck").each(function ( index ) {
-                $(this).html($(this).attr("data-origine"));
-            });
-
-            let min = parseInt($('#score-'+landscape).attr("data-min"));
-            if (score <= min) {
-                let total = score + parseInt($('#score-'+landscape).attr("data-score"));
-                maxTilesPath = total;
-                $('#score-'+landscape).html(
-                    $('#score-'+landscape).attr("data-origine") + ' + ' + score +' = ' + total
-                );
-            } else {
-                let total = score;
-                maxTilesPath = total;
-                $('#score-'+landscape).html(
-                    score +' = ' + total
-                );
-                if (tilesLandscape[landscape] === "0") {
-                    landscape = 'meadow';
+            if (isYourTurn) {
+                if (currentCard) {
+                    resetCard();
                 }
-                placeMarkerLandscape = landscape;
+                currentCard = $(this);
+                $(this).addClass("selected");
+                let score = parseInt($(this).attr('data-score'));
+                let landscape = $(this).attr('data-landscape');
+                let cardId = $(this).attr('data-cardid');
 
-                popin(__("You should now replace a tile by a ")+__(landscape)+".","warning");
+                landscapePath = landscape;
+
+                $(".cards-deck").each(function (index) {
+                    $(this).html($(this).attr("data-origine"));
+                });
+
+                let min = parseInt($('#score-' + landscape).attr("data-min"));
+                if (score <= min) {
+                    let total = score + parseInt($('#score-' + landscape).attr("data-score"));
+                    maxTilesPath = total;
+                    $('#score-' + landscape).html(
+                        $('#score-' + landscape).attr("data-origine") + ' + ' + score + ' = ' + total
+                    );
+                } else {
+                    let total = score;
+                    maxTilesPath = total;
+                    $('#score-' + landscape).html(
+                        score + ' = ' + total
+                    );
+                    if (tilesLandscape[landscape] === "0") {
+                        landscape = 'meadow';
+                    }
+                    placeMarkerLandscape = landscape;
+
+                    popin(__("You should now replace a tile by a ") + __(landscape) + ".", "warning");
+                }
+                $('#card_id').val(cardId);
             }
-            $('#card_id').val(cardId);
         });
     });
 }
@@ -202,47 +247,49 @@ function initLemmings()
 
 function lemmingClick(lemmingId)
 {
-    if ($("#" + lemmingId).attr("data-finish") === "1") {
-        popin(__("This lemming has already finished"), "error");
-    } else {
-        if (path.length > 0) {
-            popin(__("You can't move 2 lemmings"), "error");
+    if (isYourTurn) {
+        if ($("#" + lemmingId).attr("data-finish") === "1") {
+            popin(__("This lemming has already finished"), "error");
         } else {
-            let allHexa = document.querySelectorAll("polygon.cursor");
-            allHexa.forEach((adjacentHexa, index) => {
-                adjacentHexa.classList.remove('cursor');
-            });
-            currentLemming = $("#" + lemmingId);
-            $(".lemming").removeClass("selected");
-            $("#" + lemmingId).addClass("selected");
-
-            $("polygon").removeClass("selected");
-            let adjacentsHexa = [];
-            currentTile = null;
-            if ($("#" + lemmingId).attr('data-x') !== "-1" && $("#" + lemmingId).attr('data-y') !== "-1") {
-                let coord = {
-                    x: parseInt($("#" + lemmingId).attr('data-x')),
-                    y: parseInt($("#" + lemmingId).attr('data-y'))
-                };
-                let hex = grid.get(coord);
-                document.getElementById(hex.draw.node.id).classList.add('selected');
-                currentTile = hex;
-                adjacentsHexa = getAdjacentHexa(hex);
+            if (path.length > 0) {
+                popin(__("You can't move 2 lemmings"), "error");
             } else {
-                adjacentsHexa = getStartHexa();
-            }
-
-            let icons = document.querySelectorAll("text");
-            icons.forEach((icon, index) => {
-                icon.classList.remove('cursor');
-            });
-            adjacentsHexa.forEach((adjacentHexa, index) => {
-                document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
-                icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y+"']");
-                icons.forEach((icon, index) => {
-                    icon.classList.add('cursor');
+                let allHexa = document.querySelectorAll("polygon.cursor");
+                allHexa.forEach((adjacentHexa, index) => {
+                    adjacentHexa.classList.remove('cursor');
                 });
-            });
+                currentLemming = $("#" + lemmingId);
+                $(".lemming").removeClass("selected");
+                $("#" + lemmingId).addClass("selected");
+
+                $("polygon").removeClass("selected");
+                let adjacentsHexa = [];
+                currentTile = null;
+                if ($("#" + lemmingId).attr('data-x') !== "-1" && $("#" + lemmingId).attr('data-y') !== "-1") {
+                    let coord = {
+                        x: parseInt($("#" + lemmingId).attr('data-x')),
+                        y: parseInt($("#" + lemmingId).attr('data-y'))
+                    };
+                    let hex = grid.get(coord);
+                    document.getElementById(hex.draw.node.id).classList.add('selected');
+                    currentTile = hex;
+                    adjacentsHexa = getAdjacentHexa(hex);
+                } else {
+                    adjacentsHexa = getStartHexa();
+                }
+
+                let icons = document.querySelectorAll("text");
+                icons.forEach((icon, index) => {
+                    icon.classList.remove('cursor');
+                });
+                adjacentsHexa.forEach((adjacentHexa, index) => {
+                    document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
+                    icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y + "']");
+                    icons.forEach((icon, index) => {
+                        icon.classList.add('cursor');
+                    });
+                });
+            }
         }
     }
 }
@@ -266,8 +313,7 @@ function initMap()
             correctOffsetY = event.clientY-$('#hexmap').offset().top;
         }
 
-        console.log(correctOffsetX+'/'+correctOffsetY);
-        if (hexmap.contains(event.target) && gameIsStarted) {
+        if (hexmap.contains(event.target) && gameIsStarted && isYourTurn) {
             const hexCoordinates = Grid.pointToHex([correctOffsetX, correctOffsetY])
             const hex = grid.get(hexCoordinates)
 

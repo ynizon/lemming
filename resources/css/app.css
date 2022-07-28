@@ -1,0 +1,243 @@
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1840px;
+    }
+}
+.hidden {
+    display: none;
+}
+
+.mygrid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+}
+
+.card {
+    margin: 5px;
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.card-header {
+    padding: 1px;
+    border-bottom: 1px solid #ffffff;
+}
+
+.card-primary {
+    background-color: #0a53be;
+}
+
+.card-border {
+    border: 5px solid #ddd !important;
+}
+
+.border-primary {
+    border: 5px solid #0a53be !important;
+}
+
+.card-secondary {
+    background-color: #b21f2d;
+}
+
+.border-secondary {
+    border: 5px solid #b21f2d !important;
+}
+
+.card-header {
+    text-align: center;
+    text-transform: capitalize;
+    color: #fff;
+    background-color: inherit;
+}
+
+.cards{
+    list-style:none;
+}
+.chk{
+    float:left;
+    margin-top:10px;
+    margin-right:10px;
+}
+
+.cards .card{
+    cursor:pointer;
+    width: 10rem;
+}
+
+.cards li .card-title, .deck li .card-title{
+    padding-top:5px;
+}
+.card-title {
+    color:#fff;
+}
+.card.selected{
+    border:1px solid #f85700;
+}
+.renew{
+    padding-left:25px;
+    padding-top:5px;
+}
+.lemming{
+    padding:5px;
+}
+.lemming.selected{
+    border: 1px solid #ccc;
+    border-radius:15px;
+    background: #ccc;
+}
+.fa-info{
+    padding-right:10px;
+}
+.landscape-earth{
+    background: #3a1e11;
+}
+.landscape-water{
+    background: #1d5980;
+}
+.landscape-rock{
+    background: #505050;
+}
+.landscape-desert{
+    background: #b0961e;
+}
+.landscape-forest{
+    background: #112c0a;
+}
+
+.player1{
+    color: #f80031 !important;
+}
+.player2{
+    color: #0a53be!important;
+}
+.player3{
+    color: #37be0a!important;
+}
+.player4{
+    color: #d5b61a!important;
+}
+.player5{
+    color: #4f1ad5 !important;
+}
+
+h3.padleft{
+    padding-left: 60px;
+}
+div.padleft{
+    padding-left: 20px;
+}
+
+.icon-player{
+    font-size:20px;
+}
+.hexmap{
+    width:100%;
+    min-width:1050px;
+    height:800px;
+    overflow: auto;
+    position:relative;
+    top:-50px;
+}
+.hexmap text{
+    font-size:40px;
+}
+
+polygon.selected {
+    opacity:0.5;
+}
+
+.fa-frog.player1:before {
+    content: "\f71a";/* fa-squirrel*/
+}
+.fa-frog.player2:before {
+    content: "\f6be"; /* fa-cat */
+}
+.fa-frog.player3:before {
+    content: "\f709";/* fa-rabbit-running*/
+}
+.fa-frog.player4:before {
+    content: "\f6d5";/* fa-dragon */
+}
+.fa-frog.player5:before {
+    content: "\f78e";/* fa-deer */
+}
+
+.cursor{
+    cursor: pointer;
+}
+
+.hex i{
+    font-size:2em;
+    width:100%;
+    color: #fff;
+    text-align: center;
+    line-height: 2.5em;
+}
+.hex i.selected{
+    border-radius:45px;
+    border: 1px solid #ffffff;
+}
+
+.hex-start{
+    background: url('/images/start.png') no-repeat;
+}
+.hex-finish{
+    background: url('/images/finish.png') no-repeat;
+}
+.hex-out{
+    background: url('/images/out.png') no-repeat;
+}
+.hex-meadow{
+    background: url('/images/meadow.png') no-repeat;
+}
+.hex-earth{
+    background: url('/images/earth.png') no-repeat;
+}
+.hex-rock{
+    background: url('/images/rock.png') no-repeat;
+}
+.hex-forest{
+    background: url('/images/forest.png') no-repeat;
+}
+.hex-desert{
+    background: url('/images/desert.png') no-repeat;
+}
+.hex-water{
+    background: url('/images/water.png') no-repeat;
+}
+
+#info{
+    padding: 5px 5px 5px 15px;
+}
+
+.scroll{
+    overflow-x:scroll;
+}
+
+@media (max-width: 1024px) {
+    .container{
+        margin-left:10px;
+        margin-right:10px;
+    }
+}
+
+@media (min-width: 768px){
+    .container-md, .container-sm, .container {
+        max-width: initial;
+    }
+}
+
+@media (min-width: 576px){
+    .container-sm, .container {
+        max-width: initial;
+    }
+}
+
+.chat{
+    min-height:250px;
+}

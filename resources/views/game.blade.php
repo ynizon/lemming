@@ -34,6 +34,13 @@
                 <div class="col-md-6">
                     @include('game/game-deck', ['cards' => $cards, 'game' => $game])
                 </div>
+                @if (!$game->same)
+                    <div class="row">
+                        <div class="col-md-12">
+                            @include('game/game-chat', ['game' => $game])
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="col-md-8 scroll">

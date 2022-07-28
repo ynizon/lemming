@@ -20,6 +20,11 @@ class Game extends Model
         return $this->hasMany(Card::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function map()
     {
         return $this->belongsTo(Map::class);

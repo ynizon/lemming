@@ -139,6 +139,7 @@
     @endforeach
 </ul>
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
+<input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
 @if ($game->status == Game::STATUS_STARTED && ($game->same || $game->player == Auth::user()->id))
     <br/>
     @foreach (Card::CARDS as $land)

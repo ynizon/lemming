@@ -16,7 +16,7 @@
                         @if ($k == $card['score'] && $card['landscape'] == $landscape && (($card['playerId'] == Auth()->user()->id && !$game->same) || ($card['playerId'] == $game->player && $game->same)))
                             <li>
                                 <input type="checkbox" class="chk cursor" value="{{$cardId}}" name="renewCards[]"/>
-                                <div class="card landscape-{{$card['landscape']}}"
+                                <div class="card yourcard landscape-{{$card['landscape']}}"
                                      data-cardid="{{$cardId}}"
                                      data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
                                     <div class="card-body cursor" alt="{{$card['landscape']}}">

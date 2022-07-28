@@ -24,11 +24,13 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <script src="/js/sweetalert.min.js"></script>
-    <script src="/js/jquery.min.js"></script>
     <script>
         var translations = {!! \Cache::get('translations') !!};
     </script>
+    <script src="/js/svg.min.js"></script>
+    <script src="/js/honeycomb.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/sweetalert.min.js"></script>
 </head>
 <body>
     <div id="app_vuejs">
@@ -82,12 +84,13 @@
             </div>
         </nav>
 
-        <script src="/js/bootstrap.bundle.min.js"></script>
-
         <main class="py-4">
             @yield('content')
         </main>
     </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+
     <footer style="position:fixed;bottom:0; margin:auto;text-align:center;background:#fff;height:50px;padding:15px;width:100%">
         <a href="http://file.trictrac.net/file-53fd903cbe6f2.pdf" target="_blank">Règles du jeu </a> -
         <a href="https://www.gameandme.fr" target="_blank">Yohann Nizon - Développeur PHP </a> - <a target="_blank" href="https://github.com/ynizon/lemming">https://github.com/ynizon/lemming</a>
