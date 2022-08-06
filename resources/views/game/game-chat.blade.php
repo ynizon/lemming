@@ -12,7 +12,7 @@
         <input type="text" name="message" id="message" class="form-control input-sm"
                placeholder="{{__('Type your message here')}}...">
 
-        <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendMessage({{$game->id}})">
+        <button class="btn btn-primary btn-sm" id="btn-chat" onclick="window.game.game.sendMessage({{$game->id}})">
             {{__("Send")}}
         </button>
     </div>

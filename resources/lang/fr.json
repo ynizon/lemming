@@ -219,7 +219,7 @@
     "Game's status": "Etat de la partie",
     "Join the game": "Rejoindre la partie",
     "Start the game": "Démarrer la partie",
-    "Select your lemming": "Choisisssez votre lemming",
+    "Select your lemming (1 or 2)": "Choisisssez votre lemming (1 ou 2)",
     "Global Deck": "Informations de jeu",
     "Your deck": "Vos cartes",
     "card(s)": "carte(s)",
@@ -254,7 +254,7 @@
     "Yes": "Oui",
     "No": "Non",
     "Do you want push the other lemming ?": "Voulez-vous poussez l'autre lemming ?",
-    "You don't have enough moves to push the other lemming(s)":"Vous n'avez pas assez de déplacement pour pousser l'autre lemming",
+    "You don't have enough moves to push the other lemming(s)":"Vous n'avez pas assez de points de déplacement pour pousser l'autre lemming",
     "You can't push the other lemming out of the map": "Vous ne pouvez pas pousser l'autre lemming en dehors de la carte",
     "You can't push 2 lemmings": "Vous ne pouvez pas pousser 2 lemmings",
     "You can't move 2 lemmings": "Vous ne pouvez déplacer qu'un seul lemming",
@@ -269,5 +269,7 @@
     "Message sent": "Message envoyé",
     "Type your message here": "Tapez votre message ici",
     "Send": "Envoyer",
-    "Chat": "Messagerie"
+    "Chat": "Messagerie",
+	"You have win": "Vous avez gagné",
+    "Congratulations": "Félicitations"
 }

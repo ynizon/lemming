@@ -29,6 +29,7 @@
                         égale, alors vous avancerez votre pion de cette valeur + celle du total de la couleur.
                         A noter que vous pouvez pousser d'autres lemmings moyennant des points de déplacement.
                         Bonne chance à vous.
+                        <br/><br/>
                     </div>
                 @endif
                 <div class="col-md-6">

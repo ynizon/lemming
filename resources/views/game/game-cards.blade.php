@@ -14,7 +14,7 @@
                 @for ($k = 4; $k >= 0; $k--)
                     @foreach ($cards as $cardId => $card)
                         @if ($k == $card['score'] && $card['landscape'] == $landscape && (($card['playerId'] == Auth()->user()->id && !$game->same) || ($card['playerId'] == $game->player && $game->same)))
-                            <li>
+                            <li style="width: max-content;">
                                 <input type="checkbox" class="chk cursor" value="{{$cardId}}" name="renewCards[]"/>
                                 <div class="card yourcard landscape-{{$card['landscape']}}"
                                      data-cardid="{{$cardId}}"

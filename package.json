@@ -11,14 +11,12 @@
     },
     "devDependencies": {
         "axios": "^0.21",
-        "bootstrap": "^4.6.0",
-        "jquery": "^3.6",
+        "bootstrap": "^4.6.0",        
         "laravel-echo": "^1.13.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "popper.js": "^1.16.1",
-        "postcss": "^8.1.14",
-        "pusher-js": "^7.3.0",
+        "postcss": "^8.1.14",        
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1",
@@ -27,6 +25,9 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "honeycomb-grid": "^3.1.8"
+		"pusher-js": "^7.3.0",
+		"jquery": "^3.6",
+        "honeycomb-grid": "^3.1.8",
+        "svg.js": "^2.7.1"
     }
 }

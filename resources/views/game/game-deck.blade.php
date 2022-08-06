@@ -13,7 +13,7 @@
         @foreach (Card::CARDS as $landscape)
             <li>
                 <div class="card landscape-{{$landscape}}">
-                    <div class="card-body" alt="{{$landscape}}">
+                    <div class="card-body nocursor" alt="{{$landscape}}">
                         <h5 class="card-title cards-deck" data-origine = "{{$cardsSummary['line_'.$landscape]}}"
                             data-score = "{{$cardsSummary['total_'.$landscape]}}"
                             data-min = "{{$cardsSummary['min_'.$landscape]}}"

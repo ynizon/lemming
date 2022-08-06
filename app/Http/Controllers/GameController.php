@@ -45,10 +45,16 @@ class GameController extends Controller
 
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersInformations = $game->getPlayersInformations($cards);
+        $numPlayer = $game->getNumPlayer($playersInformations);
 
         $mapUpdate = [];
         $map = json_decode($game->map->map, true);
         $game->getMapWithUpdate($map, $mapUpdate);
+
+        $gameReload = 0;
+        if (($game->status !== Game::STATUS_STARTED) || (!$game->same && $game->player !== Auth::user()->id)) {
+            $gameReload = 1;
+        }
 
         return view('game', compact(
             'cards',
@@ -58,7 +64,9 @@ class GameController extends Controller
             'cardsSummary',
             'infoCards',
             'mapUpdate',
-            'map'
+            'map',
+            'gameReload',
+            'numPlayer'
         ));
     }
 

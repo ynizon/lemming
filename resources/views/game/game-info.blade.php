@@ -14,7 +14,7 @@
         @if ($game->status == Game::STATUS_STARTED && $game->winner == 0)
             @if ($game->same || $game->player == Auth::user()->id)
                 {{__("It's you turn")}} :<br/>
-                - {{__("Select your lemming")}}<br/>
+                - {{__("Select your lemming (1 or 2)")}}<br/>
                 - {{__('Choose a card')}}
             @else
                 {{__('Waiting the other player')}}
@@ -22,6 +22,18 @@
         @endif
     </div>
 @endif
+
+<input type="hidden" id="game_id" value="{{$game->id}}" />
+<input type="hidden" id="game_status" value="{{$game->status}}" />
+<input type="hidden" id="game_pusher_id" value="{{$game->status}}" />
+<input type="hidden" id="game_reload" value="{{ $gameReload }}" />
+<input type="hidden" id="icon_start" value="{{ config("app.start") }}" />
+<input type="hidden" id="icon_finish" value="{{ config("app.finish") }}" />
+@for ($i = 0; $i < Game::NB_MAX_PLAYERS; $i++)
+	<input type="hidden" id="icon_{{$i}}" value="{{ config("app.icons")[$i] }}" />
+@endfor
+
+
 
 @if ($game->status == Game::STATUS_WAITING)
     @if ($game->same || $game->player1_id == Auth::user()->id)
@@ -84,7 +96,7 @@
                                 data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                         >Lemming 1</span>
                         @if ($lemmingsPositions[$playerId][1]["finish"])
-                            🏁
+                            {{config("app.finish")}}
                         @endif
                         - <span class="lemming cursor" id="lemming2"
                                 data-lemming = "2"
@@ -96,7 +108,7 @@
                                 data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                         >Lemming 2</span>
                         @if ($lemmingsPositions[$playerId][2]["finish"])
-                            🏁
+                            {{config("app.finish")}}
                         @endif
                     @else
                         : <span class="lemming"
@@ -109,7 +121,7 @@
                                 data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                         >Lemming 1</span>
                         @if ($lemmingsPositions[$playerId][1]["finish"])
-                            🏁
+                            {{config("app.finish")}}
                         @endif
                         - <span class="lemming"
                                 data-color="player{{$loop->iteration}}"
@@ -121,23 +133,24 @@
                                 data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                         >Lemming 2</span>
                         @if ($lemmingsPositions[$playerId][2]["finish"])
-                            🏁
+                            {{config("app.finish")}}
                         @endif
                     @endif
                     @if ($lemmingsPositions[$playerId][1]["finish"] && $lemmingsPositions[$playerId][2]["finish"])
-                        🏆
+                        {{config("app.winner")}}
                     @endif
 
                     @if ($playerId == $game->player)
-                        ⬅️
+                        {{config("app.next")}}
                     @else
-                        ⏳
+                            {{config("app.wait")}}
                     @endif
                 @endif
             </div>
         </li>
     @endforeach
 </ul>
+<input type="hidden" id="num_player" value="{{$numPlayer}}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
 @if ($game->status == Game::STATUS_STARTED && ($game->same || $game->player == Auth::user()->id))
@@ -146,7 +159,7 @@
         <input type="hidden" id="nb_{{$land}}" value="{{3-$mapUpdate[$land]}}" />
     @endforeach
 
-    <form method="post" onsubmit="return validateCardAndPath()" action="/update/{{$game->id}}">
+    <form method="post" onsubmit="return window.game.game.validateCardAndPath()" action="/update/{{$game->id}}">
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
         <input type="hidden" id="path" name="path" value="" />
@@ -162,6 +175,6 @@
         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
         <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="btn btn-secondary"/>
-        <input type="submit" value="{{__('Validate')}}" class="btn btn-primary"/>
+        <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary"/>
     </form>
 @endif

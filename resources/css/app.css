@@ -113,16 +113,16 @@
     color: #f80031 !important;
 }
 .player2{
-    color: #0a53be!important;
+    color: #878787!important;
 }
 .player3{
-    color: #37be0a!important;
-}
-.player4{
     color: #d5b61a!important;
 }
+.player4{
+    color: #37be0a!important;
+}
 .player5{
-    color: #4f1ad5 !important;
+    color: #0a53be !important;
 }
 
 h3.padleft{
@@ -169,6 +169,15 @@ polygon.selected {
 
 .cursor{
     cursor: pointer;
+}
+
+.nocursor{
+    cursor: initial;
+}
+
+.winner{
+    width:100px;
+    height:100px;
 }
 
 .hex i{

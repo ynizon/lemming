@@ -4,9 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import * as game from './game.js';
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -27,7 +30,6 @@ Vue.component('chat-form', require('./components/ChatForm.vue'));
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
 
 const app = new Vue({
     el: '#app_vuejs',
@@ -58,10 +60,35 @@ const app = new Vue({
     */
 });
 
-Echo.private('chat')
-    .listen('MessageSent', (e) => {
-        this.messages.push({
-            message: e.message.message,
-            user: e.user
-        });
-    });
+window.game = game;
+
+document.addEventListener("DOMContentLoaded", function () {
+    window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
+
+    let timer = 10000;
+
+    if (document.getElementById("game_pusher_id").value !== '') {
+        Echo.private('chat')
+            .listen('MessageSent', (e) => {
+                this.messages.push({
+                    message: e.message.message,
+                    user: e.user
+                });
+            });
+
+        Echo.channel(`game-`+document.getElementById("game_id").value)
+            .listen('.NextPlayer', (event) => {
+                console.log("public");
+                window.location.reload();
+            });
+        timer = 30000;
+    }
+
+    if (document.getElementById("game_reload").value !== '0') {
+        window.setInterval(function () {
+            window.location.reload();
+        },timer)
+    }
+});
+
+

@@ -1,4 +1,4 @@
-//This file is not used (first version of resource/game.js)
+export let grid;
 const draw = SVG(document.getElementById('hexmap'));
 const Hex = Honeycomb.extendHex({
     size: 35,
@@ -64,7 +64,7 @@ const Hex = Honeycomb.extendHex({
 })
 const Grid = Honeycomb.defineGrid(Hex);
 
-let game = {
+export let game = {
     currentCard:  null,
     currentLemming : null,
     currentTile : null,

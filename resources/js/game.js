@@ -1,4 +1,8 @@
-//This file is not used (first version of resource/game.js)
+import Swal from './sweetalert.min.js';
+
+const Honeycomb = require('honeycomb-grid')
+
+export let grid;
 const draw = SVG(document.getElementById('hexmap'));
 const Hex = Honeycomb.extendHex({
     size: 35,
@@ -11,10 +15,10 @@ const Hex = Honeycomb.extendHex({
                 updateCoordY = 5;
             }
             let allClasses = 'x-'+this.x+'_y-'+this.y;
-            if (this.start && this.text === '🚦') {
+            if (this.start && this.text ===  document.getElementById("icon_start").value) {
                 allClasses = allClasses + ' start ';
             }
-            if (this.finish && this.text === '🏁') {
+            if (this.finish && this.text ===  document.getElementById("icon_finish").value) {
                 allClasses = allClasses + ' finish ';
             }
 
@@ -64,7 +68,7 @@ const Hex = Honeycomb.extendHex({
 })
 const Grid = Honeycomb.defineGrid(Hex);
 
-let game = {
+export let game = {
     currentCard:  null,
     currentLemming : null,
     currentTile : null,
@@ -88,7 +92,7 @@ let game = {
             url: "/message/"+gameId,
             data: {message: document.getElementById("message").value},
             success: function () {
-                this.loadMessages(gameId);
+                game.loadMessages(gameId);
             }
         });
         document.getElementById("message").value = '';
@@ -156,7 +160,7 @@ let game = {
     },
 
     cardClick: function (card) {
-        if (game.isYourTurn) {
+        if (game.isYourTurn && game.path.length === 0) {
             if (game.currentCard) {
                 game.resetCard();
             }
@@ -200,12 +204,12 @@ let game = {
         window.setTimeout(function () {
             grid.forEach((hexa, index) => {
                 if (hexa.start) {
-                    hexa.text = '🚦';
+                    hexa.text = document.getElementById("icon_start").value;
                     hexa.addMarker();
                     hexa.draw.fill("#DDDDDD") ;
                 }
                 if (hexa.finish) {
-                    hexa.text = '🏁';
+                    hexa.text = document.getElementById("icon_finish").value;
                     hexa.addMarker();
                     hexa.draw.fill("#DDDDDD") ;
                 }
@@ -233,7 +237,9 @@ let game = {
                 let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
                 let hex = grid.get(coord);
                 hex.text = $(this).attr("data-content");
-                hex.addMarker();
+                if (!hex.start) {
+                    hex.addMarker();
+                }
             }
         });
 
@@ -317,7 +323,7 @@ let game = {
                 const hex = grid.get(hexCoordinates)
 
                 if (this.placeMarkerLandscape !== '') {
-                    if (hex.start || hex.finish) {
+                    if (hex.start || hex.finish || hex.landscape === 'out') {
                         this.popin(this.__("You can\'t put a tile on this area"), 'error');
                     } else {
                         $("#changemap-x").val(hex.x);
@@ -423,6 +429,26 @@ let game = {
         }
 
         //Add new position
+        //Fix color if no emoji (win < 10)
+        let color = "#FFFFFF";
+        switch (lemming.attr("data-color")) {
+            case "player1":
+                color = "#f80031";
+                break;
+            case "player2":
+                color = "#878787";
+                break;
+            case "player3":
+                color = "#d5b61a";
+                break;
+            case "player4":
+                color = "#37be0a";
+                break;
+            case "player5":
+                color = "#0a53be";
+                break;
+        }
+        hex.color = color;
         hex.addMarker();
         this.path.push(hex);
 
@@ -431,6 +457,29 @@ let game = {
             allHexa.forEach((adjacentHexa, index) => {
                 adjacentHexa.classList.remove('cursor');
             });
+        }
+
+        this.isWinner();
+    },
+
+    isWinner: function () {
+        if ($('#lemming1').length > 0 && $('#lemming2').length > 0) {
+            let coord = {x: parseInt($("#lemming1").attr('data-x')), y: parseInt($("#lemming1").attr('data-y'))};
+            let hex1 = grid.get(coord);
+            coord = {x: parseInt($("#lemming2").attr('data-x')), y: parseInt($("#lemming2").attr('data-y'))};
+            let hex2 = grid.get(coord);
+
+            if (hex1.finish && hex2.finish) {
+                Swal.fire({
+                    iconHtml: '<img class="winner" src="/images/winner'+document.getElementById('num_player').value+'.png">',
+                    title: this.__("You have win"),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: __('Congratulations')
+                }).then((result) => {
+                    $("#btnConfirm").click();
+                });
+            }
         }
     },
 
@@ -539,7 +588,7 @@ let game = {
                         }
 
                         //Move your current lemming
-                        this.updateLemmingPosition(hex, currentLemming);
+                        this.updateLemmingPosition(hex, this.currentLemming);
                     }
                 }
             }
@@ -550,7 +599,7 @@ let game = {
         if (hex.text !== '') {
             let hexagone = grid.neighborsOf(hex,  [direction])[0];
             otherLemmings.push(hex);
-            otherLemmings = getOtherLemmingsForPush(otherLemmings, hexagone, direction);
+            otherLemmings = this.getOtherLemmingsForPush(otherLemmings, hexagone, direction);
         }
         return otherLemmings;
     },
