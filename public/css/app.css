@@ -9514,6 +9514,10 @@ polygon.selected {
     height:100px;
 }
 
+.forminfo{
+    text-align: center;
+}
+
 .hex i{
     font-size:2em;
     width:100%;

@@ -145,10 +145,20 @@ export let game = {
             grid.get(coord).draw.fill(grid.get(coord).picture) ;
         });
 
+        this.initButtons();
         this.initCards();
         this.initMap();
         this.initLemmings();
         this.InitStartAndFinish();
+    },
+
+    initButtons: function () {
+        $(".clicker").each(function (index) {
+            $(this).on("click", function () {
+                let audio = new Audio('/sounds/click.mp3');
+                audio.play();
+            });
+        });
     },
 
     initCards: function () {
@@ -161,6 +171,9 @@ export let game = {
 
     cardClick: function (card) {
         if (game.isYourTurn && game.path.length === 0) {
+            let audio = new Audio('/sounds/card.mp3');
+            audio.play();
+
             if (game.currentCard) {
                 game.resetCard();
             }
@@ -254,6 +267,9 @@ export let game = {
 
     lemmingClick: function (lemmingId) {
         if (game.isYourTurn) {
+            let audio = new Audio('/sounds/lemming.mp3');
+            audio.play();
+
             if ($("#" + lemmingId).attr("data-finish") === "1") {
                 game.popin(game.__("This lemming has already finished"), "error");
             } else {
@@ -390,6 +406,9 @@ export let game = {
     },
 
     updateLemmingPosition: function (hex, lemming) {
+        let audio = new Audio('/sounds/move.mp3');
+        audio.play();
+
         //hex = new position
         hex.text = lemming.attr("data-content");
         this.currentTile = hex;
@@ -470,6 +489,9 @@ export let game = {
             let hex2 = grid.get(coord);
 
             if (hex1.finish && hex2.finish) {
+                let audio = new Audio('/sounds/finish.mp3');
+                audio.play();
+
                 Swal.fire({
                     iconHtml: '<img class="winner" src="/images/winner'+document.getElementById('num_player').value+'.png">',
                     title: this.__("You have win"),
@@ -526,6 +548,11 @@ export let game = {
     resetCard: function () {
         $(".card").removeClass("selected");
         $(".hex").removeClass("path");
+
+        $(".cards-deck").each(function (index) {
+            $(this).html($(this).attr("data-origine"));
+        });
+
         this.path = [];
     },
 
@@ -550,6 +577,9 @@ export let game = {
     },
 
     popin: function (title, icon) {
+        let audio = new Audio('/sounds/info.mp3');
+        audio.play();
+
         Swal.fire({
             icon: icon,
             title: title,

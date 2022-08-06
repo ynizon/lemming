@@ -159,7 +159,7 @@
         <input type="hidden" id="nb_{{$land}}" value="{{3-$mapUpdate[$land]}}" />
     @endforeach
 
-    <form method="post" onsubmit="return window.game.game.validateCardAndPath()" action="/update/{{$game->id}}">
+    <form class="forminfo" method="post" onsubmit="return window.game.game.validateCardAndPath()" action="/update/{{$game->id}}">
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
         <input type="hidden" id="path" name="path" value="" />
@@ -174,7 +174,8 @@
         <input type="hidden" id="changemap-y" name="changemap-y" value="" />
         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
-        <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="btn btn-secondary"/>
-        <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary"/>
+        <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="clicker btn btn-secondary"/>
+        &nbsp;&nbsp;
+        <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary clicker"/>
     </form>
 @endif

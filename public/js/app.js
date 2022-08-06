@@ -2516,10 +2516,19 @@ var game = {
       grid.get(coord).text = hexa.text;
       grid.get(coord).draw.fill(grid.get(coord).picture);
     });
+    this.initButtons();
     this.initCards();
     this.initMap();
     this.initLemmings();
     this.InitStartAndFinish();
+  },
+  initButtons: function initButtons() {
+    $(".clicker").each(function (index) {
+      $(this).on("click", function () {
+        var audio = new Audio('/sounds/click.mp3');
+        audio.play();
+      });
+    });
   },
   initCards: function initCards() {
     $(".yourcard").each(function (index) {
@@ -2530,6 +2539,9 @@ var game = {
   },
   cardClick: function cardClick(card) {
     if (game.isYourTurn && game.path.length === 0) {
+      var audio = new Audio('/sounds/card.mp3');
+      audio.play();
+
       if (game.currentCard) {
         game.resetCard();
       }
@@ -2621,6 +2633,9 @@ var game = {
   },
   lemmingClick: function lemmingClick(lemmingId) {
     if (game.isYourTurn) {
+      var audio = new Audio('/sounds/lemming.mp3');
+      audio.play();
+
       if ($("#" + lemmingId).attr("data-finish") === "1") {
         game.popin(game.__("This lemming has already finished"), "error");
       } else {
@@ -2758,7 +2773,9 @@ var game = {
     });
   },
   updateLemmingPosition: function updateLemmingPosition(hex, lemming) {
-    //hex = new position
+    var audio = new Audio('/sounds/move.mp3');
+    audio.play(); //hex = new position
+
     hex.text = lemming.attr("data-content");
     this.currentTile = hex; //Remove position for the other lemming (contains class)
 
@@ -2855,6 +2872,8 @@ var game = {
       var hex2 = grid.get(coord);
 
       if (hex1.finish && hex2.finish) {
+        var audio = new Audio('/sounds/finish.mp3');
+        audio.play();
         _sweetalert_min_js__WEBPACK_IMPORTED_MODULE_0___default().fire({
           iconHtml: '<img class="winner" src="/images/winner' + document.getElementById('num_player').value + '.png">',
           title: this.__("You have win"),
@@ -2901,6 +2920,9 @@ var game = {
   resetCard: function resetCard() {
     $(".card").removeClass("selected");
     $(".hex").removeClass("path");
+    $(".cards-deck").each(function (index) {
+      $(this).html($(this).attr("data-origine"));
+    });
     this.path = [];
   },
   validateCardAndPath: function validateCardAndPath() {
@@ -2920,6 +2942,8 @@ var game = {
     }
   },
   popin: function popin(title, icon) {
+    var audio = new Audio('/sounds/info.mp3');
+    audio.play();
     _sweetalert_min_js__WEBPACK_IMPORTED_MODULE_0___default().fire({
       icon: icon,
       title: title,
