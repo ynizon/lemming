@@ -371,7 +371,7 @@ export let game = {
                         if (this.currentCard) {
                             if (this.path.length < this.maxTilesPath) {
                                 if (hex) {
-                                    if (hex.landscape === 'none' ||
+                                    if (hex.landscape === 'none' || hex.landscape === 'meadow' ||
                                         hex.landscape === this.landscapePath ||
                                         hex.start ||
                                         hex.finish) {

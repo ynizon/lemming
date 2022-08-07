@@ -58,10 +58,10 @@ class Game extends Model
         $numPlayer = 0;
         $currentPlayer = 0;
         foreach ($playersInformations as $playerId => $playerInformation) {
-            if ($currentPlayer === 0) {
+            if ($currentPlayer == 0) {
                 $numPlayer++;
             }
-            if ($playerId === $this->player) {
+            if ($playerId == $this->player) {
                 $currentPlayer = $playerId;
             }
         }
