@@ -114,7 +114,7 @@ export let game = {
 
             document.querySelector('#message').addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
-                    this.sendMessage(gameId);
+                    game.sendMessage(gameId);
                 }
             });
         }
