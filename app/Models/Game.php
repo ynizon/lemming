@@ -53,6 +53,22 @@ class Game extends Model
         return $cardsSummary;
     }
 
+    public function getNumPlayer($playersInformations)
+    {
+        $numPlayer = 0;
+        $currentPlayer = 0;
+        foreach ($playersInformations as $playerId => $playerInformation) {
+            if ($currentPlayer == 0) {
+                $numPlayer++;
+            }
+            if ($playerId == $this->player) {
+                $currentPlayer = $playerId;
+            }
+        }
+
+        return $numPlayer;
+    }
+
     public function getMapWithUpdate(&$map, &$mapUpdate)
     {
         foreach (Card::CARDS as $land) {

@@ -94,13 +94,13 @@
     padding-right:10px;
 }
 .landscape-earth{
-    background: #3a1e11;
+    background: #7a5b4c;
 }
 .landscape-water{
     background: #1d5980;
 }
 .landscape-rock{
-    background: #505050;
+    background: #878787;
 }
 .landscape-desert{
     background: #b0961e;
@@ -113,16 +113,16 @@
     color: #f80031 !important;
 }
 .player2{
-    color: #0a53be!important;
+    color: #878787!important;
 }
 .player3{
-    color: #37be0a!important;
-}
-.player4{
     color: #d5b61a!important;
 }
+.player4{
+    color: #37be0a!important;
+}
 .player5{
-    color: #4f1ad5 !important;
+    color: #0a53be !important;
 }
 
 h3.padleft{
@@ -167,8 +167,21 @@ polygon.selected {
     content: "\f78e";/* fa-deer */
 }
 
-.cursor{
+.cursor, .cursor_map{
     cursor: pointer;
+}
+
+.nocursor{
+    cursor: initial;
+}
+
+.winner{
+    width:100px;
+    height:100px;
+}
+
+.forminfo{
+    text-align: center;
 }
 
 .hex i{
@@ -240,4 +253,8 @@ polygon.selected {
 
 .chat{
     min-height:250px;
+}
+
+.playerinfos{
+    padding-left: 10px;
 }

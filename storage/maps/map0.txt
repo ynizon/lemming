@@ -243,7 +243,7 @@
     },
     {
         "picture": "none",
-        "landscape": "out",
+        "landscape": "none",
         "x": 5,
         "y": 1,
         "coordX": 333.41978045700887,
@@ -430,7 +430,7 @@
     },
     {
         "picture": "none",
-        "landscape": "out",
+        "landscape": "none",
         "x": 5,
         "y": 2,
         "coordX": 303.1088913245535,
@@ -606,7 +606,7 @@
     },
     {
         "picture": "none",
-        "landscape": "out",
+        "landscape": "none",
         "x": 4,
         "y": 3,
         "coordX": 272.7980021920982,
@@ -760,7 +760,7 @@
     },
     {
         "picture": "none",
-        "landscape": "out",
+        "landscape": "none",
         "x": 1,
         "y": 4,
         "coordX": 60.6217782649107,
@@ -771,7 +771,7 @@
     },
     {
         "picture": "none",
-        "landscape": "out",
+        "landscape": "none",
         "x": 2,
         "y": 4,
         "coordX": 121.2435565298214,
@@ -799,7 +799,7 @@
         "coordX": 242.4871130596428,
         "coordY": 210,
         "start": false,
-        "finish": true,
+        "finish": false,
         "text": ""
     },
     {
@@ -1760,8 +1760,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 7,
         "y": 9,
         "coordX": 454.66333698683025,
@@ -1771,8 +1771,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 8,
         "y": 9,
         "coordX": 515.285115251741,
@@ -1947,8 +1947,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 7,
         "y": 10,
         "coordX": 424.35244785437493,
@@ -1958,8 +1958,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 8,
         "y": 10,
         "coordX": 484.9742261192856,
@@ -1969,8 +1969,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 9,
         "y": 10,
         "coordX": 545.5960043841964,
@@ -1980,8 +1980,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 10,
         "y": 10,
         "coordX": 606.217782649107,
@@ -2134,8 +2134,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 7,
         "y": 11,
         "coordX": 454.66333698683025,
@@ -2145,8 +2145,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 8,
         "y": 11,
         "coordX": 515.285115251741,
@@ -2156,8 +2156,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 9,
         "y": 11,
         "coordX": 575.9068935166516,
@@ -2321,8 +2321,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 7,
         "y": 12,
         "coordX": 424.35244785437493,
@@ -2332,8 +2332,8 @@
         "text": ""
     },
     {
-        "picture": "/images/meadow.png",
-        "landscape": "none",
+        "picture": "/images/water.png",
+        "landscape": "water",
         "x": 8,
         "y": 12,
         "coordX": 484.9742261192856,
