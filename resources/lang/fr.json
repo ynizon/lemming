@@ -209,8 +209,8 @@
     "Wait other player": "En attente de l'adversaire",
     "Please, select a question": "Merci de choisir une question",
     "Player": "Joueur",
-    "Game over. You win.": "Partie terminée, vous avez gagné.",
-    "Game over. You loose.": "Partie terminée, vous avez perdu.",
+    "You win": "Vous avez gagné",
+    "You loose": "Vous avez perdu",
     "Play again": "Rejouer",
     "Your opponent have": "Votre adversaire a",
     "card(s).": "carte(s).",
@@ -226,7 +226,7 @@
     "card(s)": "carte(s)",
     "Players": "Joueurs",
     "Validate": "Valider",
-    "Renew your cards": "Renouveller vos cartes",
+    "Renew selected cards": "Changer les cartes selectionnés",
     "Rules are available in the footer": "Les règles officielles sont disponibles en pied de page",
     "You should now replace a tile by a ": "Vous devez maintenant remplacer une tuile par une ",
     "forest": "forêt",
@@ -264,7 +264,7 @@
     "This lemming has already finished": "Ce lemming a déjà terminé",
     "The winner is": "La vainqueur est",
     "Select cards before renew them": "Sélectionnez des cartes avant de les renouveller",
-    "Start the game on the same PC": "Démarrer la partie sur le même ordinateur",
+    "Start the game on the same PC with": "Démarrer la partie sur le même ordinateur avec",
     "players": "joueurs",
     "Rules": "Règles",
     "Message sent": "Message envoyé",
@@ -272,5 +272,6 @@
     "Send": "Envoyer",
     "Chat": "Messagerie",
 	"You have win": "Vous avez gagné",
-    "Congratulations": "Félicitations"
+    "Congratulations": "Félicitations",
+    "Renew my cards": "Renouveller ses cartes"
 }

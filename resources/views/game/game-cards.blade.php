@@ -10,7 +10,7 @@
                     @foreach ($cards as $cardId => $card)
                         @if ($k == $card['score'] && $card['landscape'] == $landscape && (($card['playerId'] == Auth()->user()->id && !$game->same) || ($card['playerId'] == $game->player && $game->same)))
                             <li style="width: max-content;">
-                                <input type="checkbox" class="chk cursor" value="{{$cardId}}" name="renewCards[]"/>
+                                <input type="checkbox" class="chk cursor changecard hidden" value="{{$cardId}}" name="renewCards[]"/>
                                 <div class="card yourcard landscape-{{$card['landscape']}}"
                                      data-cardid="{{$cardId}}"
                                      data-score="{{$card['score']}}" data-landscape="{{$card['landscape']}}">
@@ -24,10 +24,10 @@
                 @endfor
             @endforeach
             @if ($game->status == Game::STATUS_STARTED && (($game->same) || (!$game->same && $game->player == Auth::user()->id)))
-                <li>
+                <li class="changecard hidden">
                     <input type="checkbox" class="chk cursor" onclick="$('.chk').prop('checked',$(this).prop('checked'));"/>
                     <div class="renew">
-                        <input type="submit" class="btn btn-primary" value="{{__("Renew your cards")}}" />
+                        <input type="submit" class="btn btn-primary" value="{{__("Renew selected cards")}}" />
                     </div>
                 </li>
             @endif

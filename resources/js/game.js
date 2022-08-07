@@ -132,7 +132,8 @@ export let game = {
         })
 
         // For create new Map see utils.js
-        // var deserializedGrid=createOriginalMap()
+        //let deserializedGrid = game.createOriginalMap()
+        //console.log(deserializedGrid);
         let deserializedGrid = JSON.parse(map);
 
         deserializedGrid.forEach((hexa) => {
@@ -223,12 +224,12 @@ export let game = {
                 if (hexa.start) {
                     hexa.text = document.getElementById("icon_start").value;
                     hexa.addMarker();
-                    hexa.draw.fill("#DDDDDD") ;
+                    hexa.draw.fill("#999999") ;
                 }
                 if (hexa.finish) {
                     hexa.text = document.getElementById("icon_finish").value;
                     hexa.addMarker();
-                    hexa.draw.fill("#DDDDDD") ;
+                    hexa.draw.fill("#999999") ;
                 }
             });
 
@@ -418,6 +419,10 @@ export let game = {
         });
     },
 
+    changeCards: function() {
+        $(".changecard").toggleClass("hidden");
+    },
+
     updateLemmingPosition: function (hex, lemming) {
         let audio = new Audio('/sounds/move.mp3');
         audio.play();
@@ -510,7 +515,7 @@ export let game = {
                     title: this.__("You have win"),
                     showDenyButton: false,
                     showCancelButton: false,
-                    confirmButtonText: __('Congratulations')
+                    confirmButtonText: this.__('Congratulations')
                 }).then(() => {
                     $("#btnConfirm").click();
                 });
@@ -768,6 +773,10 @@ export let game = {
         tiles = [
             {x: 12, y: 4 },
             {x: 11, y: 5 },{x: 12, y: 5 },{x: 13, y: 5 },
+            {x: 7, y: 9 },{x: 8, y: 9 },
+            {x: 7, y: 10 },{x: 8, y: 10 },{x: 9, y: 10 },{x: 10, y: 10 },
+            {x: 7, y: 11 },{x: 8, y: 11 },{x: 9, y: 11 },
+            {x: 7, y: 12 },{x: 8, y: 12 },
             {x: 11, y: 13 },
         ];
         tiles.forEach((hexa) => {
@@ -798,7 +807,6 @@ export let game = {
         tiles.forEach((hexa) => {
             grid.get(hexa).start = true;
             grid.get(hexa).landscape = "none";
-            grid.get(hexa).picture = '/images/start.png';
         });
 
         tiles = [
@@ -809,7 +817,6 @@ export let game = {
         tiles.forEach((hexa) => {
             grid.get(hexa).finish = true;
             grid.get(hexa).landscape = "none";
-            grid.get(hexa).picture = '/images/finish.png';
         });
 
         let serializedGrid = [];

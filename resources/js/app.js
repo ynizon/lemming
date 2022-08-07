@@ -63,30 +63,32 @@ const app = new Vue({
 window.game = game;
 
 document.addEventListener("DOMContentLoaded", function () {
-    window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
+    if (document.getElementById('is_your_turn')) {
+        window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
 
-    let timer = 10000;
+        let timer = 10000;
 
-    if (document.getElementById("game_pusher_id").value !== '') {
-        Echo.private('chat')
-            .listen('MessageSent', (e) => {
-                this.messages.push({
-                    message: e.message.message,
-                    user: e.user
+        if (document.getElementById("game_pusher_id").value !== '') {
+            Echo.private('chat')
+                .listen('MessageSent', (e) => {
+                    this.messages.push({
+                        message: e.message.message,
+                        user: e.user
+                    });
                 });
-            });
 
-        Echo.channel(`game-`+document.getElementById("game_id").value)
-            .listen('.NextPlayer', (event) => {
+            Echo.channel(`game-`+document.getElementById("game_id").value)
+                .listen('.NextPlayer', (event) => {
+                    window.location.reload();
+                });
+            timer = 30000;
+        }
+
+        if (document.getElementById("game_reload").value !== '0') {
+            window.setInterval(function () {
                 window.location.reload();
-            });
-        timer = 30000;
-    }
-
-    if (document.getElementById("game_reload").value !== '0') {
-        window.setInterval(function () {
-            window.location.reload();
-        },timer)
+            },timer)
+        }
     }
 });
 

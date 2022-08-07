@@ -1,4 +1,4 @@
-@if ($game->status != Game::STATUS_WAITING)
+@if ($game->status != Game::STATUS_WAITING && $game->status != Game::STATUS_ENDED)
     <br/>
     <div class="padleft">
         <h3>{{__("Global Deck")}}</h3>

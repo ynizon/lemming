@@ -1,8 +1,10 @@
 @if (($game->status == Game::STATUS_STARTED && $game->winner == 0) || $game->status != Game::STATUS_STARTED)
     <div id="info" class="alert-success">
         @if ($game->status != Game::STATUS_STARTED)
-            <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
-            <br/>
+            @if ($game->status != Game::STATUS_ENDED)
+                <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.
+                <br/>
+            @endif
             {{__("Game's status")}}: {{__($game->status)}}<br/>
         @endif
 
@@ -40,7 +42,7 @@
 
             <form action="/start/{{$game->id}}">
                 <input type="hidden" name="same" value="1" />
-                <input type="submit" class="btn btn-primary" value="{{__("Start the game on the same PC")}}" />
+                <input type="submit" class="btn btn-primary" value="{{__("Start the game on the same PC with")}}" />
                 <select name="nb_players" class="form-select" style="width:100px;display:inline;padding-top:2px;">
                     @for ($i = 2; $i<=Game::NB_MAX_PLAYERS; $i++)
                         <option value="{{$i}}">{{$i}}</option>
@@ -60,14 +62,14 @@
 
 @if ($game->winner == Auth::user()->id)
     <div class="alert alert-success" role="alert">
-        {{__('Game over. You win.')}}<br/>
+        {{__('You win')}}<br/>
         <a href="{{env('APP_URL')}}/replay/{{$game->id}}">{{__('Play again')}}</a>
     </div>
 @endif
 
 @if ($game->winner != Auth::user()->id && !empty($game->winner))
     <div class="alert alert-danger" role="alert">
-        {{__('Game over. You loose.')}}<br/>
+        {{__('You loose')}}<br/>
         {{__('The winner is')}}
         @if (0 != $game->winner) {{ $playersInformations[$game->winner]['name'] }}. @endif
     </div>
@@ -173,6 +175,8 @@
         <input type="hidden" id="changemap-y" name="changemap-y" value="" />
         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
+        <input type="button" onclick="window.game.game.changeCards()" value="{{__('Renew my cards')}}" class="clicker btn btn-primary"/>
+        &nbsp;&nbsp;
         <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="clicker btn btn-secondary"/>
         &nbsp;&nbsp;
         <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary clicker"/>

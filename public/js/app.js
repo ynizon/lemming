@@ -2269,26 +2269,28 @@ window.game = _game_js__WEBPACK_IMPORTED_MODULE_0__;
 document.addEventListener("DOMContentLoaded", function () {
   var _this = this;
 
-  window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
-  var timer = 10000;
+  if (document.getElementById('is_your_turn')) {
+    window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
+    var timer = 10000;
 
-  if (document.getElementById("game_pusher_id").value !== '') {
-    Echo["private"]('chat').listen('MessageSent', function (e) {
-      _this.messages.push({
-        message: e.message.message,
-        user: e.user
+    if (document.getElementById("game_pusher_id").value !== '') {
+      Echo["private"]('chat').listen('MessageSent', function (e) {
+        _this.messages.push({
+          message: e.message.message,
+          user: e.user
+        });
       });
-    });
-    Echo.channel("game-" + document.getElementById("game_id").value).listen('.NextPlayer', function (event) {
-      window.location.reload();
-    });
-    timer = 30000;
-  }
+      Echo.channel("game-" + document.getElementById("game_id").value).listen('.NextPlayer', function (event) {
+        window.location.reload();
+      });
+      timer = 30000;
+    }
 
-  if (document.getElementById("game_reload").value !== '0') {
-    window.setInterval(function () {
-      window.location.reload();
-    }, timer);
+    if (document.getElementById("game_reload").value !== '0') {
+      window.setInterval(function () {
+        window.location.reload();
+      }, timer);
+    }
   }
 });
 
@@ -2500,7 +2502,8 @@ var game = {
         hex.render(draw);
       }
     }); // For create new Map see utils.js
-    // var deserializedGrid=createOriginalMap()
+    //let deserializedGrid = game.createOriginalMap()
+    //console.log(deserializedGrid);
 
     var deserializedGrid = JSON.parse(map);
     deserializedGrid.forEach(function (hexa) {
@@ -2586,13 +2589,13 @@ var game = {
         if (hexa.start) {
           hexa.text = document.getElementById("icon_start").value;
           hexa.addMarker();
-          hexa.draw.fill("#DDDDDD");
+          hexa.draw.fill("#999999");
         }
 
         if (hexa.finish) {
           hexa.text = document.getElementById("icon_finish").value;
           hexa.addMarker();
-          hexa.draw.fill("#DDDDDD");
+          hexa.draw.fill("#999999");
         }
       }); //Default Lemming is 1
 
@@ -2784,6 +2787,9 @@ var game = {
       }
     });
   },
+  changeCards: function changeCards() {
+    $(".changecard").toggleClass("hidden");
+  },
   updateLemmingPosition: function updateLemmingPosition(hex, lemming) {
     var audio = new Audio('/sounds/move.mp3');
     audio.play(); //hex = new position
@@ -2891,7 +2897,7 @@ var game = {
           title: this.__("You have win"),
           showDenyButton: false,
           showCancelButton: false,
-          confirmButtonText: __('Congratulations')
+          confirmButtonText: this.__('Congratulations')
         }).then(function () {
           $("#btnConfirm").click();
         });
@@ -3467,6 +3473,39 @@ var game = {
       x: 13,
       y: 5
     }, {
+      x: 7,
+      y: 9
+    }, {
+      x: 8,
+      y: 9
+    }, {
+      x: 7,
+      y: 10
+    }, {
+      x: 8,
+      y: 10
+    }, {
+      x: 9,
+      y: 10
+    }, {
+      x: 10,
+      y: 10
+    }, {
+      x: 7,
+      y: 11
+    }, {
+      x: 8,
+      y: 11
+    }, {
+      x: 9,
+      y: 11
+    }, {
+      x: 7,
+      y: 12
+    }, {
+      x: 8,
+      y: 12
+    }, {
       x: 11,
       y: 13
     }];
@@ -3526,7 +3565,6 @@ var game = {
     tiles.forEach(function (hexa) {
       grid.get(hexa).start = true;
       grid.get(hexa).landscape = "none";
-      grid.get(hexa).picture = '/images/start.png';
     });
     tiles = [{
       x: 5,
@@ -3541,7 +3579,6 @@ var game = {
     tiles.forEach(function (hexa) {
       grid.get(hexa).finish = true;
       grid.get(hexa).landscape = "none";
-      grid.get(hexa).picture = '/images/finish.png';
     });
     var serializedGrid = [];
     grid.forEach(function (hexa) {
