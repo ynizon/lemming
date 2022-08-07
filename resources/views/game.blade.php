@@ -1,7 +1,3 @@
-@php
-    use App\Models\Card;
-    use App\Models\Game;
-@endphp
 @extends('layouts.app')
 
 @section('content')

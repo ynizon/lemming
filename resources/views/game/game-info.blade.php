@@ -1,8 +1,3 @@
-@php
-     use App\Models\Card;
-     use App\Models\Game;
-@endphp
-
 @if (($game->status == Game::STATUS_STARTED && $game->winner == 0) || $game->status != Game::STATUS_STARTED)
     <div id="info" class="alert-success">
         @if ($game->status != Game::STATUS_STARTED)
@@ -15,7 +10,8 @@
             @if ($game->same || $game->player == Auth::user()->id)
                 {{__("It's you turn")}} :<br/>
                 - {{__("Select your lemming (1 or 2)")}}<br/>
-                - {{__('Choose a card')}}
+                - {{__('Choose a card')}}<br/>
+                - {{__('Move your lemming on the map')}}
             @else
                 {{__('Waiting the other player')}}
             @endif
@@ -77,79 +73,82 @@
     </div>
 @endif
 <br/>
-<h5>{{__('Players')}}:</h5>
-<ul>
-    @foreach ($playersInformations as $playerId => $playerInfo)
-        <li>
-            <div class="player{{$loop->iteration}}">
-                <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{config("app.icons")[$loop->iteration-1]}}</span>
-                {{$playerInfo['name']}} ({{$playerInfo['nbCards']}} {{__('card(s)')}})
-                @if ($game->status == Game::STATUS_STARTED)
-                    @if (($game->same && $playerId == $game->player) || (!$game->same && $playerId == Auth::user()->id))
-                        : <span class="lemming cursor" id="lemming1"
-                                data-lemming = "1"
-                                data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
-                                data-player = "{{$playerId}}"
-                                data-content="{{config("app.icons")[$loop->iteration-1]}}"
-                                data-color="player{{$loop->iteration}}"
-                                data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
-                                data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
-                        >Lemming 1</span>
-                        @if ($lemmingsPositions[$playerId][1]["finish"])
-                            {{config("app.finish")}}
+<div class="playerinfos">
+    <h5>{{__('Players')}}:</h5>
+    <ul>
+        @foreach ($playersInformations as $playerId => $playerInfo)
+            <li>
+                <div class="player{{$loop->iteration}}">
+                    <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{config("app.icons")[$loop->iteration-1]}}</span>
+                    {{$playerInfo['name']}} - {{$playerInfo['nbCards']}} {{__('card(s)')}}
+                    @if ($game->status == Game::STATUS_STARTED)
+                        @if (($game->same && $playerId == $game->player) || (!$game->same && $playerId == Auth::user()->id))
+                            <input id="current_icon" type="hidden" value="{{config("app.icons")[$loop->iteration-1]}}" />
+                            : <span class="lemming cursor" id="lemming1"
+                                    data-lemming = "1"
+                                    data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
+                                    data-player = "{{$playerId}}"
+                                    data-content = "{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-color = "player{{$loop->iteration}}"
+                                    data-x = "{{$lemmingsPositions[$playerId][1]["x"]}}"
+                                    data-y = "{{$lemmingsPositions[$playerId][1]["y"]}}"
+                            >Lemming 1</span>
+                            @if ($lemmingsPositions[$playerId][1]["finish"])
+                                {{config("app.finish")}}
+                            @endif
+                            - <span class="lemming cursor" id="lemming2"
+                                    data-lemming = "2"
+                                    data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
+                                    data-player = "{{$playerId}}"
+                                    data-content = "{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-color = "player{{$loop->iteration}}"
+                                    data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
+                                    data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
+                            >Lemming 2</span>
+                            @if ($lemmingsPositions[$playerId][2]["finish"])
+                                {{config("app.finish")}}
+                            @endif
+                        @else
+                            : <span class="lemming"
+                                    data-color="player{{$loop->iteration}}"
+                                    data-lemming = "1"
+                                    data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
+                                    data-player = "{{$playerId}}"
+                                    data-content="{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
+                                    data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
+                            >Lemming 1</span>
+                            @if ($lemmingsPositions[$playerId][1]["finish"])
+                                {{config("app.finish")}}
+                            @endif
+                            - <span class="lemming"
+                                    data-color="player{{$loop->iteration}}"
+                                    data-lemming = "2"
+                                    data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
+                                    data-player = "{{$playerId}}"
+                                    data-content="{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
+                                    data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
+                            >Lemming 2</span>
+                            @if ($lemmingsPositions[$playerId][2]["finish"])
+                                {{config("app.finish")}}
+                            @endif
                         @endif
-                        - <span class="lemming cursor" id="lemming2"
-                                data-lemming = "2"
-                                data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
-                                data-player = "{{$playerId}}"
-                                data-content="{{config("app.icons")[$loop->iteration-1]}}"
-                                data-color="player{{$loop->iteration}}"
-                                data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
-                                data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
-                        >Lemming 2</span>
-                        @if ($lemmingsPositions[$playerId][2]["finish"])
-                            {{config("app.finish")}}
+                        @if ($lemmingsPositions[$playerId][1]["finish"] && $lemmingsPositions[$playerId][2]["finish"])
+                            {{config("app.winner")}}
                         @endif
-                    @else
-                        : <span class="lemming"
-                                data-color="player{{$loop->iteration}}"
-                                data-lemming = "1"
-                                data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
-                                data-player = "{{$playerId}}"
-                                data-content="{{config("app.icons")[$loop->iteration-1]}}"
-                                data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
-                                data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
-                        >Lemming 1</span>
-                        @if ($lemmingsPositions[$playerId][1]["finish"])
-                            {{config("app.finish")}}
-                        @endif
-                        - <span class="lemming"
-                                data-color="player{{$loop->iteration}}"
-                                data-lemming = "2"
-                                data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
-                                data-player = "{{$playerId}}"
-                                data-content="{{config("app.icons")[$loop->iteration-1]}}"
-                                data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
-                                data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
-                        >Lemming 2</span>
-                        @if ($lemmingsPositions[$playerId][2]["finish"])
-                            {{config("app.finish")}}
-                        @endif
-                    @endif
-                    @if ($lemmingsPositions[$playerId][1]["finish"] && $lemmingsPositions[$playerId][2]["finish"])
-                        {{config("app.winner")}}
-                    @endif
 
-                    @if ($playerId == $game->player)
-                        {{config("app.next")}}
-                    @else
-                            {{config("app.wait")}}
+                        @if ($playerId == $game->player)
+                            {{config("app.next")}}
+                        @else
+                                {{config("app.wait")}}
+                        @endif
                     @endif
-                @endif
-            </div>
-        </li>
-    @endforeach
-</ul>
+                </div>
+            </li>
+        @endforeach
+    </ul>
+</div>
 <input type="hidden" id="num_player" value="{{$numPlayer}}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />

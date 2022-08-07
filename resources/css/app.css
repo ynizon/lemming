@@ -167,7 +167,7 @@ polygon.selected {
     content: "\f78e";/* fa-deer */
 }
 
-.cursor{
+.cursor, .cursor_map{
     cursor: pointer;
 }
 
@@ -253,4 +253,8 @@ polygon.selected {
 
 .chat{
     min-height:250px;
+}
+
+.playerinfos{
+    padding-left: 10px;
 }

@@ -1,8 +1,3 @@
-@php
-     use App\Models\Message;
-     use App\Models\Game;
-@endphp
-
 <div class="panel panel-default chat">
     <h3>{{__('Chat')}}</h3>
 
@@ -16,18 +11,4 @@
             {{__("Send")}}
         </button>
     </div>
-
-    <?php
-    /*
-    <div class="panel-body">
-        <chat-messages :messages="messages"></chat-messages>
-    </div>
-    <div class="panel-footer">
-        <chat-form
-            v-on:messagesent="addMessage"
-            :user="{{ Auth::user() }}"
-        ></chat-form>
-    </div>
-    */
-    ?>
 </div>

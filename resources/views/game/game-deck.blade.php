@@ -1,8 +1,3 @@
-@php
-    use App\Models\Card;
-    use App\Models\Game;
-@endphp
-
 @if ($game->status != Game::STATUS_WAITING)
     <br/>
     <div class="padleft">

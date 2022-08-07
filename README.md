@@ -29,7 +29,7 @@ php artisan migrate --seed
 Modify resources/css/app.css
 Modify resources/js/app.js
 ````  
-npm run dev    
+npm run production    
 ````  
 
 ## Pusher
@@ -63,6 +63,7 @@ This application use the [MIT] licence.
 - SweetAlert : https://sweetalert2.github.io/
 - Resources map : https://gamedev.stackexchange.com/questions/6382/how-to-create-a-hexagon-world-map-in-php-from-a-database-for-a-browser-based-str
 - Emojis : https://openmoji.org/ / https://emojicombos.com/animal
+- Pictures: https://labs.openai.com/
 
 ## Troobleshooting
 - If you haven't emojis on the map (windows < 10), please install this font: 

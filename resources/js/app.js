@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         Echo.channel(`game-`+document.getElementById("game_id").value)
             .listen('.NextPlayer', (event) => {
-                console.log("public");
                 window.location.reload();
             });
         timer = 30000;

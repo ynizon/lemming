@@ -1,8 +1,3 @@
-@php
-     use App\Models\Card;
-     use App\Models\Game;
-@endphp
-
 @if (empty($game->winner))
     <br/>
     <h3 class="padleft">{{__("Your deck")}}</h3>

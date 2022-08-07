@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', "Qui est-ce ?"),
+    'name' => env('APP_NAME', ""),
 
     /*
     |--------------------------------------------------------------------------
@@ -238,6 +238,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Card' => App\Models\Card::class,
+        'Game' => App\Models\Game::class,
+        'Message' => App\Models\Message::class
     ],
 
 ];

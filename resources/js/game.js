@@ -69,6 +69,7 @@ const Hex = Honeycomb.extendHex({
 const Grid = Honeycomb.defineGrid(Hex);
 
 export let game = {
+    sound: false,
     currentCard:  null,
     currentLemming : null,
     currentTile : null,
@@ -101,7 +102,6 @@ export let game = {
     loadMessages: function (gameId) {
         if (document.getElementById("message")) {
             $.getJSON("/messages/" + gameId, function (data) {
-                let items = [];
                 let ul = document.getElementById("messages");
                 ul.innerHTML = '';
                 $.each(data, function (key, val) {
@@ -135,7 +135,7 @@ export let game = {
         // var deserializedGrid=createOriginalMap()
         let deserializedGrid = JSON.parse(map);
 
-        deserializedGrid.forEach((hexa, index) => {
+        deserializedGrid.forEach((hexa) => {
             let coord = {x: hexa.x, y:hexa.y};
             grid.get(coord).landscape = hexa.landscape;
             grid.get(coord).picture = hexa.picture;
@@ -153,7 +153,7 @@ export let game = {
     },
 
     initButtons: function () {
-        $(".clicker").each(function (index) {
+        $(".clicker").each(function () {
             $(this).on("click", function () {
                 let audio = new Audio('/sounds/click.mp3');
                 audio.play();
@@ -162,7 +162,7 @@ export let game = {
     },
 
     initCards: function () {
-        $(".yourcard").each(function (index) {
+        $(".yourcard").each(function () {
             $(this).on("click", function () {
                 game.cardClick($(this));
             });
@@ -185,7 +185,7 @@ export let game = {
 
             game.landscapePath = landscape;
 
-            $(".cards-deck").each(function (index) {
+            $(".cards-deck").each(function () {
                 card.html(card.attr("data-origine"));
             });
 
@@ -208,6 +208,10 @@ export let game = {
                 game.placeMarkerLandscape = landscape;
 
                 game.popin(game.__("You should now replace a tile by a ") + game.__(landscape) + ".", "warning");
+                let allHexa = document.querySelectorAll("polygon");
+                allHexa.forEach((hexa) => {
+                    hexa.classList.add('cursor_map');
+                });
             }
             $('#card_id').val(cardId);
         }
@@ -215,7 +219,7 @@ export let game = {
 
     InitStartAndFinish: function () {
         window.setTimeout(function () {
-            grid.forEach((hexa, index) => {
+            grid.forEach((hexa) => {
                 if (hexa.start) {
                     hexa.text = document.getElementById("icon_start").value;
                     hexa.addMarker();
@@ -241,16 +245,17 @@ export let game = {
                     $('#lemming2').click();
                 }
             }
-        }, 2000);
+        }, 1000);
     },
 
     initLemmings: function () {
-        $(".lemming").each(function ( index ) {
+        $(".lemming").each(function ( ) {
             if ($(this).attr('data-x') !== "-1" && $(this).attr('data-y') !== "-1") {
                 let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
                 let hex = grid.get(coord);
                 hex.text = $(this).attr("data-content");
-                if (!hex.start) {
+                let currentIcon = document.getElementById("current_icon").value;
+                if (!hex.start || $(this).attr('data-content') === currentIcon) {
                     hex.addMarker();
                 }
             }
@@ -267,8 +272,11 @@ export let game = {
 
     lemmingClick: function (lemmingId) {
         if (game.isYourTurn) {
-            let audio = new Audio('/sounds/lemming.mp3');
-            audio.play();
+            if (game.sound) {
+                let audio = new Audio('/sounds/lemming.mp3');
+                audio.play();
+            }
+            game.sound = true;//No sound before user click on DOM
 
             if ($("#" + lemmingId).attr("data-finish") === "1") {
                 game.popin(game.__("This lemming has already finished"), "error");
@@ -277,7 +285,7 @@ export let game = {
                     game.popin(this.__("You can't move 2 lemmings"), "error");
                 } else {
                     let allHexa = document.querySelectorAll("polygon.cursor");
-                    allHexa.forEach((adjacentHexa, index) => {
+                    allHexa.forEach((adjacentHexa) => {
                         adjacentHexa.classList.remove('cursor');
                     });
                     game.currentLemming = $("#" + lemmingId);
@@ -301,13 +309,13 @@ export let game = {
                     }
 
                     let icons = document.querySelectorAll("text");
-                    icons.forEach((icon, index) => {
+                    icons.forEach((icon) => {
                         icon.classList.remove('cursor');
                     });
-                    adjacentsHexa.forEach((adjacentHexa, index) => {
+                    adjacentsHexa.forEach((adjacentHexa) => {
                         document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
                         icons = document.querySelectorAll("text[class*='x-" + adjacentHexa.x + "_y-" + adjacentHexa.y + "']");
-                        icons.forEach((icon, index) => {
+                        icons.forEach((icon) => {
                             icon.classList.add('cursor');
                         });
                     });
@@ -342,6 +350,11 @@ export let game = {
                     if (hex.start || hex.finish || hex.landscape === 'out') {
                         this.popin(this.__("You can\'t put a tile on this area"), 'error');
                     } else {
+                        let allHexa = document.querySelectorAll("polygon");
+                        allHexa.forEach((hexa) => {
+                            hexa.classList.remove('cursor_map');
+                        });
+
                         $("#changemap-x").val(hex.x);
                         $("#changemap-y").val(hex.y);
                         $("#changemap-landscape").val(this.placeMarkerLandscape);
@@ -431,17 +444,17 @@ export let game = {
         lemming.attr("data-y", hex.y);
 
         let allHexa = document.querySelectorAll("polygon.cursor");
-        allHexa.forEach((adjacentHexa, index) => {
+        allHexa.forEach((adjacentHexa) => {
             adjacentHexa.classList.remove('cursor');
         });
         if (this.path.length < this.maxTilesPath) {
             let adjacentsHexa = this.getAdjacentHexa(hex);
-            adjacentsHexa.forEach((adjacentHexa, index) => {
+            adjacentsHexa.forEach((adjacentHexa) => {
                 //Polygon (tile)
                 document.getElementById(adjacentHexa.draw.node.id).classList.add('cursor');
                 //And text (lemming)
                 allHexa = document.querySelectorAll("text.x-"+adjacentHexa.x+"_y-"+adjacentHexa.y);
-                allHexa.forEach((adjacentHexa, index) => {
+                allHexa.forEach((adjacentHexa) => {
                     adjacentHexa.classList.add('cursor');
                 });
             });
@@ -473,7 +486,7 @@ export let game = {
 
         if (this.path.length === this.maxTilesPath) {
             let allHexa = document.querySelectorAll("polygon.cursor");
-            allHexa.forEach((adjacentHexa, index) => {
+            allHexa.forEach((adjacentHexa) => {
                 adjacentHexa.classList.remove('cursor');
             });
         }
@@ -493,12 +506,12 @@ export let game = {
                 audio.play();
 
                 Swal.fire({
-                    iconHtml: '<img class="winner" src="/images/winner'+document.getElementById('num_player').value+'.png">',
+                    iconHtml: '<img alt="winner" class="winner" src="/images/winner'+document.getElementById('num_player').value+'.png">',
                     title: this.__("You have win"),
                     showDenyButton: false,
                     showCancelButton: false,
                     confirmButtonText: __('Congratulations')
-                }).then((result) => {
+                }).then(() => {
                     $("#btnConfirm").click();
                 });
             }
@@ -509,7 +522,7 @@ export let game = {
         let canMove = false;
         var contiguousHexa = this.getAdjacentHexa(this.currentTile);
 
-        contiguousHexa.forEach((hexa, index) => {
+        contiguousHexa.forEach((hexa) => {
             if (newHexa.x === hexa.x && newHexa.y === hexa.y) {
                 canMove = true;
             }
@@ -522,7 +535,7 @@ export let game = {
         let adjacentsHexa = [];
         let hexagones = grid.neighborsOf(hexagone, 'all');
 
-        hexagones.forEach((hexa, index) => {
+        hexagones.forEach((hexa) => {
             if (hexa) {
                 if (hexa.landscape !== 'out' || hexa.finish) {
                     adjacentsHexa.push(hexa);
@@ -536,7 +549,7 @@ export let game = {
     getStartHexa: function () {
         let adjacentsHexa = [];
 
-        grid.forEach((hexa, index) => {
+        grid.forEach((hexa) => {
             if (hexa && hexa.start) {
                 adjacentsHexa.push(hexa);
             }
@@ -549,7 +562,7 @@ export let game = {
         $(".card").removeClass("selected");
         $(".hex").removeClass("path");
 
-        $(".cards-deck").each(function (index) {
+        $(".cards-deck").each(function () {
             $(this).html($(this).attr("data-origine"));
         });
 
@@ -562,7 +575,7 @@ export let game = {
             return false;
         } else {
             let serializedPath = [];
-            game.path.forEach((hexa, index) => {
+            game.path.forEach((hexa) => {
                 serializedPath.push(
                     {
                         x: hexa.x,
@@ -586,7 +599,7 @@ export let game = {
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: 'OK'
-        }).then((result) => {
+        }).then(() => {
 
         });
     },
@@ -636,7 +649,7 @@ export let game = {
 
     checkPositionsForPushingLemmings: function (otherLemmings, direction) {
         let canMove = true;
-        otherLemmings.forEach((lemming, index) => {
+        otherLemmings.forEach((lemming) => {
             let hexagone = grid.neighborsOf(lemming,  [direction])[0];
             if (hexagone.landscape === 'out') {
                 canMove = false;
@@ -649,9 +662,9 @@ export let game = {
     getDirection: function (oldTile, nextTile) {
         let direction = '';
         let directions = ['SE','SW','E','W','NW','NE'];
-        directions.forEach((onlyDirection, index) => {
+        directions.forEach((onlyDirection) => {
             let neighbors = grid.neighborsOf(oldTile, [onlyDirection]);
-            neighbors.forEach((hexa, index) => {
+            neighbors.forEach((hexa) => {
                 if (hexa) {
                     if (hexa.x === nextTile.x && hexa.y === nextTile.y ) {
                         direction = onlyDirection;
@@ -708,7 +721,7 @@ export let game = {
             {x: 0, y: 12 },{x: 1, y: 12 },{x: 15, y: 12 },{x: 16, y: 12 },
             {x: 0, y: 13 },{x: 1, y: 13 },{x: 2, y: 13 },{x: 13, y: 13 },{x: 14, y: 13 },{x: 15, y: 13 },{x: 16, y: 13 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "out";
             grid.get(hexa).picture = 'none';
         });
@@ -720,7 +733,7 @@ export let game = {
             {x: 4, y: 9 },
             {x: 5, y: 13 },{x: 6, y: 13 },{x: 7, y: 13 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "rock";
             grid.get(hexa).picture = '/images/rock.png';
         });
@@ -734,7 +747,7 @@ export let game = {
             {x: 14, y: 10 },
             {x: 12, y: 11 },{x: 13, y: 11 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "desert";
             grid.get(hexa).picture = '/images/desert.png';
         });
@@ -747,7 +760,7 @@ export let game = {
             {x: 3, y: 11 },
             {x: 3, y: 13 },{x: 4, y: 13 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "earth";
             grid.get(hexa).picture = '/images/earth.png';
         });
@@ -757,7 +770,7 @@ export let game = {
             {x: 11, y: 5 },{x: 12, y: 5 },{x: 13, y: 5 },
             {x: 11, y: 13 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "water";
             grid.get(hexa).picture = '/images/water.png';
         });
@@ -772,7 +785,7 @@ export let game = {
             {x: 12, y: 9 },
             {x: 13, y: 10 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).landscape = "forest";
             grid.get(hexa).picture = '/images/forest.png';
         });
@@ -782,7 +795,7 @@ export let game = {
             {x: 1, y: 4 },
             {x: 2, y: 4 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).start = true;
             grid.get(hexa).landscape = "none";
             grid.get(hexa).picture = '/images/start.png';
@@ -793,14 +806,14 @@ export let game = {
             {x: 5, y: 2 },
             {x: 4, y: 3 },
         ];
-        tiles.forEach((hexa, index) => {
+        tiles.forEach((hexa) => {
             grid.get(hexa).finish = true;
             grid.get(hexa).landscape = "none";
             grid.get(hexa).picture = '/images/finish.png';
         });
 
         let serializedGrid = [];
-        grid.forEach((hexa, index) => {
+        grid.forEach((hexa) => {
             hexa.draw.fill(hexa.picture) ;
 
             serializedGrid.push(
