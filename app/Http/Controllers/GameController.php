@@ -148,36 +148,83 @@ class GameController extends Controller
 
     private function moveLemming(&$game, $request)
     {
-        //@TODO Check le path (hack possible ?)
-        $path = $request->input('path');
-
-        $map = json_decode($game->map->map, true);
-        $finishTiles = [];
-        foreach ($map as $tile) {
-            if ($tile["finish"]) {
-                $finishTiles[] = $tile["x"]."/".$tile["y"];
-            }
-        }
-
-        $lemmingsPositions = unserialize($game->lemmings_positions);
         $cards = unserialize($game->cards);
         $playersInformations = $game->getPlayersInformations($cards);
+        $lemmingsPositions = unserialize($game->lemmings_positions);
+        $path = json_decode($request->input('path'), true);
+
+        if ($this->checkMove($playersInformations, $request, $lemmingsPositions, $path)) {
+            $map = json_decode($game->map->map, true);
+            $finishTiles = [];
+            foreach ($map as $tile) {
+                if ($tile["finish"]) {
+                    $finishTiles[] = $tile["x"]."/".$tile["y"];
+                }
+            }
+
+            foreach ($playersInformations as $playerId => $playerInfo) {
+                for ($numLemming = 1; $numLemming <3; $numLemming++) {
+                    if ($request->input('hexa-'.$playerId.'-'.$numLemming.'-x') != '' &&
+                        $request->input('hexa-'.$playerId.'-'.$numLemming.'-y') != '') {
+                        $x = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-x');
+                        $y = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-y');
+                        $finish = 0;
+                        if (in_array($x.'/'.$y, $finishTiles)) {
+                            $finish = 1;
+                        }
+                        $lemmingsPositions[$playerId][$numLemming] = ["x" => $x, "y" => $y, "finish" => $finish];
+                    }
+                }
+            }
+
+            $game->lemmings_positions = serialize($lemmingsPositions);
+        } else {
+            die('PLEASE-DONT-CHEAT - IP LOGGED');
+        }
+    }
+
+    private function checkMove($playersInformations, $request, $lemmingsPositions, $path)
+    {
+        $canMove = true;
         foreach ($playersInformations as $playerId => $playerInfo) {
-            for ($numLemming = 1; $numLemming <3; $numLemming++) {
+            for ($numLemming = 1; $numLemming < 3; $numLemming++) {
                 if ($request->input('hexa-'.$playerId.'-'.$numLemming.'-x') != '' &&
                     $request->input('hexa-'.$playerId.'-'.$numLemming.'-y') != '') {
+                    $startX = $lemmingsPositions[$playerId][$numLemming]['x'];
+                    $startY = $lemmingsPositions[$playerId][$numLemming]['y'];
                     $x = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-x');
                     $y = (int)$request->input('hexa-' . $playerId . '-' . $numLemming . '-y');
-                    $finish = 0;
-                    if (in_array($x.'/'.$y, $finishTiles)) {
-                        $finish = 1;
+
+                    $k = 0;
+                    while ($k < count($path)) {
+                        $moveX =  $path[$k]['x'];
+                        $moveY =  $path[$k]['y'];
+                        $canMove = false;
+                        if ((($startX+1) == $moveX && ($startY+1) == $moveY) ||
+                            (($startX+1) == $moveX && ($startY-1) == $moveY) ||
+                            (($startX+1) == $moveX && $startY == $moveY) ||
+                            (($startX-1) == $moveX && ($startY+1) == $moveY) ||
+                            (($startX-1) == $moveX && ($startY-1) == $moveY) ||
+                            (($startX-1) == $moveX && $startY == $moveY) ||
+                            (($startX) == $moveX && ($startY+1) == $moveY) ||
+                            (($startX) == $moveX && ($startY-1) == $moveY) ||
+                            (($startX) == $moveX && $startY == $moveY)) {
+                            $startX = $moveX;
+                            $startY = $moveY;
+
+                            $canMove = true;
+                        }
+                        $k++;
                     }
-                    $lemmingsPositions[$playerId][$numLemming] = ["x" => $x, "y" => $y, "finish" => $finish];
+
+                    if ($x != $startX || $y != $startY) {
+                        $canMove = false;
+                    }
                 }
             }
         }
 
-        $game->lemmings_positions = serialize($lemmingsPositions);
+        return $canMove;
     }
 
     private function playACard(&$game, &$cards, $cardId)
