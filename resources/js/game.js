@@ -401,7 +401,7 @@ export let game = {
                                         if (canMove) {
                                             let direction = this.getDirection(this.currentTile, hex);
                                             if (hex.text !== '' && !hex.finish) {
-                                                this.askPushLemming(this.__("Do you want push the other lemming ?"), "warning", hex, direction);
+                                                this.askPushLemming(this.__("Do you want push the other lemming ?"), "question", hex, direction);
                                             } else {
                                                 this.updateLemmingPosition(hex, this.currentLemming);
                                             }
@@ -709,6 +709,21 @@ export let game = {
         } else {
             return true;
         }
+    },
+
+    removePlayer: function (url) {
+        Swal.fire({
+            icon: 'question',
+            title: this.__('Confirm removing this player ?'),
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: this.__('Yes'),
+            denyButtonText: this.__('No')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
     },
 
     __: function (key, replace = {}) {

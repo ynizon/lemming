@@ -132,7 +132,8 @@
                             {{config("app.wait")}}
                         @endif
                     @endif
-                    &nbsp;&nbsp;<a href="/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}" class="@if ($playerIdTrash !== $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
+                    &nbsp;&nbsp;<a onclick='window.game.game.removePlayer("/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}")'
+                       class="@if ($playerIdTrash !== $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
                 </div>
             </li>
         @endforeach

@@ -275,5 +275,6 @@
 	"You have win": "Vous avez gagné",
     "Congratulations": "Félicitations",
     "Renew my cards": "Renouveller ses cartes",
-    "You can't, because you have already change the map": "Vous ne pouvez pas car vous avez déjà modifié le plateau de jeu"
+    "You can't, because you have already change the map": "Vous ne pouvez pas car vous avez déjà modifié le plateau de jeu",
+    "Confirm removing this player ?": "Confirmez-vous la suppression de ce joueur ?"
 }
