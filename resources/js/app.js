@@ -8,7 +8,6 @@ import * as game from './game.js';
 
 require('./bootstrap');
 require('./sweetalert.min');
-window.Vue = require('vue').default;
 
 /**
  * The following block of code may be used to automatically register your
@@ -27,18 +26,16 @@ window.Vue = require('vue').default;
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app_vuejs'
-});
-
 window.game = game;
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector('#message').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            window.game.game.sendMessage(gameId);
-        }
-    });
+    if (document.getElementById('message')) {
+        document.querySelector('#message').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                window.game.game.sendMessage(gameId);
+            }
+        });
+    }
 
     if (document.getElementById('is_your_turn')) {
         window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
