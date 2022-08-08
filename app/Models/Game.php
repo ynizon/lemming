@@ -259,4 +259,25 @@ class Game extends Model
         }
         return $playerId;
     }
+
+    public function getYourIcon()
+    {
+        $icon = '';
+        if ($this->same) {
+            for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+                $field = 'player'.$i.'_icon';
+                $icon = $this->$field;
+            }
+        } else {
+            for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+                $field = 'player' . $i . '_id';
+                $fieldIcon = 'player' . $i . '_icon';
+                if (Auth::user()->id == $this->$field) {
+                    $icon = $this->$fieldIcon;
+                }
+            }
+        }
+
+        return $icon;
+    }
 }

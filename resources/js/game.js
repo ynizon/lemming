@@ -1,6 +1,5 @@
-import Swal from './sweetalert.min.js';
-
-const Honeycomb = require('honeycomb-grid')
+import Swal from 'sweetalert2';
+const Honeycomb = require('honeycomb-grid');
 
 export let grid;
 const draw = SVG(document.getElementById('hexmap'));
@@ -84,6 +83,7 @@ export let game = {
     isYourTurn : 0,
 
     sendMessage: function (gameId) {
+        $(".input-group").hide();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -110,18 +110,13 @@ export let game = {
                     li.appendChild(document.createTextNode(val.user.name + ": " + val.message));
                     ul.appendChild(li);
                 });
-            });
-
-            document.querySelector('#message').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    game.sendMessage(gameId);
-                }
+                $(".input-group").show();
+                document.getElementById("message").focus();
             });
         }
     },
 
     loadGame: function (width, height, map, gameId) {
-        this.loadMessages(gameId)
         this.isYourTurn = parseInt(document.getElementById('is_your_turn').value);
         grid = Grid.rectangle({
             width: width,
@@ -147,11 +142,19 @@ export let game = {
             grid.get(coord).draw.fill(grid.get(coord).picture) ;
         });
 
+        this.initMessages(gameId);
         this.initButtons();
         this.initCards();
         this.initMap();
         this.initLemmings();
         this.InitStartAndFinish();
+    },
+
+    initMessages: function (gameId) {
+        this.loadMessages(gameId);
+        if (document.getElementById("message")) {
+            document.getElementById("message").focus();
+        }
     },
 
     initButtons: function () {
@@ -427,7 +430,7 @@ export let game = {
         });
     },
 
-    changeCards: function() {
+    changeCards: function () {
         $(".changecard").toggleClass("hidden");
     },
 

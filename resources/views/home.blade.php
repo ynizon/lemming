@@ -19,6 +19,24 @@
                         </div>
                     @endif
 
+                    <h2>{{__('Create a game')}}</h2>
+                    <ul>
+                        <li>
+                            <a href="{{env('APP_URL')}}/create">{{__('Create an online game')}}</a>
+                        </li>
+                        <li>
+                            <form action="/createAndStart">
+                                <input type="submit" class="nobtn" value="{{__("Start the game on the same PC with")}}" />
+                                <select name="nb_players" class="form-select" style="width:100px;display:inline;padding-top:2px;">
+                                    @for ($i = 2; $i<=Game::NB_MAX_PLAYERS; $i++)
+                                        <option value="{{$i}}">{{$i}}</option>
+                                    @endfor
+                                </select>
+                                {{__("players")}}
+                            </form>
+                        </li>
+                    </ul>
+
                     @if (count($games)>0)
                         <h2>{{__('Join a game')}}</h2>
                         <ul>
@@ -33,9 +51,6 @@
 
                     <h2>{{__('My games')}}</h2>
                     <ul>
-                        <li>
-                            <a href="{{env('APP_URL')}}/create">{{__('Create a game')}}</a>
-                        </li>
                         @foreach ($mygames as $game)
                         <li>
                             <a href="{{env('APP_URL')}}/game/{{ $game->id }}">#{{ $game->id }} - {{ $game->name }}</a>

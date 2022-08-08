@@ -10,6 +10,14 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+    public function createAndStart(Request $request)
+    {
+        $game = new Game();
+        $game->init();
+
+        return redirect("/start/".$game->id."?same=1&nb_players=".$request->input("nb_players"));
+    }
+
     public function start($id, Request $request)
     {
         $game = Game::findOrFail($id);
@@ -58,6 +66,7 @@ class GameController extends Controller
             $gameReload = 1;
         }
 
+        $yourIcon = $game->getYourIcon();
         $playerIdTrash = $game->whichPlayerHasLeaved();
 
         return view('game', compact(
@@ -71,7 +80,8 @@ class GameController extends Controller
             'map',
             'gameReload',
             'numPlayer',
-            'playerIdTrash'
+            'playerIdTrash',
+            'yourIcon'
         ));
     }
 

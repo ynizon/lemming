@@ -15,16 +15,6 @@ class ChatsController extends Controller
     }
 
     /**
-     * Show chats
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('chat');
-    }
-
-    /**
      * Fetch all messages for a game
      *
      * @return Message
@@ -51,7 +41,7 @@ class ChatsController extends Controller
                 'game_id' => $id
             ]);
 
-            broadcast(new MessageSent($user, $message))->toOthers();
+            broadcast(new MessageSent($user, $message, $id))->toOthers();
         }
         return ['status' => __('Message Sent')];
     }

@@ -258,3 +258,11 @@ polygon.selected {
 .playerinfos{
     padding-left: 10px;
 }
+
+.nobtn{
+    background: none;
+    border:0;
+    color: #3490dc;
+    text-decoration: none;
+    padding-left: 0;
+}

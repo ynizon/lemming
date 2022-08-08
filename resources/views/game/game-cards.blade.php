@@ -1,6 +1,12 @@
 @if (empty($game->winner))
     <br/>
-    <h3 class="padleft">{{__("Your deck")}}</h3>
+    <h3>
+        <span id="your_icon">
+            {{$yourIcon}}
+        </span>
+
+        {{__("Your deck")}}
+    </h3>
     <h6>&nbsp;</h6>
     <form method="POST" action="/renew/{{$game->id}}" onsubmit="return checkNbCardsToRenew()">
         @csrf

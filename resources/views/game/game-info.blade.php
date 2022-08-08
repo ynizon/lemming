@@ -33,18 +33,6 @@
         <br/>
         <div>
             <a class="btn btn-primary" href="/start/{{$game->id}}">{{__("Start the game")}}</a>
-            <br/><br/>
-
-            <form action="/start/{{$game->id}}">
-                <input type="hidden" name="same" value="1" />
-                <input type="submit" class="btn btn-primary" value="{{__("Start the game on the same PC with")}}" />
-                <select name="nb_players" class="form-select" style="width:100px;display:inline;padding-top:2px;">
-                    @for ($i = 2; $i<=Game::NB_MAX_PLAYERS; $i++)
-                        <option value="{{$i}}">{{$i}}</option>
-                    @endfor
-                </select>
-                {{__("players")}}
-            </form>
         </div>
     @else
         @if (!in_array(Auth::user()->id, [$game->player1_id, $game->player2_id, $game->player3_id, $game->player4_id]))
@@ -75,7 +63,7 @@
     <ul>
         @foreach ($playersInformations as $playerId => $playerInfo)
             @php
-                $fieldIcon = 'player'.$playerId.'_icon';
+                $fieldIcon = 'player'.$loop->iteration.'_icon';
             @endphp
             <li>
                 <div class="player{{$loop->iteration}}">
