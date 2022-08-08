@@ -21,6 +21,11 @@ class CreateGamesTable extends Migration
 			$table->unsignedBigInteger('player3_id')->nullable();
             $table->unsignedBigInteger('player4_id')->nullable();
             $table->unsignedBigInteger('player5_id')->nullable();
+            $table->char('player1_icon', 5)->nullable();
+            $table->char('player2_icon', 5)->nullable();
+            $table->char('player3_icon', 5)->nullable();
+            $table->char('player4_icon', 5)->nullable();
+            $table->char('player5_icon', 5)->nullable();
             $table->unsignedBigInteger('player')->nullable();
             $table->unsignedBigInteger('winner')->nullable();
             $table->integer('same')->default(0)->comment("The game is on the same PC");

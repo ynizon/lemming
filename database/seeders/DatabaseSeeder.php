@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
             DB::table('users')->insert([
-                'name' => 'CPU' . $i,
+                'name' => 'Player ' . $i,
                 'email' => 'cpu'.$i.'@gmail.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('cpu'),

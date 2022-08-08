@@ -54,6 +54,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Reset Password') }}
                                 </button>
+                                <br/><br/>
                             </div>
                         </div>
                     </form>

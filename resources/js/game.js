@@ -262,7 +262,9 @@ export let game = {
                 hex.text = $(this).attr("data-content");
                 let currentIcon = document.getElementById("current_icon").value;
                 if (!hex.start || $(this).attr('data-content') === currentIcon) {
-                    hex.addMarker();
+                    if (!hex.finish) {
+                        hex.addMarker();
+                    }
                 }
             }
         });

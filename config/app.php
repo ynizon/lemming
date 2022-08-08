@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'description' => 'Lemming - un jeu de courses en tour par tour.',
     'nb_cards'=> 10*5,
     'map_width'=> 17,
     'map_height'=> 14,

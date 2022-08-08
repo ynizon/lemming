@@ -27,11 +27,6 @@
 <input type="hidden" id="game_reload" value="{{ $gameReload }}" />
 <input type="hidden" id="icon_start" value="{{ config("app.start") }}" />
 <input type="hidden" id="icon_finish" value="{{ config("app.finish") }}" />
-@for ($i = 0; $i < Game::NB_MAX_PLAYERS; $i++)
-	<input type="hidden" id="icon_{{$i}}" value="{{ config("app.icons")[$i] }}" />
-@endfor
-
-
 
 @if ($game->status == Game::STATUS_WAITING)
     @if ($game->same || $game->player1_id == Auth::user()->id)
@@ -79,18 +74,21 @@
     <h5>{{__('Players')}}:</h5>
     <ul>
         @foreach ($playersInformations as $playerId => $playerInfo)
+            @php
+                $fieldIcon = 'player'.$playerId.'_icon';
+            @endphp
             <li>
                 <div class="player{{$loop->iteration}}">
-                    <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{config("app.icons")[$loop->iteration-1]}}</span>
+                    <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{$game->$fieldIcon}}</span>
                     {{$playerInfo['name']}} - {{$playerInfo['nbCards']}} {{__('card(s)')}}
                     @if ($game->status == Game::STATUS_STARTED)
                         @if (($game->same && $playerId == $game->player) || (!$game->same && $playerId == Auth::user()->id))
-                            <input id="current_icon" type="hidden" value="{{config("app.icons")[$loop->iteration-1]}}" />
+                            <input id="current_icon" type="hidden" value="{{$game->$fieldIcon}}" />
                             : <span class="lemming cursor" id="lemming1"
                                     data-lemming = "1"
                                     data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content = "{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-content = "{{$game->$fieldIcon}}"
                                     data-color = "player{{$loop->iteration}}"
                                     data-x = "{{$lemmingsPositions[$playerId][1]["x"]}}"
                                     data-y = "{{$lemmingsPositions[$playerId][1]["y"]}}"
@@ -102,7 +100,7 @@
                                     data-lemming = "2"
                                     data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content = "{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-content = "{{$game->$fieldIcon}}"
                                     data-color = "player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
@@ -116,7 +114,7 @@
                                     data-lemming = "1"
                                     data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content="{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-content="{{$game->$fieldIcon}}"
                                     data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                             >Lemming 1</span>
@@ -128,7 +126,7 @@
                                     data-lemming = "2"
                                     data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content="{{config("app.icons")[$loop->iteration-1]}}"
+                                    data-content="{{$game->$fieldIcon}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                             >Lemming 2</span>
@@ -143,9 +141,10 @@
                         @if ($playerId == $game->player)
                             {{config("app.next")}}
                         @else
-                                {{config("app.wait")}}
+                            {{config("app.wait")}}
                         @endif
                     @endif
+                    &nbsp;&nbsp;<a href="/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}" class="@if ($playerIdTrash !== $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
                 </div>
             </li>
         @endforeach

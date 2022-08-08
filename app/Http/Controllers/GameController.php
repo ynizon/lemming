@@ -18,7 +18,9 @@ class GameController extends Controller
                 $nbPlayers = $request->input("nb_players");
                 for ($k= 1; $k <= $nbPlayers; $k++) {
                     $field = 'player'.$k.'_id';
+                    $fieldIcon = 'player'.$k.'_icon';
                     $game->$field = $k;//Player par defaut
+                    $game->$fieldIcon = config("app.icons")[$k-1];
                 }
                 $game->same = 1;
             }
@@ -56,6 +58,8 @@ class GameController extends Controller
             $gameReload = 1;
         }
 
+        $playerIdTrash = $game->whichPlayerHasLeaved();
+
         return view('game', compact(
             'cards',
             'game',
@@ -66,7 +70,8 @@ class GameController extends Controller
             'mapUpdate',
             'map',
             'gameReload',
-            'numPlayer'
+            'numPlayer',
+            'playerIdTrash'
         ));
     }
 
@@ -100,9 +105,11 @@ class GameController extends Controller
         if (!$alreadyJoin) {
             foreach ([2, 3, 4, 5] as $playerId) {
                 $field = 'player' . $playerId . '_id';
+                $fieldIcon = 'player' . $playerId . '_icon';
                 if (empty($game->$field) &&  $alreadyJoin == false) {
                     $alreadyJoin = true;
                     $game->$field = Auth::user()->id;
+                    $game->$fieldIcon = config("app.icons")[$playerId-1];
                     $game->save();
                 }
             }
@@ -268,37 +275,28 @@ class GameController extends Controller
         $nextPlayerEvent = new NextPlayer($game->id);
         broadcast($nextPlayerEvent)->toOthers();
 
-        switch ($game->player) {
-            case $game->player1_id:
-                if (!empty($game->player2_id)) {
-                    $game->player = $game->player2_id;
-                }
-                break;
-            case $game->player2_id:
-                if (!empty($game->player3_id)) {
-                    $game->player = $game->player3_id;
-                } else {
-                    $game->player = $game->player1_id;
-                }
-                break;
-            case $game->player3_id:
-                if (!empty($game->player4_id)) {
-                    $game->player = $game->player4_id;
-                } else {
-                    $game->player = $game->player1_id;
-                }
-                break;
-            case $game->player4_id:
-                if (!empty($game->player5_id)) {
-                    $game->player = $game->player5_id;
-                } else {
-                    $game->player = $game->player1_id;
-                }
-                break;
-            case $game->player5_id:
-                $game->player = $game->player1_id;
-                break;
+        $playersIds = [];
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player' . $i . '_id';
+            if (!empty($game->$field)) {
+                $playersIds[] = $game->$field;
+            }
         }
+
+        $nextPlayerId = -1;
+        $currentPlayer = $game->player;
+        foreach ($playersIds as $playerId) {
+            if ($nextPlayerId == 0) {
+                $nextPlayerId = $playerId;
+            }
+            if ($playerId == $currentPlayer && $nextPlayerId == -1) {
+                $nextPlayerId = 0;
+            }
+        }
+        if ($nextPlayerId == 0) {
+            $nextPlayerId = $playersIds[0];
+        }
+        $game->player = $nextPlayerId;
     }
 
     public function renew($id, Request $request)
@@ -346,5 +344,21 @@ class GameController extends Controller
             $game->delete();
         }
         return redirect('/home');
+    }
+
+    public function removePlayer($id, $playerId)
+    {
+        $game = Game::findOrFail($id);
+        if ($game->player == $playerId) {
+            for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+                $field = 'player' . $i . '_id';
+                if (!empty($game->$field) && $game->$field == $playerId) {
+                    $this->nextPlayer($game);
+                    $game->$field = null;
+                    $game->save();
+                }
+            }
+        }
+        return redirect("/game/".$game->id);
     }
 }

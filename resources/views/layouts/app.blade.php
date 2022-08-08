@@ -2,7 +2,24 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="{{config("app.description")}}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{config("app.url")}}">
+    <meta property="og:title" content="{{config("app.title")}}">
+    <meta property="og:image" content="/images/logo-modify.jpg">
+    <meta property="og:description" content="{{config("app.description")}}">
+    <meta property="og:site_name" content="{{config("app.title")}}">
+    <meta property="og:locale" content="fr_FR">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="{{config("app.url")}}">
+    <meta name="twitter:creator" content="@enpix">
+    <meta name="twitter:url" content="{{config("app.url")}}">
+    <meta name="twitter:title" content="{{config("app.title")}}">
+    <meta name="twitter:description" content="{{config("app.description")}}">
+    <meta name="twitter:image" content="/images/logo-modify.jpg">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,7 +33,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href={{ asset('css/bootstrap.min.css') }}>
     <!-- Favicon -->
-    <link href="/favicon.png" rel="icon" type="image/png">
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon/favicon-16x16.png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->

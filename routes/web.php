@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/whoplay/{id}', 'GameController@whoplay');
     Route::get('/join/{id}', 'GameController@join');
     Route::get('/game/{id}', 'GameController@game');
+    Route::get('/game/{id}/removePlayer/{playerId}', 'GameController@removePlayer');
     Route::get('/replay/{id}', 'GameController@replay');
     Route::get('/remove/{id}', 'GameController@delete');
     Route::get('/create', 'GameController@create');

@@ -15,6 +15,7 @@
                 @else
                     <div class="col-md-12">
                         <h5>{{__("Rules")}}</h5>
+                        <a href="https://youtu.be/WLSg3jQa570" target="_blank">Les règles en vidéo</a>.<br/>
                         Vous devez emmener vos 2 lemmings du {{config("app.start")}} au {{config("app.finish")}}.
                         Pour cela, vous aller jouer des cartes. Chaque carte possède une couleur qui reprend celle
                         du terrain de jeu. Vos lemmings pourront traverser uniquement les terrains de type prairie

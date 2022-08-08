@@ -189,12 +189,15 @@ class Game extends Model
     {
         $this->map_id = 1;
         $this->player1_id = Auth::user()->id;
+        $this->player1_icon = config("app.icons")[0];
 
         if (!empty($oldGame)) {
             for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
                 $field = 'player' . $i . '_id';
+                $fieldIcon = 'player' . $i . '_icon';
                 if (!empty($oldGame->$field)) {
                     $this->$field = $oldGame->$field;
+                    $this->$fieldIcon = $oldGame->$fieldIcon;
                 }
             }
             $this->map_id = $oldGame->map_id;
@@ -229,6 +232,7 @@ class Game extends Model
         $playersInformations = [];
         for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';
+            $fieldIcon = 'player'.$i.'_icon';
             if (!empty($this->$field)) {
                 $nbCards = 0;
                 foreach ($cards as $card) {
@@ -237,9 +241,22 @@ class Game extends Model
                     }
                 }
                 $playersInformations[$this->$field] =
-                    ['name' => User::find($this->$field)->name, 'nbCards' => $nbCards ];
+                    ['name' => User::find($this->$field)->name, 'nbCards' => $nbCards, 'icon' => $this->$fieldIcon];
             }
         }
         return $playersInformations;
+    }
+
+    public function whichPlayerHasLeaved()
+    {
+        $playerId = 0;
+        $now = strtotime("now");
+        $lastUpdate = strtotime($this->updated_at);
+        $diff = abs($lastUpdate- $now);
+
+        if ($diff > 59) {
+            $playerId = $this->player;
+        }
+        return $playerId;
     }
 }
