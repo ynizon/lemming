@@ -95,7 +95,7 @@ class Game extends Model
 
     public function start()
     {
-        $this->status = GAME::STATUS_STARTED;
+        $this->status = Game::STATUS_STARTED;
 
         $cards = unserialize($this->cards);
         shuffle($cards);

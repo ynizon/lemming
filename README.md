@@ -52,6 +52,7 @@ PUSHER_APP_CLUSTER="eu"
 - PHPCodeSniffer
 - PHPCS
 - PHPMD
+- Larastan (vendor/bin/phpstan analyze)
 
 ## License
 This application use the [MIT] licence.

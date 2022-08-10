@@ -10,11 +10,6 @@ use File;
 class LocalizationServiceProvider extends ServiceProvider
 {
     /**
-     * @var string
-     */
-    private $langPath;
-
-    /**
      * Register services.
      *
      * @return void
@@ -31,19 +26,8 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*
-        $this->langPath = resource_path( 'lang/'. App::getLocale() );
-        Cache::rememberForever( 'translations', function () {
-            return collect( File::allFiles( $this->langPath ) )->flatMap( function ( $file ) {
-                return [
-                    $translation = $file->getBasename( '.php' ) => trans( $translation ),
-                ];
-            } )->toJson();
-        } );
-        */
-
-        Cache::pull( 'translations' );
-        Cache::rememberForever( 'translations', function () {
+        Cache::pull('translations');
+        Cache::rememberForever('translations', function () {
             return file_get_contents(resource_path('lang/') . App::getLocale() . ".json");
         });
     }

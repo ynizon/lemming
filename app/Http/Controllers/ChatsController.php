@@ -16,8 +16,8 @@ class ChatsController extends Controller
 
     /**
      * Fetch all messages for a game
-     *
-     * @return Message
+     * @param $id
+     * @return mixed
      */
     public function fetchMessages($id)
     {
