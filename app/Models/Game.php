@@ -53,20 +53,17 @@ class Game extends Model
         return $cardsSummary;
     }
 
-    public function getNumPlayer($playersInformations)
+    public function getIconCurrentPlayer($currentIcon)
     {
-        $numPlayer = 0;
-        $currentPlayer = 0;
-        foreach ($playersInformations as $playerId => $playerInformation) {
-            if ($currentPlayer == 0) {
-                $numPlayer++;
+        $iconPlayer = 0;
+        $num = 1;
+        foreach (config("app.icons") as $icon) {
+            if ($icon == $currentIcon) {
+                $iconPlayer = $num;
             }
-            if ($playerId == $this->player) {
-                $currentPlayer = $playerId;
-            }
+            $num++;
         }
-
-        return $numPlayer;
+        return $iconPlayer;
     }
 
     public function getMapWithUpdate(&$map, &$mapUpdate)
@@ -179,8 +176,7 @@ class Game extends Model
             }
         }
 
-        //No shuffle because first player have less cards...
-        //shuffle($playersId);
+        //No shuffle cards because first players have less cards...
         $this->player = $playersId[0];
         $this->save();
     }
@@ -265,8 +261,11 @@ class Game extends Model
         $icon = '';
         if ($this->same) {
             for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
-                $field = 'player'.$i.'_icon';
-                $icon = $this->$field;
+                $field = 'player' . $i . '_id';
+                if ($this->player == $this->$field) {
+                    $fieldIcon = 'player' . $i . '_icon';
+                    $icon = $this->$fieldIcon;
+                }
             }
         } else {
             for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
@@ -279,5 +278,21 @@ class Game extends Model
         }
 
         return $icon;
+    }
+
+    /**
+     * Use for test moves
+     * @return void
+     */
+    public function forceMove()
+    {
+        $lemmingsPositions = unserialize($this->lemmings_positions);
+        $lemmingsPositions[4][1]["x"]=6;
+        $lemmingsPositions[4][1]["y"]=3;
+        $lemmingsPositions[4][2]["x"]=5;
+        $lemmingsPositions[4][2]["y"]=3;
+        $this->lemmings_positions = serialize($lemmingsPositions);
+        $this->save();
+
     }
 }

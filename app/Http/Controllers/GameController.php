@@ -55,8 +55,6 @@ class GameController extends Controller
 
         $infoCards = $nbAvailableCards .'/'.count($cards);
         $playersInformations = $game->getPlayersInformations($cards);
-        $numPlayer = $game->getNumPlayer($playersInformations);
-
         $mapUpdate = [];
         $map = json_decode($game->map->map, true);
         $game->getMapWithUpdate($map, $mapUpdate);
@@ -67,6 +65,7 @@ class GameController extends Controller
         }
 
         $yourIcon = $game->getYourIcon();
+        $iconNumber = $game->getIconCurrentPlayer($yourIcon);
         $playerIdTrash = $game->whichPlayerHasLeaved();
 
         return view('game', compact(
@@ -79,7 +78,7 @@ class GameController extends Controller
             'mapUpdate',
             'map',
             'gameReload',
-            'numPlayer',
+            'iconNumber',
             'playerIdTrash',
             'yourIcon'
         ));
@@ -406,7 +405,9 @@ class GameController extends Controller
     public function removePlayer($id, $playerId)
     {
         $game = Game::findOrFail($id);
-        if ($game->player == $playerId) {
+        $playerHasLeavedId = $game->whichPlayerHasLeaved();
+
+        if ($game->player == $playerId && $playerId == $playerHasLeavedId) {
             for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
                 $field = 'player' . $i . '_id';
                 if (!empty($game->$field) && $game->$field == $playerId) {

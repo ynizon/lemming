@@ -522,7 +522,7 @@ export let game = {
                 audio.play();
 
                 Swal.fire({
-                    iconHtml: '<img alt="winner" class="winner" src="/images/winner'+document.getElementById('num_player').value+'.png">',
+                    iconHtml: '<img alt="winner" class="winner" src="/images/winner'+document.getElementById('icon_number').value+'.png">',
                     title: this.__("You have win"),
                     showDenyButton: false,
                     showCancelButton: false,

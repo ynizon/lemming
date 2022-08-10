@@ -62,21 +62,18 @@
     <h5>{{__('Players')}}:</h5>
     <ul>
         @foreach ($playersInformations as $playerId => $playerInfo)
-            @php
-                $fieldIcon = 'player'.$loop->iteration.'_icon';
-            @endphp
             <li>
                 <div class="player{{$loop->iteration}}">
-                    <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{$game->$fieldIcon}}</span>
+                    <span class="icon-player" id="icon-{{$loop->iteration-1}}">{{$playerInfo['icon']}}</span>
                     {{$playerInfo['name']}} - {{$playerInfo['nbCards']}} {{__('card(s)')}}
                     @if ($game->status == Game::STATUS_STARTED)
                         @if (($game->same && $playerId == $game->player) || (!$game->same && $playerId == Auth::user()->id))
-                            <input id="current_icon" type="hidden" value="{{$game->$fieldIcon}}" />
+                            <input id="current_icon" type="hidden" value="{{$playerInfo['icon']}}" />
                             : <span class="lemming cursor" id="lemming1"
                                     data-lemming = "1"
                                     data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content = "{{$game->$fieldIcon}}"
+                                    data-content = "{{$playerInfo['icon']}}"
                                     data-color = "player{{$loop->iteration}}"
                                     data-x = "{{$lemmingsPositions[$playerId][1]["x"]}}"
                                     data-y = "{{$lemmingsPositions[$playerId][1]["y"]}}"
@@ -88,7 +85,7 @@
                                     data-lemming = "2"
                                     data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content = "{{$game->$fieldIcon}}"
+                                    data-content = "{{$playerInfo['icon']}}"
                                     data-color = "player{{$loop->iteration}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
@@ -102,7 +99,7 @@
                                     data-lemming = "1"
                                     data-finish = "{{$lemmingsPositions[$playerId][1]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content="{{$game->$fieldIcon}}"
+                                    data-content="{{$playerInfo['icon']}}"
                                     data-x="{{$lemmingsPositions[$playerId][1]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][1]["y"]}}"
                             >Lemming 1</span>
@@ -114,7 +111,7 @@
                                     data-lemming = "2"
                                     data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                     data-player = "{{$playerId}}"
-                                    data-content="{{$game->$fieldIcon}}"
+                                    data-content="{{$playerInfo['icon']}}"
                                     data-x="{{$lemmingsPositions[$playerId][2]["x"]}}"
                                     data-y="{{$lemmingsPositions[$playerId][2]["y"]}}"
                             >Lemming 2</span>
@@ -139,7 +136,7 @@
         @endforeach
     </ul>
 </div>
-<input type="hidden" id="num_player" value="{{$numPlayer}}" />
+<input type="hidden" id="icon_number" value="{{$iconNumber}}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
 @if ($game->status == Game::STATUS_STARTED && ($game->same || $game->player == Auth::user()->id))
