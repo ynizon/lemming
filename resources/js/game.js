@@ -498,7 +498,10 @@ export let game = {
         }
         hex.color = color;
         hex.addMarker();
-        this.path.push(hex);
+
+        if (lemming.attr("data-player") === this.currentLemming.attr("data-player")) {
+            this.path.push(hex);
+        }
 
         if (this.path.length === this.maxTilesPath) {
             let allHexa = document.querySelectorAll("polygon.cursor");

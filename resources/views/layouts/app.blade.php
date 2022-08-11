@@ -114,7 +114,7 @@
     <script src="/js/app.js"></script>
 
     <footer style="position:fixed;bottom:0; margin:auto;text-align:center;background:#fff;height:50px;padding:15px;width:100%">
-        <a href="http://file.trictrac.net/file-53fd903cbe6f2.pdf" target="_blank">Règles du jeu </a> -
+        Règles du jeu <a href="https://youtu.be/WLSg3jQa570" target="_blank">📺</a>&nbsp;<a href="http://file.trictrac.net/file-53fd903cbe6f2.pdf" target="_blank">📁</a> -
         <a href="https://www.gameandme.fr" target="_blank">Yohann Nizon - Développeur PHP </a> - <a target="_blank" href="https://github.com/ynizon/lemming">https://github.com/ynizon/lemming</a>
     </footer>
 </body>
