@@ -291,8 +291,10 @@ class GameManager
         $yourIcon = $this->getYourIcon();
         $iconNumber = $this->getIconCurrentPlayer($yourIcon);
         $playerIdTrash = $this->whichPlayerHasLeaved();
+        $maxTime = date("H:i:s", strtotime($this->game->updated_at)+60);
 
         return compact(
+            'maxTime',
             'cards',
             'game',
             'playersInformations',
@@ -319,6 +321,19 @@ class GameManager
         $this->hasWinner(unserialize($this->game->lemmings_positions));
 
         $game->cards = serialize($cards);
+        $game->save();
+
+        return $game;
+    }
+
+    /**
+     * Increase timeout
+     * @return mixed
+     */
+    public function timeout()
+    {
+        $game = $this->game;
+        $game->updated_at = date('Y-m-d G:i:s');
         $game->save();
 
         return $game;
@@ -412,7 +427,7 @@ class GameManager
         $lastUpdate = strtotime($this->game->updated_at);
         $diff = abs($lastUpdate - $now);
 
-        if ($diff > 59) {
+        if ($diff > 90) {
             $playerId = $this->game->player;
         }
         return $playerId;

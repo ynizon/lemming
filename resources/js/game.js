@@ -74,6 +74,8 @@ export let game = {
     currentLemming : null,
     currentTile : null,
     path : [],
+    fullPath : [],
+    isContinueToPlay : true,
     maxTilesPath : 0,
     landscapePath : null,
     placeMarkerLandscape : '',
@@ -380,7 +382,7 @@ export let game = {
                 } else {
                     if (this.currentLemming) {
                         if (this.currentCard) {
-                            if (this.path.length < this.maxTilesPath) {
+                            if (this.fullPath.length < this.maxTilesPath) {
                                 if (hex) {
                                     if (hex.landscape === 'none' || hex.landscape === 'meadow' ||
                                         hex.landscape === this.landscapePath ||
@@ -463,7 +465,7 @@ export let game = {
         allHexa.forEach((adjacentHexa) => {
             adjacentHexa.classList.remove('cursor');
         });
-        if (this.path.length < this.maxTilesPath) {
+        if (this.fullPath.length < this.maxTilesPath) {
             let adjacentsHexa = this.getAdjacentHexa(hex);
             adjacentsHexa.forEach((adjacentHexa) => {
                 //Polygon (tile)
@@ -502,8 +504,9 @@ export let game = {
         if (lemming.attr("data-player") === this.currentLemming.attr("data-player")) {
             this.path.push(hex);
         }
+        this.fullPath.push(hex);
 
-        if (this.path.length === this.maxTilesPath) {
+        if (this.fullPath.length === this.maxTilesPath) {
             let allHexa = document.querySelectorAll("polygon.cursor");
             allHexa.forEach((adjacentHexa) => {
                 adjacentHexa.classList.remove('cursor');
@@ -586,6 +589,7 @@ export let game = {
         });
 
         this.path = [];
+        this.fullPath = [];
     },
 
     validateCardAndPath: function () {
@@ -604,6 +608,7 @@ export let game = {
             });
 
             $('#path').val(JSON.stringify(serializedPath));
+            $('#full_path').val(JSON.stringify(serializedPath));
             return true;
         }
     },
@@ -638,7 +643,7 @@ export let game = {
                 if (!this.checkPositionsForPushingLemmings(otherLemmings, direction)) {
                     this.popin(this.__("You can't push the other lemming out of the map"), "error");
                 } else {
-                    if ((this.path.length+nbMoves) >= this.maxTilesPath) {
+                    if ((this.fullPath.length+nbMoves) >= this.maxTilesPath) {
                         this.popin(this.__("You don't have enough moves to push the other lemming(s)"), "error");
                     } else {
                         //Start by the end
@@ -662,7 +667,9 @@ export let game = {
             && hex.text !== document.getElementById('icon_finish').value ) {
             let hexagone = grid.neighborsOf(hex,  [direction])[0];
             otherLemmings.push(hex);
-            otherLemmings = this.getOtherLemmingsForPush(otherLemmings, hexagone, direction);
+            if (hexagone) {
+                otherLemmings = this.getOtherLemmingsForPush(otherLemmings, hexagone, direction);
+            }
         }
         return otherLemmings;
     },
@@ -671,7 +678,11 @@ export let game = {
         let canMove = true;
         otherLemmings.forEach((hexa) => {
             let hexagone = grid.neighborsOf(hexa,  [direction])[0];
-            if (hexagone.landscape === 'out') {
+            if (hexagone) {
+                if (hexagone.landscape === 'out') {
+                    canMove = false;
+                }
+            } else {
                 canMove = false;
             }
         });
@@ -725,6 +736,29 @@ export let game = {
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = url;
+            }
+        });
+    },
+
+    timeOut: function () {
+        Swal.fire({
+            icon: 'question',
+            title: this.__('Do you continue to play ? (you will be removed)'),
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: this.__('Yes'),
+            denyButtonText: this.__('No')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: "/timeout/"+gameId,
+                    data: {},
+                    success: function (data) {
+                        document.getElementById('max_time').value = data;
+                        game.isContinueToPlay = true;
+                    }
+                });
             }
         });
     },

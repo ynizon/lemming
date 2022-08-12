@@ -68,6 +68,13 @@ class GameController extends Controller
         return redirect("/game/".$game->id);
     }
 
+    public function timeout($id)
+    {
+        $this->gameManager->loadById($id);
+        $game = $this->gameManager->timeout();
+        return date("H:i:s", strtotime($game->updated_at)+60);
+    }
+
     public function update($id, Request $request)
     {
         $game = $this->gameManager->loadById($id);

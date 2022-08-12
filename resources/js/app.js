@@ -56,9 +56,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (document.getElementById("game_reload").value !== '0') {
-            window.setInterval(function () {
+            window.setTimeout(function () {
                 window.location.reload();
             },timer)
+        }
+
+        if (document.getElementById("max_time")) {
+            window.setInterval(function () {
+                let now = new Date();
+                let nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getTimezoneOffset() * 60;
+                let max = document.getElementById('max_time').value.split(':');
+                let maxTime = parseInt(max[0]) * 3600 + parseInt(max[1]) * 60 + parseInt(max[0]);
+                if (nowTime >= maxTime && window.game.game.isContinueToPlay) {
+                    window.game.game.isContinueToPlay = false
+                    window.game.game.timeOut();
+                }
+            },1000)
         }
     }
 });

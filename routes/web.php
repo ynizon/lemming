@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/game/{id}/removePlayer/{playerId}', 'GameController@removePlayer');
     Route::get('/replay/{id}', 'GameController@replay');
     Route::get('/remove/{id}', 'GameController@delete');
+    Route::get('/timeout/{id}', 'GameController@timeout');
     Route::get('/create', 'GameController@create');
     Route::get('/createAndStart', 'GameController@createAndStart');
     Route::post('/update/{id}', 'GameController@update');

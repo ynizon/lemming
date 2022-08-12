@@ -21,6 +21,7 @@
     </div>
 @endif
 
+<input type="hidden" id="max_time" value="{{$maxTime}}" />
 <input type="hidden" id="game_id" value="{{$game->id}}" />
 <input type="hidden" id="game_status" value="{{$game->status}}" />
 <input type="hidden" id="game_pusher_id" value="{{$game->status}}" />
@@ -149,6 +150,7 @@
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
         <input type="hidden" id="path" name="path" value="" />
+        <input type="hidden" id="full_path" name="full_path" value="" />
         <input type="hidden" id="card_id" name="card_id" value="" />
         @foreach ($playersInformations as $playerId => $playerInfo)
             <input type="hidden" id="hexa-{{$playerId}}-1-x" name="hexa-{{$playerId}}-1-x" value="" />
