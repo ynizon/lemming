@@ -56,6 +56,7 @@
         {{__('You loose')}}<br/>
         {{__('The winner is')}}
         @if (0 != $game->winner) {{ $playersInformations[$game->winner]['name'] }}. @endif
+        <br/><a href="/replay/{{$game->id}}">{{__('Play again')}}</a>
     </div>
 @endif
 <br/>

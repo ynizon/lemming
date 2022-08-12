@@ -526,7 +526,6 @@ export let game = {
             if (hex1.finish && hex2.finish) {
                 let audio = new Audio('/sounds/finish.mp3');
                 audio.play();
-
                 Swal.fire({
                     iconHtml: '<img alt="winner" class="winner" src="/images/winner'+document.getElementById('icon_number').value+'.png">',
                     title: this.__("You have win"),
