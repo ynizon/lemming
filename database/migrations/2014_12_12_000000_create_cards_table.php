@@ -18,7 +18,7 @@ class CreateCardsTable extends Migration
             $table->id();
             $table->integer('score')->default(0);
             $table->integer('game_id')->default(0);
-            $table->enum('landscape',Card::LANDSCAPES);
+            $table->enum('landscape', Card::LANDSCAPES);
         });
     }
 
