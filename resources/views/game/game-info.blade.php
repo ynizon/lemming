@@ -150,6 +150,8 @@
     <form class="forminfo" method="post" onsubmit="return window.game.game.validateCardAndPath()" action="/update/{{$game->id}}">
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
+        <input type="hidden" id="num_lemming" name="num_lemming" value="" />
+        <input type="hidden" id="same" name="same" value="{{$game->same}}" />
         <input type="hidden" id="path" name="path" value="" />
         <input type="hidden" id="full_path" name="full_path" value="" />
         <input type="hidden" id="card_id" name="card_id" value="" />

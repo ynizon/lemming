@@ -217,7 +217,7 @@ export let game = {
                     }
                     game.placeMarkerLandscape = landscape;
 
-                    game.popin(game.__("You should now replace a tile by a ") + game.__(landscape) + ".", "warning");
+                    game.popin(game.__("You should now replace a tile by a tile ") + game.__(landscape) + ".", "warning");
                     let allHexa = document.querySelectorAll("polygon");
                     allHexa.forEach((hexa) => {
                         hexa.classList.add('cursor_map');
@@ -304,6 +304,7 @@ export let game = {
                     game.currentLemming = $("#" + lemmingId);
                     $(".lemming").removeClass("selected");
                     $("#" + lemmingId).addClass("selected");
+                    document.getElementById('num_lemming').value = $("#" + lemmingId).attr("data-lemming");
 
                     $("polygon").removeClass("selected");
                     let adjacentsHexa = [];
@@ -501,13 +502,19 @@ export let game = {
         hex.color = color;
         hex.addMarker();
 
-        if (lemming.attr("data-player") === this.currentLemming.attr("data-player")) {
+        if (lemming.attr("data-player") === this.currentLemming.attr("data-player")
+            && lemming.attr("data-lemming") === this.currentLemming.attr("data-lemming")
+        ) {
             this.path.push(hex);
         }
         this.fullPath.push(hex);
 
         if (this.fullPath.length === this.maxTilesPath) {
             let allHexa = document.querySelectorAll("polygon.cursor");
+            allHexa.forEach((adjacentHexa) => {
+                adjacentHexa.classList.remove('cursor');
+            });
+            allHexa = document.querySelectorAll("text.cursor");
             allHexa.forEach((adjacentHexa) => {
                 adjacentHexa.classList.remove('cursor');
             });
