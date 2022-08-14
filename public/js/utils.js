@@ -190,7 +190,7 @@ let game = {
                 }
                 game.placeMarkerLandscape = landscape;
 
-                game.popin(game.__("You should now replace a tile by a ") + game.__(landscape) + ".", "warning");
+                game.popin(game.__("You should now replace a tile by a tile ") + game.__(landscape) + ".", "warning");
             }
             $('#card_id').val(cardId);
         }

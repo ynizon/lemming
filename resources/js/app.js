@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import * as game from './game.js';
+import * as game from './lemming.js';
 
 require('./bootstrap');
 require('./sweetalert.min');
@@ -62,18 +62,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (document.getElementById("max_time")) {
-            window.setInterval(function () {
-                let now = new Date();
-                let nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getTimezoneOffset() * 60;
-                let max = document.getElementById('max_time').value.split(':');
-                let maxTime = parseInt(max[0]) * 3600 + parseInt(max[1]) * 60 + parseInt(max[2]);
+            if (document.getElementById("same").value !== "1") {
+                window.setInterval(function () {
+                    let now = new Date();
+                    let nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getTimezoneOffset() * 60;
+                    let max = document.getElementById('max_time').value.split(':');
+                    let maxTime = parseInt(max[0]) * 3600 + parseInt(max[1]) * 60 + parseInt(max[2]);
 
-                if (nowTime >= maxTime && window.game.game.isContinueToPlay &&
-                    document.getElementById('game_status').value === 'started') {
-                    window.game.game.isContinueToPlay = false
-                    window.game.game.timeOut();
-                }
-            },1000)
+                    if (nowTime >= maxTime && window.game.game.isContinueToPlay &&
+                        document.getElementById('game_status').value === 'started') {
+                        window.game.game.isContinueToPlay = false
+                        window.game.game.timeOut();
+                    }
+                }, 1000)
+            }
         }
     }
 });

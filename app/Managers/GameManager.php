@@ -499,13 +499,14 @@ class GameManager
     {
         //@Todo: check pushing lemmings
         //@Todo: check maximum tiles
-
         //Check only the current lemming
         $canMove = true;
+        $numLemmingSelected = (int) $request->input("num_lemming");
         foreach ($playersInformations as $playerId => $playerInfo) {
             if ($playerId == $this->game->player) {
                 for ($numLemming = 1; $numLemming < 3; $numLemming++) {
-                    if ($request->input('hexa-' . $playerId . '-' . $numLemming . '-x') != '' &&
+                    if ($numLemming == $numLemmingSelected &&
+                        $request->input('hexa-' . $playerId . '-' . $numLemming . '-x') != '' &&
                         $request->input('hexa-' . $playerId . '-' . $numLemming . '-y') != '') {
                         $startX = $lemmingsPositions[$playerId][$numLemming]['x'];
                         $startY = $lemmingsPositions[$playerId][$numLemming]['y'];
