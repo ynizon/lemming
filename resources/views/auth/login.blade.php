@@ -68,7 +68,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <br/>
-                                Notes:<br/>
+                                {{__('Demo accounts')}}:<br/>
                                 player1@gmail.com / player1<br/>
                                 player2@gmail.com / player2<br/>
                                 player3@gmail.com / player3<br/>

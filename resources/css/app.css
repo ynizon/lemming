@@ -180,10 +180,6 @@ polygon.selected {
     height:100px;
 }
 
-.forminfo{
-    text-align: center;
-}
-
 .hex i{
     font-size:2em;
     width:100%;
@@ -266,3 +262,15 @@ polygon.selected {
     text-decoration: none;
     padding-left: 0;
 }
+
+.clicker{
+    margin:5px;
+}
+
+@media only screen and (min-width: 600px) {
+    .forminfo {
+        text-align: center;
+    }
+}
+
+

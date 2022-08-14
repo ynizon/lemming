@@ -166,9 +166,7 @@
         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
         <input type="button" onclick="window.game.game.changeCards()" value="{{__('Renew my cards')}}" class="clicker btn btn-primary"/>
-        &nbsp;&nbsp;
         <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="clicker btn btn-secondary"/>
-        &nbsp;&nbsp;
         <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary clicker"/>
     </form>
 @endif
