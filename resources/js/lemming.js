@@ -404,7 +404,11 @@ export let game = {
                                         if (canMove) {
                                             let direction = this.getDirection(this.currentTile, hex);
                                             if (hex.text !== '' && !hex.finish) {
-                                                this.askPushLemming(this.__("Do you want push the other lemming ?"), "question", hex, direction);
+                                                if (this.fullPath.length >= (this.maxTilesPath -1) ) {
+                                                    this.popin(this.__("You don't have enough moves to push the other lemming(s)"), "error");
+                                                } else {
+                                                    this.askPushLemming(this.__("Do you want push the other lemming ?"), "question", hex, direction);
+                                                }
                                             } else {
                                                 this.updateLemmingPosition(hex, this.currentLemming);
                                             }
