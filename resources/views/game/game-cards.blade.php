@@ -5,9 +5,9 @@
             {{$yourIcon}}
         </span>
 
-        {{__("Your deck")}} (max = 6)
+        {{__("Your deck")}}
     </h3>
-    <h6>&nbsp;</h6>
+    <h6 style="padding-left:40px">(max = 6)</h6>
     <form method="POST" action="/renew/{{$game->id}}" onsubmit="return checkNbCardsToRenew()">
         @csrf
         <ul class="cards" id="mycard">
