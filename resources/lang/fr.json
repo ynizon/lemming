@@ -277,6 +277,8 @@
     "Renew my cards": "Renouveller ses cartes",
     "You can't, because you have already change the map": "Vous ne pouvez pas car vous avez déjà modifié le plateau de jeu",
     "Confirm removing this player ?": "Confirmez-vous la suppression de ce joueur ?",
-    "Do you continue to play ? (you will be removed)": "Continuez vous à jouer ? (vous allez être renvoyer)",
-    "Demo accounts": "Comptes de démo"
+    "Do you continue to play ? (you will be removed)": "Continuez vous à jouer ? (vous allez être renvoyé)",
+    "Demo accounts": "Comptes de démo",
+    "Last card played": "Dernière carte jouée",
+    "Show last moves": "Voir le dernier déplacement"
 }

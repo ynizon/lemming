@@ -25,6 +25,8 @@
 <input type="hidden" id="game_id" value="{{$game->id}}" />
 <input type="hidden" id="game_status" value="{{$game->status}}" />
 <input type="hidden" id="game_pusher_id" value="{{$game->status}}" />
+<input type="hidden" id="game_player" value="{{$game->player}}" />
+<input type="hidden" id="game_lastmoves" value="{{$game->player_lastmoves}}" />
 <input type="hidden" id="game_reload" value="{{ $gameReload }}" />
 <input type="hidden" id="icon_start" value="{{ config("app.start") }}" />
 <input type="hidden" id="icon_finish" value="{{ config("app.finish") }}" />
@@ -131,6 +133,12 @@
                             {{config("app.wait")}}
                         @endif
                     @endif
+
+                    @if ($playerInfo['lastcard_score'] !== '')
+                        <span title="{{__("Show last moves")}}" onclick="window.game.game.seeLastMoves()"
+                              title="{{__('Last card played')}}"
+                              class="minicard landscape-{{$playerInfo['lastcard_landscape']}}">{{$playerInfo['lastcard_score']}}</span>
+                    @endif
                     &nbsp;&nbsp;<a onclick='window.game.game.removePlayer("/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}")'
                        class="@if ($playerIdTrash !== $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
                 </div>
@@ -138,6 +146,7 @@
         @endforeach
     </ul>
 </div>
+<div id="tile-hover"><div class="hexagone"><div class="hexagonemain"></div></div></div>
 <input type="hidden" id="icon_number" value="{{$iconNumber}}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />

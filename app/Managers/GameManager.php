@@ -232,6 +232,11 @@ class GameManager
         $game->lemmings_positions = serialize([]);
         $game->cards = serialize($cards);
         $game->map_update = serialize([]);
+        $game->player_lastmoves = json_encode([]);
+        for ($k = 1; $k <= Game::NB_MAX_PLAYERS; $k++) {
+            $fieldLastCard = 'player'.$k.'_lastcard';
+            $game->$fieldLastCard = serialize(['score'=> '', 'landscape'=>'']);
+        }
 
         $game->save();
 
@@ -291,7 +296,7 @@ class GameManager
         $yourIcon = $this->getYourIcon();
         $iconNumber = $this->getIconCurrentPlayer($yourIcon);
         $playerIdTrash = $this->whichPlayerHasLeaved();
-        $maxTime = date("H:i:s", strtotime($this->game->updated_at)+60);
+        $maxTime = date("H:i:s", strtotime($this->game->updated_at)+120);
 
         return compact(
             'maxTime',
@@ -337,6 +342,16 @@ class GameManager
         $game->save();
 
         return $game;
+    }
+
+    public function reload($playerId)
+    {
+        $game = $this->game;
+        $return = '';
+        if ($game->player != $playerId) {
+            $return = 'reload';
+        }
+        return response()->json($return);
     }
 
     /**
@@ -405,6 +420,7 @@ class GameManager
         for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';
             $fieldIcon = 'player'.$i.'_icon';
+            $fieldCard = 'player'.$i.'_lastcard';
             if (!empty($this->game->$field)) {
                 $nbCards = 0;
                 foreach ($cards as $card) {
@@ -412,9 +428,15 @@ class GameManager
                         $nbCards++;
                     }
                 }
+
+                $lastCard = unserialize($this->game->$fieldCard);
+
                 $playersInformations[$this->game->$field] =
                     ['name' => User::find($this->game->$field)->name,
-                        'nbCards' => $nbCards, 'icon' => $this->game->$fieldIcon];
+                        'nbCards' => $nbCards, 'icon' => $this->game->$fieldIcon,
+                        'lastcard_landscape' => $lastCard['landscape'],
+                        'lastcard_score' => $lastCard['score']
+                        ];
             }
         }
         return $playersInformations;
@@ -427,7 +449,7 @@ class GameManager
         $lastUpdate = strtotime($this->game->updated_at);
         $diff = abs($lastUpdate - $now);
 
-        if ($diff > 90) {
+        if ($diff > 210) {
             $playerId = $this->game->player;
         }
         return $playerId;
@@ -488,7 +510,7 @@ class GameManager
                     }
                 }
             }
-
+            $game->player_lastmoves = json_encode($path);
             $game->lemmings_positions = serialize($lemmingsPositions);
         } else {
             die('PLEASE-DONT-CHEAT - IP LOGGED');
@@ -568,6 +590,8 @@ class GameManager
             $landCards = [$currentScore];
         }
         $game->$landscape = serialize($landCards);
+        $fieldLastCard = "player".$game->player."_lastcard";
+        $game->$fieldLastCard = serialize(["score"=>$currentScore, "landscape"=>$landscape]);
     }
 
     private function updateMap($request)

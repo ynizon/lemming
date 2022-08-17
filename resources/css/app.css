@@ -87,6 +87,8 @@
 }
 .lemming.selected{
     border: 1px solid #ccc;
+    padding-left: 4px ;
+    padding-right: 4px ;
     border-radius:15px;
     background: #ccc;
 }
@@ -266,11 +268,89 @@ polygon.selected {
 .clicker{
     margin:5px;
 }
-
-@media only screen and (min-width: 600px) {
-    .forminfo {
-        text-align: center;
-    }
+.minicard{
+    padding:5px;
+    color:#ffffff;
+    cursor: pointer;
+    text-align: center;
 }
 
+.lastmoves{
+    opacity : 0.3;
+    filter : 'alpha(opacity=30)';
+}
 
+#tile-hover{
+    position: absolute;
+    z-index:9999;
+    width:30px;
+    height:30px;
+    display:none;
+}
+
+.hexagone {
+    position: relative;
+    width:100%;
+    visibility: hidden;
+    overflow: hidden;
+    -webkit-filter : drop-shadow(5px 5px 5px rgba(0,0,0,0.6));
+    filter : drop-shadow(5px 5px 5px rgba(0,0,0,0.6));
+}
+.hexagone:after {
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    content: "";
+    display: block;
+    margin-top: 28.86751%;
+    padding-bottom: 86.602%;
+}
+.hexagone .hexagonemain{
+    display: block;
+    position: absolute;
+    width: 100%;
+    padding-bottom: 115.47005%;
+    overflow: hidden;
+    visibility: hidden;
+    -webkit-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+    -ms-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+    transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+    z-index: 1;
+}
+.hexagone .hexagonemain:before{
+    content: "";
+    display: block;
+    position: absolute;
+    visibility: visible;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+    -ms-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+    transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+}
+.hexagone .hexagonemain.hex-water:before{
+    background: url('/images/water.png') no-repeat;
+}
+.hexagone .hexagonemain.hex-forest:before{
+    background: url('/images/forest.png') no-repeat;
+}
+.hexagone .hexagonemain.hex-earth:before{
+    background: url('/images/earth.png') no-repeat;
+}
+.hexagone .hexagonemain.hex-desert:before{
+    background: url('/images/desert.png') no-repeat;
+}
+.hexagone .hexagonemain.hex-rock:before{
+    background: url('/images/rock.png') no-repeat;
+}
+.hexagone .hexagonemain.hex-meadow:before{
+    background: url('/images/meadow.png') no-repeat;
+}
+
+@media only screen and (min-width: 600px) {
+  .forminfo {
+      text-align: center;
+  }
+}

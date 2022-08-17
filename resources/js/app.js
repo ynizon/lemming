@@ -57,7 +57,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (document.getElementById("game_reload").value !== '0') {
             window.setTimeout(function () {
-                window.location.reload();
+                $.ajax({
+                    type: "GET",
+                    url: "/reload/"+gameId+'/'+document.getElementById('game_player').value,
+                    data: {},
+                    success: function (data) {
+                        if (data !== '') {
+                            window.location.reload();
+                        }
+                    }
+                });
             },timer)
         }
 

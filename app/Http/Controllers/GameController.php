@@ -72,7 +72,13 @@ class GameController extends Controller
     {
         $this->gameManager->loadById($id);
         $game = $this->gameManager->timeout();
-        return date("H:i:s", strtotime($game->updated_at)+60);
+        return date("H:i:s", strtotime($game->updated_at)+120);
+    }
+
+    public function reload($id, $playerId)
+    {
+        $this->gameManager->loadById($id);
+        return $this->gameManager->reload($playerId);
     }
 
     public function update($id, Request $request)

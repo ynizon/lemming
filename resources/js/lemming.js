@@ -150,6 +150,7 @@ export let game = {
         this.initMap();
         this.initLemmings();
         this.InitStartAndFinish();
+        this.initMouse();
     },
 
     initMessages: function (gameId) {
@@ -216,8 +217,9 @@ export let game = {
                         landscape = 'meadow';
                     }
                     game.placeMarkerLandscape = landscape;
-
-                    game.popin(game.__("You should now replace a tile by a tile ") + game.__(landscape) + ".", "warning");
+                    $("#tile-hover .hexagonemain").class = '';
+                    $("#tile-hover .hexagonemain").addClass("hex-"+landscape);
+                    game.popinPlaceMarker(game.__("You should now replace a tile by a tile ") + game.__(landscape) + ".", "warning");
                     let allHexa = document.querySelectorAll("polygon");
                     allHexa.forEach((hexa) => {
                         hexa.classList.add('cursor_map');
@@ -257,6 +259,14 @@ export let game = {
                 }
             }
         }, 1000);
+    },
+
+    initMouse: function () {
+        document.addEventListener('mousemove', e => {
+            if (game.placeMarkerLandscape !== '') {
+                $("#tile-hover").css({left:e.pageX, top:e.pageY-100});
+            }
+        });
     },
 
     initLemmings: function () {
@@ -377,6 +387,7 @@ export let game = {
                         grid.get(hex).draw.fill('/images/' + this.placeMarkerLandscape + '.png');
 
                         this.placeMarkerLandscape = '';
+                        $("#tile-hover").hide();
                         this.hasTakenATile = true;
                         this.info('');
                     }
@@ -438,7 +449,11 @@ export let game = {
     },
 
     changeCards: function () {
-        $(".changecard").toggleClass("hidden");
+        if ($("#mycard li").length === 1) {
+            $("#renew_cards").click();
+        } else {
+            $(".changecard").toggleClass("hidden");
+        }
     },
 
     updateLemmingPosition: function (hex, lemming) {
@@ -638,6 +653,21 @@ export let game = {
         });
     },
 
+    popinPlaceMarker: function (title, icon) {
+        let audio = new Audio('/sounds/info.mp3');
+        audio.play();
+
+        Swal.fire({
+            icon: icon,
+            title: title,
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'OK'
+        }).then(() => {
+            $("#tile-hover").show();
+        });
+    },
+
     askPushLemming: function (title, icon, hex, direction) {
         Swal.fire({
             icon: icon,
@@ -754,7 +784,7 @@ export let game = {
         Swal.fire({
             icon: 'question',
             title: this.__('Do you continue to play ? (you will be removed)'),
-            showDenyButton: true,
+            showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: this.__('Yes'),
             denyButtonText: this.__('No')
@@ -770,6 +800,14 @@ export let game = {
                     }
                 });
             }
+        });
+    },
+
+    seeLastMoves: function () {
+        let moves =  JSON.parse(document.getElementById('game_lastmoves').value);
+        moves.forEach((move) => {
+            let hexa = grid.get({x: move.x, y:move.y});
+            hexa.draw.addClass('lastmoves');
         });
     },
 
