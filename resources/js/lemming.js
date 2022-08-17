@@ -807,7 +807,7 @@ export let game = {
         let moves =  JSON.parse(document.getElementById('game_lastmoves').value);
         moves.forEach((move) => {
             let hexa = grid.get({x: move.x, y:move.y});
-            hexa.draw.addClass('lastmoves');
+            hexa.draw.toggleClass('lastmoves');
         });
     },
 
