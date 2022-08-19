@@ -52,7 +52,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 .listen('.NextPlayer', (event) => {
                     window.location.reload();
                 });
-            timer = 30000;
+
+            //@TODO : I dont understand why it disconnect after 30 seconds
+            window.Echo.connector.pusher.connection.bind('state_change', function (states) {
+                if (states.current === 'disconnected') {
+                    window.Echo.connector.pusher.connect();
+                }
+            });
+
+            let timer = 120000;
         }
 
         if (document.getElementById("game_reload").value !== '0') {

@@ -590,7 +590,20 @@ class GameManager
             $landCards = [$currentScore];
         }
         $game->$landscape = serialize($landCards);
-        $fieldLastCard = "player".$game->player."_lastcard";
+
+        $findPlayer = false;
+        $currentPlayer = 1;
+        for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player' . $i . '_id';
+            if (!empty($game->$field) && $game->player == $game->$field) {
+                $findPlayer = true;
+            }
+            if (!$findPlayer) {
+                $currentPlayer++;
+            }
+        }
+
+        $fieldLastCard = "player".$currentPlayer."_lastcard";
         $game->$fieldLastCard = serialize(["score"=>$currentScore, "landscape"=>$landscape]);
     }
 

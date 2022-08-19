@@ -147,6 +147,7 @@
     </ul>
 </div>
 <div id="tile-hover"><div class="hexagone"><div class="hexagonemain"></div></div></div>
+<input type="hidden" id="same" name="same" value="{{$game->same}}" />
 <input type="hidden" id="icon_number" value="{{$iconNumber}}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
@@ -160,7 +161,6 @@
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
         <input type="hidden" id="num_lemming" name="num_lemming" value="" />
-        <input type="hidden" id="same" name="same" value="{{$game->same}}" />
         <input type="hidden" id="path" name="path" value="" />
         <input type="hidden" id="full_path" name="full_path" value="" />
         <input type="hidden" id="card_id" name="card_id" value="" />

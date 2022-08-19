@@ -19,5 +19,27 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('game-{gameId}', function ($user, $gameId) {
-    return ($user->id === Game::findOrNew($gameId)->player1_id || $user->id === Game::findOrNew($gameId)->player2_id);
+    $game = Game::findOrNew($gameId);
+    $usersId = [];
+    for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+        $field = 'player' . $i . '_id';
+        if (!empty($game->$field)) {
+            $usersId[] = $game->$field;
+        }
+    }
+
+    return in_array($user->id, $usersId);
+});
+
+Broadcast::channel('chat-{gameId}', function ($user, $gameId) {
+    $game = Game::findOrNew($gameId);
+    $usersId = [];
+    for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
+        $field = 'player' . $i . '_id';
+        if (!empty($game->$field)) {
+            $usersId[] = $game->$field;
+        }
+    }
+
+    return in_array($user->id, $usersId);
 });
