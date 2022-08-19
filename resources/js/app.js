@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (document.getElementById("max_time")) {
-            if (document.getElementById("same").value !== "1") {
+            if (document.getElementById("same").value !== "1" && document.getElementById('is_your_turn').value === '1') {
                 window.setInterval(function () {
                     let now = new Date();
                     let nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getTimezoneOffset() * 60;
