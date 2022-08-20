@@ -192,7 +192,7 @@ class GameManager
 
         $startEvent = new Reload($game->id);
         broadcast($startEvent)->toOthers();
-        
+
         return $game;
     }
 
@@ -650,6 +650,9 @@ class GameManager
         if (!empty($winnerId)) {
             $game->winner = $winnerId;
             $game->status = Game::STATUS_ENDED;
+
+            $endEvent = new Reload($game->id);
+            broadcast($endEvent)->toOthers();
         } else {
             $this->nextPlayer($game);
         }

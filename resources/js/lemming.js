@@ -225,7 +225,7 @@ export let game = {
     initMouse: function () {
         document.addEventListener('mousemove', e => {
             if (game.placeMarkerLandscape !== '') {
-                $("#tile-hover").css({left:e.pageX, top:e.pageY-100});
+                $("#tile-hover").css({left:e.pageX, top:e.pageY-50});
             }
         });
     },
