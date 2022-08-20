@@ -151,6 +151,7 @@ export let game = {
         this.initLemmings();
         this.InitStartAndFinish();
         this.initMouse();
+        this.initLastMoves();
     },
 
     initMessages: function (gameId) {
@@ -268,6 +269,13 @@ export let game = {
             }
         });
     },
+
+    initLastMoves: function () {
+        game.seeLastMoves();
+        window.setTimeout(function () {
+            game.seeLastMoves();
+        }, 3000);
+    } ,
 
     initLemmings: function () {
         $(".lemming").each(function ( ) {

@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
             Echo.channel(`game-`+document.getElementById("game_id").value)
-                .listen('.NextPlayer', (event) => {
+                .listen('.Reload', (event) => {
                     window.location.reload();
                 });
 

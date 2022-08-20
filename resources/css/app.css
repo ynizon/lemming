@@ -72,6 +72,10 @@
 .cards li .card-title, .deck li .card-title{
     padding-top:5px;
 }
+.deck .card{
+    cursor:initial;
+}
+
 .card-title {
     color:#fff;
 }
@@ -348,7 +352,19 @@ polygon.selected {
 .hexagone .hexagonemain.hex-meadow:before{
     background: url('/images/meadow.png') no-repeat;
 }
+.btn-primary{
+    color:#ffffff;
+}
+.btn-primary:hover{
+    color:#ffffff;
+}
 
+footer a{
+    text-decoration: none;
+}
+footer a:hover{
+    text-decoration: underline;
+}
 @media only screen and (min-width: 600px) {
   .forminfo {
       text-align: center;

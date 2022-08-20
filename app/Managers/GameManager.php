@@ -1,7 +1,7 @@
 <?php
 namespace App\Managers;
 
-use App\Events\NextPlayer;
+use App\Events\Reload;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Models\Game;
@@ -190,6 +190,9 @@ class GameManager
         $game->player = $playersId[0];
         $game->save();
 
+        $startEvent = new Reload($game->id);
+        broadcast($startEvent)->toOthers();
+        
         return $game;
     }
 
@@ -265,6 +268,10 @@ class GameManager
                 }
             }
         }
+
+        $joinEvent = new Reload($game->id);
+        broadcast($joinEvent)->toOthers();
+
         return $game;
     }
 
@@ -688,7 +695,7 @@ class GameManager
 
     private function nextPlayer(&$game)
     {
-        $nextPlayerEvent = new NextPlayer($game->id);
+        $nextPlayerEvent = new Reload($game->id);
         broadcast($nextPlayerEvent)->toOthers();
 
         $playersIds = [];

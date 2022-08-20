@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 
-class NextPlayer implements ShouldBroadcastNow
+class Reload implements ShouldBroadcastNow
 {
     use InteractsWithSockets, SerializesModels;
 
@@ -29,6 +29,6 @@ class NextPlayer implements ShouldBroadcastNow
 
     public function broadcastAs()
     {
-        return 'NextPlayer';
+        return 'Reload';
     }
 }
