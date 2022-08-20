@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import * as chat from './chat.js';
 import * as game from './lemming.js';
 
 require('./bootstrap');
@@ -27,12 +28,13 @@ require('./sweetalert.min');
  */
 
 window.game = game;
+window.chat = chat;
 
 document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById('message')) {
         document.querySelector('#message').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                window.game.game.sendMessage(gameId);
+                window.chat.chat.sendMessage(gameId);
             }
         });
     }
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (document.getElementById("game_pusher_id").value !== '') {
             Echo.channel(`chat-`+document.getElementById("game_id").value)
                 .listen('.MessageSent', (e) => {
-                    window.game.game.loadMessages(document.getElementById("game_id").value);
+                    window.chat.chat.loadMessages(document.getElementById("game_id").value);
                 });
 
             Echo.channel(`game-`+document.getElementById("game_id").value)

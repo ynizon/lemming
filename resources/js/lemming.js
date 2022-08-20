@@ -1,7 +1,8 @@
 import Swal from 'sweetalert2';
+import {chat} from './chat.js';
 const Honeycomb = require('honeycomb-grid');
 
-export let grid;
+let grid;
 const draw = SVG(document.getElementById('hexmap'));
 const Hex = Honeycomb.extendHex({
     size: 35,
@@ -84,40 +85,6 @@ export let game = {
     grid : null,
     isYourTurn : 0,
 
-    sendMessage: function (gameId) {
-        $(".input-group").hide();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: "/message/"+gameId,
-            data: {message: document.getElementById("message").value},
-            success: function () {
-                game.loadMessages(gameId);
-            }
-        });
-        document.getElementById("message").value = '';
-    },
-
-    loadMessages: function (gameId) {
-        if (document.getElementById("message")) {
-            $.getJSON("/messages/" + gameId, function (data) {
-                let ul = document.getElementById("messages");
-                ul.innerHTML = '';
-                $.each(data, function (key, val) {
-                    let li = document.createElement("li");
-                    li.appendChild(document.createTextNode(val.user.name + ": " + val.message));
-                    ul.appendChild(li);
-                });
-                $(".input-group").show();
-                document.getElementById("message").focus();
-            });
-        }
-    },
-
     loadGame: function (width, height, map, gameId) {
         this.isYourTurn = parseInt(document.getElementById('is_your_turn').value);
         grid = Grid.rectangle({
@@ -144,7 +111,7 @@ export let game = {
             grid.get(coord).draw.fill(grid.get(coord).picture) ;
         });
 
-        this.initMessages(gameId);
+        chat.initMessages(gameId);
         this.initButtons();
         this.initCards();
         this.initMap();
@@ -152,13 +119,6 @@ export let game = {
         this.InitStartAndFinish();
         this.initMouse();
         this.initLastMoves();
-    },
-
-    initMessages: function (gameId) {
-        this.loadMessages(gameId);
-        if (document.getElementById("message")) {
-            document.getElementById("message").focus();
-        }
     },
 
     initButtons: function () {
