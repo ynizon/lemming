@@ -443,7 +443,7 @@ class GameManager
     {
         $game = $this->game;
         $return = '';
-        if ($game->player != $playerId) {
+        if ($game->player != $playerId || $playerId == '') {
             $return = 'reload';
         }
         return response()->json($return);

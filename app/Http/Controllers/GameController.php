@@ -76,7 +76,7 @@ class GameController extends Controller
         return date("H:i:s", strtotime($game->updated_at)+120);
     }
 
-    public function reload($id, $playerId)
+    public function reload($id, $playerId = '')
     {
         $this->gameManager->loadById($id);
         return $this->gameManager->reload($playerId);
