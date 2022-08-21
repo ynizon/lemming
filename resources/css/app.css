@@ -144,7 +144,7 @@ div.padleft{
 .hexmap{
     width:100%;
     min-width:1050px;
-    height:800px;
+    height:770px;
     overflow: auto;
     position:relative;
     top:-50px;
@@ -292,6 +292,21 @@ polygon.selected {
     display:none;
 }
 
+.list-horizontal{
+    display:inline;
+    list-style: none;
+}
+.list-horizontal li{
+    float:left;
+    padding:10px;
+}
+
+.hexa-editor{
+    display:block;
+    width:30px !important;
+    height:36px;
+}
+
 .hexagone {
     position: relative;
     width:100%;
@@ -359,12 +374,34 @@ polygon.selected {
     color:#ffffff;
 }
 
-footer a{
+.ml-auto{
+    margin-left: auto!important;
+    padding:20px;
+}
+
+a{
     text-decoration: none;
 }
-footer a:hover{
+a:hover{
     text-decoration: underline;
 }
+
+.rotate {
+    display:inline-block;
+    -webkit-animation: spin 2s linear infinite;
+    -moz-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.myselect{
+    width:120px;
+    display:inline;
+    padding-top:2px;
+}
+
 @media only screen and (min-width: 600px) {
   .forminfo {
       text-align: center;

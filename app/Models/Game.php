@@ -29,4 +29,9 @@ class Game extends Model
     {
         return $this->belongsTo(Map::class);
     }
+
+    public function maps()
+    {
+        return Map::where("published", "=", 1)->get();
+    }
 }

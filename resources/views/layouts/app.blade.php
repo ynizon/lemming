@@ -50,7 +50,7 @@
         //SVG.js Cant be import in app.js (version 2 used)
         let mapWidth = 17;
         let mapHeight = 14;
-        @if (isset($map))
+        @if (isset($game) && isset($map))
             let mapTiles = '{!! $map !!}';
             let gameId = {{$game->id}};
         @endif

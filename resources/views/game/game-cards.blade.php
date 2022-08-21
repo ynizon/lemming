@@ -1,7 +1,7 @@
 @if (empty($game->winner))
     <br/>
     <h3>
-        <span id="your_icon">
+        <span id="your_icon" @if ($game->player != Auth()->user()->id && !$game->same) class="rotate" @endif>
             {{$yourIcon}}
         </span>
 

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Player ' . $i,
                 'email' => 'cpu'.$i.'@gmail.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('cpu'),
+                'password' => Hash::make(uniqid()),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
@@ -52,7 +52,24 @@ class DatabaseSeeder extends Seeder
         }
 
         DB::table('maps')->insert([
-            'map' => file_get_contents(storage_path("maps/map0.txt"))
+            'name' => 'Default',
+            'user_id' => 1,
+            'published' => 1,
+            'map' => file_get_contents(storage_path("maps/map1.txt"))
+        ]);
+
+        DB::table('maps')->insert([
+            'name' => 'empty',
+            'user_id' => 1,
+            'published' => 0,
+            'map' => file_get_contents(storage_path("maps/map2.txt"))
+        ]);
+
+        DB::table('maps')->insert([
+            'name' => 'Nature',
+            'user_id' => 1,
+            'published' => 1,
+            'map' => file_get_contents(storage_path("maps/map3.txt"))
         ]);
     }
 }

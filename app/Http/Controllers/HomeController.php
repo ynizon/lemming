@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Map;
 use Auth;
 use DB;
 
@@ -35,11 +36,14 @@ class HomeController extends Controller
         ->orWhere('player5_id', '=', Auth::user()->id)
         ->orderBy('created_at', 'desc')->paginate(10);
 
+        $mymaps = Map::where("user_id", "=", Auth::user()->id)->get();
+
         $games = Game::whereNull('player2_id')
             ->where('player1_id', '!=', Auth::user()->id)
             ->where('status', '=', 'waiting')
             ->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('home', compact('mygames', 'games'));
+        $game = new Game;
+        return view('home', compact('mygames', 'games', 'mymaps', 'game'));
     }
 }

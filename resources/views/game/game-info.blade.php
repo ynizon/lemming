@@ -21,20 +21,19 @@
     </div>
 @endif
 
-<input type="hidden" id="max_time" value="{{$maxTime}}" />
-<input type="hidden" id="game_id" value="{{$game->id}}" />
-<input type="hidden" id="game_status" value="{{$game->status}}" />
-<input type="hidden" id="game_pusher_id" value="{{$game->status}}" />
-<input type="hidden" id="game_player" value="{{$game->player}}" />
-<input type="hidden" id="game_lastmoves" value="{{$game->player_lastmoves}}" />
-<input type="hidden" id="game_reload" value="{{ $gameReload }}" />
-<input type="hidden" id="icon_start" value="{{ config("app.start") }}" />
-<input type="hidden" id="icon_finish" value="{{ config("app.finish") }}" />
+@include('game/game-vars', ['game' => $game, 'gameReload'=>$gameReload, 'maxTime'=>$maxTime, "editor"=>0])
 
 @if ($game->status == Game::STATUS_WAITING)
     @if ($game->same || $game->player1_id == Auth::user()->id)
         <br/>
         <div>
+            {{__("Map")}} :
+            <select id="change_map" class="form-select myselect" onchange="window.game.game.changeMap(this.value)">
+                @foreach ($game->maps() as $map)
+                    <option @if ($game->map->id == $map->id) selected @endif value="{{$map->id}}">{{__($map->name)}}</option>
+                @endforeach
+            </select>
+
             <a class="btn btn-primary" href="/start/{{$game->id}}">{{__("Start the game")}}</a>
         </div>
     @else
@@ -60,6 +59,8 @@
         @if (0 != $game->winner) {{ $playersInformations[$game->winner]['name'] }}. @endif
         <br/><a href="/replay/{{$game->id}}">{{__('Play again')}}</a>
     </div>
+    <img alt="winner" class="winner" src="/images/winner{{$winnerNumber}}.png">
+    <br/>
 @endif
 <br/>
 <div class="playerinfos">
@@ -146,11 +147,7 @@
         @endforeach
     </ul>
 </div>
-<div id="tile-hover"><div class="hexagone"><div class="hexagonemain"></div></div></div>
-<input type="hidden" id="icon_number" value="{{$iconNumber}}" />
-<input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
-<input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
-<input type="hidden" id="same" value="{{ $game->same }}" />
+
 @if ($game->status == Game::STATUS_STARTED && ($game->same || $game->player == Auth::user()->id))
     <br/>
     @foreach (Card::CARDS as $land)

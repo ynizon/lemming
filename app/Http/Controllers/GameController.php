@@ -38,7 +38,8 @@ class GameController extends Controller
         $this->gameManager->create();
         $game = $this->gameManager->init();
 
-        return redirect("/start/".$game->id."?same=1&nb_players=".$request->input("nb_players"));
+        return redirect("/start/".$game->id."?same=1&map_id=".$request->input("map_id").
+            "&nb_players=".$request->input("nb_players"));
     }
 
     public function start($id, Request $request)
@@ -53,7 +54,7 @@ class GameController extends Controller
         }
     }
 
-    public function game($id, Request $request)
+    public function game($id)
     {
         $this->gameManager->loadById($id);
         $gameVars = $this->gameManager->game();
@@ -117,4 +118,11 @@ class GameController extends Controller
 
         return redirect("/game/".$game->id);
     }
+
+    public function changeMap($id, Request $request)
+    {
+        $this->gameManager->loadById($id);
+        $this->gameManager->changeMap($request);
+    }
+
 }

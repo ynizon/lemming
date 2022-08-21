@@ -30,6 +30,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reload/{id}/{playerId}', 'GameController@reload');
     Route::get('/remove/{id}', 'GameController@delete');
     Route::get('/timeout/{id}', 'GameController@timeout');
+    Route::get('/changeMap/{id}', 'GameController@changeMap');
+    Route::get('/createNewMap', 'EditorController@createNewMap');
+    Route::get('/editor/{mapId}', 'EditorController@editor');
+    Route::get('/removeMap/{mapId}', 'EditorController@removeMap');
+    Route::get('/resetMap/{mapId}', 'EditorController@resetMap');
+    Route::post('/saveMap/{mapId}', 'EditorController@saveMap');
     Route::get('/create', 'GameController@create');
     Route::get('/createAndStart', 'GameController@createAndStart');
     Route::post('/update/{id}', 'GameController@update');

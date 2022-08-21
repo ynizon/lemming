@@ -280,5 +280,14 @@
     "Do you continue to play ? (you will be removed)": "Continuez vous à jouer ? (vous allez être renvoyé)",
     "Demo accounts": "Comptes de démo",
     "Last card played": "Dernière carte jouée",
-    "Show last moves": "Voir le dernier déplacement"
+    "Show last moves": "Voir le dernier déplacement",
+    "default": "defaut",
+    "Map": "Carte",
+    "Create a new map": "Créer une nouvelle carte",
+    "My maps": "Mes cartes",
+    "Draft": "Brouillon",
+    "Published": "Publié",
+    "on the map": "sur la carte",
+    "Map Editor": "Editeur de carte",
+    "Choose your landscape": "Choisissez votre terrain"
 }

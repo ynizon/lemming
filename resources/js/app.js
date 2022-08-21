@@ -67,16 +67,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (document.getElementById("game_reload").value !== '0') {
             window.setTimeout(function () {
-                $.ajax({
-                    type: "GET",
-                    url: "/reload/"+gameId+'/'+document.getElementById('game_player').value,
-                    data: {},
-                    success: function (data) {
-                        if (data !== '') {
-                            window.location.reload();
+                if (document.getElementById('game_player')) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/reload/"+gameId+'/'+document.getElementById('game_player').value,
+                        data: {},
+                        success: function (data) {
+                            if (data !== '') {
+                                window.location.reload();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             },timer)
         }
 

@@ -2,6 +2,7 @@
 namespace App\Managers;
 
 use App\Events\Reload;
+use App\Models\Map;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Models\Game;
@@ -11,6 +12,7 @@ use Auth;
 class GameManager
 {
     private $game;
+    private $map;
 
     public function create()
     {
@@ -27,6 +29,86 @@ class GameManager
         $game = Game::findOrFail($gameId);
         $this->game = $game;
         return $game;
+    }
+
+    public function changeMap(Request $request)
+    {
+        $mapId = (int) $request->input("map");
+        $map = Map::findOrFail($mapId);
+        $game = $this->game;
+        $game->map_id = $map->id;
+        $game->save();
+
+        $changeMapEvent = new Reload($game->id);
+        broadcast($changeMapEvent)->toOthers();
+    }
+
+    public function removeMap($mapId)
+    {
+        $map = $this->map;
+        if ($map->user_id == Auth::user()->id) {
+            $map->delete();
+        }
+    }
+
+    public function createNewMap()
+    {
+        $map = new Map();
+        $map->map = Map::find("2")->map;
+        $map->user_id = Auth::user()->id;
+        $map->save();
+        $map->name = "Map #". $map->id;
+        $map->save();
+
+        return $map;
+    }
+
+    public function loadMap($mapId)
+    {
+        $this->map = Map::find($mapId);
+        return $this->map;
+    }
+
+    public function editor($mapId)
+    {
+        $map = Map::findOrFail($mapId);
+        $map = json_decode($map->map, true);
+        $map = json_encode($map);
+
+        return $map;
+    }
+
+    public function resetMap()
+    {
+        $emptyMap = Map::find(2);
+        $this->map->map = $emptyMap->map;
+        $this->map->save();
+    }
+
+    public function saveMap($request)
+    {
+        $x = (int) $request->input('x');
+        $y = (int) $request->input('y');
+        $land = $request->input('landscape');
+        $name = $request->input('name');
+        $published = (int) $request->input('published');
+
+        if (!empty($land)) {
+            $map = json_decode($this->map->map, true);
+            $k = 0;
+            foreach ($map as $tile) {
+                if ($tile["y"] == $y && $tile["x"] == $x) {
+                    $map[$k]["picture"] = "/images/".$land.".png";
+                    $map[$k]["landscape"] = $land;
+                }
+                $k++;
+            }
+
+            $this->map->map = json_encode($map);
+        }
+        $this->map->name = $name;
+        $this->map->published = $published;
+        $this->map->save();
     }
 
     public function getCardsSummary(): array
@@ -92,6 +174,10 @@ class GameManager
     public function start(Request $request)
     {
         $game = $this->game;
+        $map = Map::where("published", "=", 1)->where("id", "=", $request->input("map_id"))->first();
+        if (!empty($map)) {
+            $game->map_id = $map->id;
+        }
         if ($request->input("same") == "1") {
             $nbPlayers = $request->input("nb_players");
             for ($k= 1; $k <= $nbPlayers; $k++) {
@@ -304,8 +390,10 @@ class GameManager
         $iconNumber = $this->getIconCurrentPlayer($yourIcon);
         $playerIdTrash = $this->whichPlayerHasLeaved();
         $maxTime = date("H:i:s", strtotime($this->game->updated_at)+120);
+        $winnerNumber = $this->getWinnerNumber();
 
         return compact(
+            'winnerNumber',
             'maxTime',
             'cards',
             'game',
@@ -447,6 +535,18 @@ class GameManager
             }
         }
         return $playersInformations;
+    }
+
+    private function getWinnerNumber()
+    {
+        $winnerNumber = 0;
+        for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player' . $i . '_id';
+            if ($this->game->winner == $this->game->$field) {
+                $winnerNumber = $i;
+            }
+        }
+        return $winnerNumber;
     }
 
     public function whichPlayerHasLeaved()

@@ -6,7 +6,7 @@
         <div class="col-md-4">
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    @include('game/game-info', ['cards' => $cards, 'game' => $game])
+                    @include('game/game-info', ['cards' => $cards, 'game' => $game, 'winnerNumber'=>$winnerNumber])
                 </div>
                 @if ($game->status != Game::STATUS_WAITING)
                     <div class="col-md-6">
