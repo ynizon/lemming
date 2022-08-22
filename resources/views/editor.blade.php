@@ -13,6 +13,11 @@
                         {{__('Choose your landscape')}} :<br/>
                         <ul class="list-horizontal">
                             <li>
+                                <div id="hexa-out" class="cursor hexagone hexa-editor" onclick="window.game.game.editTile('out')">
+                                    <div class="hexagonemain hex-out"></div>
+                                </div>
+                            </li>
+                            <li>
                                 <div id="hexa-meadow" class="cursor hexagone hexa-editor" onclick="window.game.game.editTile('meadow')">
                                     <div class="hexagonemain hex-meadow"></div>
                                 </div>
@@ -24,6 +29,19 @@
                                     </div>
                                 </li>
                             @endforeach
+                        </ul>
+                        <br style="clear:both"/>
+                        <ul class="list-horizontal">
+                            <li>
+                                <div class="cursor" style="font-size:30px" onclick="window.game.game.editTileFinishStart('start')">
+                                    {{config("app.start")}}
+                                </div>
+                            </li>
+                            <li>
+                                <div class="cursor" style="font-size:30px" onclick="window.game.game.editTileFinishStart('finish')">
+                                    {{config("app.finish")}}
+                                </div>
+                            </li>
                         </ul>
                         <br style="clear:both"/>
                         <br/>
@@ -39,10 +57,13 @@
                         <input type="hidden" id="changemap-x" name="changemap-x" value="" />
                         <input type="hidden" id="changemap-y" name="changemap-y" value="" />
                         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
+                        <input type="hidden" id="changemap-status" name="changemap-status" value="" />
 
                         <a href="/resetMap/{{$themap->id}}" id="reset" class="btn btn-secondary">{{__('Reset')}}</a>
                         &nbsp;&nbsp;
                         <input type="submit" id="save" class="btn btn-primary" value="{{__('Save')}}" />
+                        <br/><br/>
+                        <i class="fa fa-info"></i>&nbsp;{{__('You need to have 2 start points and at least 3 finish points')}}
                     </form>
                 </div>
             </div>

@@ -91,6 +91,7 @@ class GameManager
         $y = (int) $request->input('y');
         $land = $request->input('landscape');
         $name = $request->input('name');
+        $status = $request->input('status');
         $published = (int) $request->input('published');
 
         if (!empty($land)) {
@@ -98,8 +99,20 @@ class GameManager
             $k = 0;
             foreach ($map as $tile) {
                 if ($tile["y"] == $y && $tile["x"] == $x) {
-                    $map[$k]["picture"] = "/images/".$land.".png";
                     $map[$k]["landscape"] = $land;
+                    $map[$k]["start"] = false;
+                    $map[$k]["finish"] = false;
+                    if ($land == 'out') {
+                        $map[$k]["picture"] = "none";
+                    } else {
+                        $map[$k]["picture"] = "/images/".$land.".png";
+                    }
+                    if ($status == 'start') {
+                        $map[$k]["start"] = true;
+                    }
+                    if ($status == 'finish') {
+                        $map[$k]["finish"] = true;
+                    }
                 }
                 $k++;
             }
@@ -107,6 +120,21 @@ class GameManager
             $this->map->map = json_encode($map);
         }
         $this->map->name = $name;
+
+        $nbStart = 0;
+        $nbFinish = 0;
+        foreach ($map as $tile) {
+            if ($status == 'start') {
+                $nbStart++;
+            }
+            if ($status == 'finish') {
+                $nbFinish++;
+            }
+        }
+        if ($nbStart != 2 && $nbFinish < 3) {
+            $published = 0;
+        }
+
         $this->map->published = $published;
         $this->map->save();
     }
@@ -190,6 +218,24 @@ class GameManager
         }
         $game->status = Game::STATUS_STARTED;
 
+        // Shuffle player orders
+        // No shuffle cards because first players have less cards...
+        $playersId = [];
+        for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player'.$i.'_id';
+            if (!empty($game->$field)) {
+                $playersId[] = $game->$field;
+            }
+        }
+        shuffle($playersId);
+        for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
+            $field = 'player'.$i.'_id';
+            if (!empty($game->$field)) {
+                $game->$field = $playersId[$i-1];
+            }
+        }
+
+        // Set cards
         $cards = unserialize($game->cards);
         shuffle($cards);
         $players = [];
@@ -263,7 +309,7 @@ class GameManager
         $game->cards = serialize($cards);
         $game->lemmings_positions = serialize($lemmingsPositions);
 
-        //First player
+        //Set First player
         $playersId = [];
         for ($i = 1; $i<= Game::NB_MAX_PLAYERS; $i++) {
             $field = 'player'.$i.'_id';
@@ -271,8 +317,6 @@ class GameManager
                 $playersId[] = $game->$field;
             }
         }
-
-        //No shuffle cards because first players have less cards...
         $game->player = $playersId[0];
         $game->save();
 

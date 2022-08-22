@@ -31,6 +31,7 @@ const Hex = Honeycomb.extendHex({
     render(draw) {
         const { x, y } = this.toPoint()
         const corners = this.corners()
+        this.editorStartOrFinish = '';
         this.mydraw = draw;
         this.start = false;
         this.finish = false;
@@ -336,7 +337,8 @@ export let game = {
                 const hex = grid.get(hexCoordinates)
 
                 if (this.placeMarkerLandscape !== '') {
-                    if (hex.start || hex.finish || hex.landscape === 'out') {
+                    if ((document.getElementById('editor').value === '0') &&
+                        (hex.start || hex.finish || hex.landscape === 'out')) {
                         this.popin(this.__("You can\'t put a tile on this area"), 'error');
                     } else {
                         let allHexa = document.querySelectorAll("polygon");
@@ -347,6 +349,10 @@ export let game = {
                         $("#changemap-x").val(hex.x);
                         $("#changemap-y").val(hex.y);
                         $("#changemap-landscape").val(this.placeMarkerLandscape);
+                        if (this.editorStartOrFinish === 'start' || this.editorStartOrFinish === 'finish') {
+                            $("#changemap-status").val(this.editorStartOrFinish);
+                            this.editorStartOrFinish = '';
+                        }
 
                         grid.get(hex).landscape = this.placeMarkerLandscape;
                         grid.get(hex).draw.fill('/images/' + this.placeMarkerLandscape + '.png');
@@ -369,10 +375,14 @@ export let game = {
                                 data: {"name":document.getElementById('name').value,
                                     "x": document.getElementById('changemap-x').value,
                                     "y": document.getElementById('changemap-y').value,
-                                    "landscape" : document.getElementById('changemap-landscape').value
+                                    "landscape" : document.getElementById('changemap-landscape').value,
+                                    "status": document.getElementById('changemap-status').value
                                 },
                                 success: function () {
                                     $("#hexa-"+newLandscape).click();
+                                    if (document.getElementById('changemap-landscape').value === 'out') {
+                                        window.location.reload();
+                                    }
                                 }
                             });
                         }
@@ -824,5 +834,10 @@ export let game = {
         $("#tile-hover .hexagonemain").attr('class', 'hexagonemain');
         $("#tile-hover .hexagonemain").addClass("hex-"+landscape);
         $("#tile-hover").show();
+    },
+
+    editTileFinishStart: function (startOrFinish) {
+        this.editorStartOrFinish = startOrFinish;
+        this.editTile('out');
     }
 }

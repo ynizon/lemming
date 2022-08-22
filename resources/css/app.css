@@ -367,54 +367,59 @@ polygon.selected {
 .hexagone .hexagonemain.hex-meadow:before{
     background: url('/images/meadow.png') no-repeat;
 }
+.hexagone .hexagonemain.hex-out:before{
+    background: url('/images/rock.png') no-repeat;
+    opacity:0.2;
+}
+
 .btn-primary{
     color:#ffffff;
 }
-.btn-primary:hover{
+.btn-primary:hover, .btn-primary:focus{
     color:#ffffff;
 }
 
 .ml-auto{
-    margin-left: auto!important;
-    padding:20px;
+margin-left: auto!important;
+padding:20px;
 }
 
 a{
-    text-decoration: none;
+text-decoration: none;
 }
 a:hover{
-    text-decoration: underline;
+text-decoration: underline;
 }
 
 .rotate {
-    display:inline-block;
-    -webkit-animation: spin 2s linear infinite;
-    -moz-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+display:inline-block;
+-webkit-animation: spin 2s linear infinite;
+-moz-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
 }
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 .myselect{
-    width:120px;
-    display:inline;
-    padding-top:2px;
+width:120px;
+display:inline;
+padding-top:2px;
 }
 
 @media only screen and (min-width: 600px) {
-  .forminfo {
-      text-align: center;
-  }
+.forminfo {
+text-align: center;
+}
 }
 
 .emoji {
-    font-family: "Twemoji Mozilla",
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji",
-    "EmojiOne Color",
-    "Android Emoji",
-    sans-serif;
+font-family: "Twemoji Mozilla",
+"Apple Color Emoji",
+"Segoe UI Emoji",
+"Segoe UI Symbol",
+"Noto Color Emoji",
+"EmojiOne Color",
+"Android Emoji",
+sans-serif;
 }
