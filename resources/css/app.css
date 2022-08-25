@@ -112,7 +112,7 @@
     background: #b0961e;
 }
 .landscape-forest{
-    background: #112c0a;
+    background: #38602d;
 }
 
 .player1{
@@ -231,7 +231,7 @@ polygon.selected {
 }
 
 .scroll{
-    overflow-x:scroll;
+    overflow-x:auto;
 }
 
 @media (max-width: 1024px) {

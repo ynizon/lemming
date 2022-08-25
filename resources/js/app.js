@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById('is_your_turn')) {
         window.game.game.loadGame(mapWidth, mapHeight, mapTiles, gameId);
 
-        let timer = 10000;
+        let timer = 15000;
 
         if (document.getElementById("game_pusher_id").value !== '') {
             Echo.channel(`chat-`+document.getElementById("game_id").value)
