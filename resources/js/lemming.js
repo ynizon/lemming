@@ -224,6 +224,22 @@ export let game = {
         document.addEventListener('mousemove', e => {
             if (game.placeMarkerLandscape !== '') {
                 $("#tile-hover").css({left:e.pageX, top:e.pageY-50});
+
+                let hexmap = document.querySelector('#hexmap');
+                let correctOffsetX = event.clientX-$('#hexmap').offset().left;
+                let correctOffsetY = event.clientY-$('#hexmap').offset().top;
+
+                if (hexmap.contains(event.target)) {
+                    const hexCoordinates = Grid.pointToHex([correctOffsetX, correctOffsetY]);
+                    const hex = grid.get(hexCoordinates);
+                    if (hex) {
+                        hex.draw
+                            .stop(true, true)
+                            .fill({ opacity: 0.5 })
+                            .animate(600)
+                            .fill({ opacity: 1 })
+                    }
+                }
             }
         });
     },
@@ -333,8 +349,8 @@ export let game = {
             }
 
             if (hexmap.contains(event.target) && gameIsStarted && this.isYourTurn) {
-                const hexCoordinates = Grid.pointToHex([correctOffsetX, correctOffsetY])
-                const hex = grid.get(hexCoordinates)
+                const hexCoordinates = Grid.pointToHex([correctOffsetX, correctOffsetY]);
+                const hex = grid.get(hexCoordinates);
 
                 if (this.placeMarkerLandscape !== '') {
                     if ((document.getElementById('editor').value === '0') &&
@@ -507,7 +523,7 @@ export let game = {
                 color = "#878787";
                 break;
             case "player3":
-                color = "#d5b61a";
+                color = "#7c6d1f";
                 break;
             case "player4":
                 color = "#37be0a";

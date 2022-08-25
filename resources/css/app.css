@@ -90,11 +90,10 @@
     padding:5px;
 }
 .lemming.selected{
-    border: 1px solid #ccc;
+    text-decoration: underline;
     padding-left: 4px ;
     padding-right: 4px ;
     border-radius:15px;
-    background: #ccc;
 }
 .fa-info{
     padding-right:10px;
@@ -122,7 +121,7 @@
     color: #878787!important;
 }
 .player3{
-    color: #d5b61a!important;
+    color: #7c6d1f!important;
 }
 .player4{
     color: #37be0a!important;
@@ -258,7 +257,18 @@ polygon.selected {
 }
 
 .playerinfos{
-    padding-left: 10px;
+    border:1px solid #cccccc;
+    border-bottom: 0;
+    margin-bottom: 20px;
+}
+.playerinfos thead td{
+    font-weight: bold;
+}
+.playerinfos tr{
+    border-bottom: 1px solid #cccccc;
+}
+.playerinfos td{
+    text-align: center;
 }
 
 .nobtn{
@@ -422,4 +432,16 @@ font-family: "Twemoji Mozilla",
 "EmojiOne Color",
 "Android Emoji",
 sans-serif;
+}
+
+.nolist{
+    list-style: none;
+    padding: 0;
+}
+.player-selected{
+    width:fit-content;
+    border:1px solid #cccccc;
+    padding-bottom: 2px;
+    padding-right: 2px;
+    background: #e7d476;
 }
