@@ -45,7 +45,7 @@ class GameController extends Controller
     public function start($id, Request $request)
     {
         $game = $this->gameManager->loadById($id);
-        if ($game->status == GAME::STATUS_WAITING && Auth()->user()->id == $game->player1_id) {
+        if ($game->status == GAME::STATUS_WAITING) {
             $this->gameManager->load($game);
             $game = $this->gameManager->start($request);
             return redirect("/game/".$game->id);
@@ -125,4 +125,8 @@ class GameController extends Controller
         $this->gameManager->changeMap($request);
     }
 
+    public function saveSettings(Request $request)
+    {
+        $this->gameManager->saveSettings($request);
+    }
 }

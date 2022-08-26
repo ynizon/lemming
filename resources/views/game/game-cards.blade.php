@@ -8,7 +8,7 @@
         {{__("Your deck")}}
     </h3>
     <h6 style="padding-left:40px">(max = 6)</h6>
-    <form method="POST" action="/renew/{{$game->id}}" onsubmit="return checkNbCardsToRenew()">
+    <form method="POST" action="/renew/{{$game->id}}" onsubmit="return window.game.game.checkNbCardsToRenew()">
         @csrf
         <ul class="cards" id="mycard">
             @foreach (Card::CARDS as $landscape)

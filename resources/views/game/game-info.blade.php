@@ -15,10 +15,11 @@
                 - {{__('Choose a card')}}<br/>
                 - {{__('Move your lemming on the map')}}
             @else
+                <span class="rotate">{{config("app.wait")}}</span>
                 {{__('Waiting the other player')}} :
                 @foreach ($playersInformations as $playerId => $playerInfo)
                     @if ($playerId == $game->player)
-                        <span class="rotate icon-player">{{$playerInfo['icon']}}</span>
+                        <span class="icon-player">{{$playerInfo['icon']}}</span>
                     @endif
                 @endforeach
             @endif
@@ -73,7 +74,7 @@
         <thead>
             <tr>
                 <td>
-                    &nbsp;
+                    <i onclick="$('#settings').toggleClass('hidden')" class="fa fa-gear cursor"></i>
                 </td>
                 <td>
                     {{__('Players')}}
@@ -93,6 +94,16 @@
             </tr>
         </thead>
         <tbody>
+            <tr class="hidden" id="settings">
+                <td colspan="5">
+                    {{__('Map size')}} :
+                    <select id="map_size" onchange="window.game.game.saveSettings()">
+                        <option value="35" @if (35 == Cookie::get('map_size')) selected @endif>35 px</option>
+                        <option value="30" @if (30 == Cookie::get('map_size')) selected @endif>30 px</option>
+                        <option value="25" @if (25 == Cookie::get('map_size')) selected @endif>25 px</option>
+                    </select>
+                </td>
+            </tr>
             @foreach ($playersInformations as $playerId => $playerInfo)
                 <tr class="player{{$loop->iteration}} @if ($playerId == $game->player) player-selected @endif">
                     <td>
@@ -168,14 +179,15 @@
                     </td>
                     <td>
                         @if ($playerInfo['lastcard_score'] !== '')
-                            <span title="{{__("Show last moves")}}" onclick="window.game.game.seeLastMoves()"
+                            <span title="{{__("Click to see the last moves")}}" onclick="window.game.game.seeLastMoves()"
                                   title="{{__('Last card played')}}"
                                   class="minicard landscape-{{$playerInfo['lastcard_landscape']}}">{{$playerInfo['lastcard_score']}}</span>
                         @endif
                     </td>
                     <td>
                         <a title="{{__('Remove this player')}}" onclick='window.game.game.removePlayer("/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}")'
-                           class="@if ($playerIdTrash != $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
+                           class="player{{$loop->iteration}} @if ($playerIdTrash != $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
+                        &nbsp;
                     </td>
                 </tr>
             @endforeach

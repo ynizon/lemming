@@ -35,12 +35,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/createNewMap', 'EditorController@createNewMap');
     Route::get('/editor/{mapId}', 'EditorController@editor');
     Route::get('/removeMap/{mapId}', 'EditorController@removeMap');
+    Route::get('/exportMap/{mapId}', 'EditorController@exportMap');
     Route::get('/resetMap/{mapId}', 'EditorController@resetMap');
     Route::post('/saveMap/{mapId}', 'EditorController@saveMap');
     Route::get('/create', 'GameController@create');
     Route::get('/createAndStart', 'GameController@createAndStart');
     Route::post('/update/{id}', 'GameController@update');
     Route::post('/renew/{id}', 'GameController@renew');
+    Route::post('/saveSettings', 'GameController@saveSettings');
     Route::get('/start/{id}', 'GameController@start');
     Route::get('messages/{id}', 'ChatsController@fetchMessages');
     Route::post('message/{id}', 'ChatsController@sendMessage');

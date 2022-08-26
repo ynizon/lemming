@@ -140,17 +140,6 @@ div.padleft{
 .icon-player{
     font-size:20px;
 }
-.hexmap{
-    width:100%;
-    min-width:1050px;
-    height:770px;
-    overflow: auto;
-    position:relative;
-    top:-50px;
-}
-.hexmap text{
-    font-size:40px;
-}
 
 polygon.selected {
     opacity:0.5;
@@ -444,4 +433,32 @@ sans-serif;
     padding-bottom: 2px;
     padding-right: 2px;
     background: #e7d476;
+}
+
+.hexmap{
+    width:100%;
+    min-width:1050px;
+    height:770px;
+    overflow: auto;
+    position:relative;
+    top:-50px;
+}
+.hexmap.map-30{
+    top:-30px;
+    min-width:900px;
+}
+.hexmap.map-25{
+    top:-10px;
+    min-width:750px;
+}
+
+.hexmap text{
+    font-size:40px;
+}
+
+.hexmap.map-30 text{
+    font-size:35px;
+}
+.hexmap.map-25 text{
+    font-size:30px;
 }

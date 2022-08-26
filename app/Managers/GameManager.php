@@ -8,6 +8,7 @@ use App\Models\Card;
 use App\Models\Game;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class GameManager
 {
@@ -94,8 +95,8 @@ class GameManager
         $status = $request->input('status');
         $published = (int) $request->input('published');
 
+        $map = json_decode($this->map->map, true);
         if (!empty($land)) {
-            $map = json_decode($this->map->map, true);
             $k = 0;
             foreach ($map as $tile) {
                 if ($tile["y"] == $y && $tile["x"] == $x) {
@@ -334,6 +335,7 @@ class GameManager
         $game->player1_icon = config("app.icons")[0];
 
         if (!empty($oldGame)) {
+            $oldPlayerId = $game->player1_id;
             for ($i = 1; $i<=Game::NB_MAX_PLAYERS; $i++) {
                 $field = 'player' . $i . '_id';
                 $fieldIcon = 'player' . $i . '_icon';
@@ -867,6 +869,11 @@ class GameManager
             $nextPlayerId = $playersIds[0];
         }
         $game->player = $nextPlayerId;
+    }
+
+    public function saveSettings(Request $request)
+    {
+        Cookie::queue('map_size', $request->input("map_size"));
     }
 
     /**

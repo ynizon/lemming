@@ -31,6 +31,12 @@ window.game = game;
 window.chat = chat;
 
 document.addEventListener("DOMContentLoaded", function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     if (document.getElementById('message')) {
         document.querySelector('#message').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
@@ -52,7 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             Echo.channel(`game-`+document.getElementById("game_id").value)
                 .listen('.Reload', (event) => {
-                    window.location.reload();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
+                    let audio = new Audio('/sounds/go.mp3');
+                    audio.play();
                 });
 
             //@TODO : I dont understand why it disconnect after 30 seconds

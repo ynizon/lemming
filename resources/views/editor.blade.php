@@ -51,6 +51,8 @@
                             <option @if ($themap->published == 1) selected @endif value="1">{{__('Published')}}</option>
                         </select>
                         <br/><br/>
+
+                        <input type="hidden" name="map_size" id="map_size" value="@if (empty(Cookie::get('map_size'))) 35 @else {{Cookie::get('map_size')}} @endif" />
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <input type="hidden" id="editor" name="editor" value="1" />
                         <input type="hidden" id="map_id" value="{{$themap->id}}" />
@@ -62,6 +64,8 @@
                         <a href="/resetMap/{{$themap->id}}" id="reset" class="btn btn-secondary">{{__('Reset')}}</a>
                         &nbsp;&nbsp;
                         <input type="submit" id="save" class="btn btn-primary" value="{{__('Save')}}" />
+                        &nbsp;&nbsp;
+                        <a href="/exportMap/{{$themap->id}}" id="reset" class="btn btn-secondary">{{__('Exporter')}}</a>
                         <br/><br/>
                         <i class="fa fa-info"></i>&nbsp;{{__('You need to have 2 start points and at least 3 finish points')}}
                     </form>

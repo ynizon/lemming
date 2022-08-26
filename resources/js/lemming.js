@@ -3,9 +3,13 @@ import {chat} from './chat.js';
 const Honeycomb = require('honeycomb-grid');
 
 let grid;
+let sizeIcon = 35;
+if (document.getElementById('map_size')) {
+    sizeIcon = parseInt(document.getElementById('map_size').value);
+}
 const draw = SVG(document.getElementById('hexmap'));
 const Hex = Honeycomb.extendHex({
-    size: 35,
+    size: sizeIcon,
     mydraw: null,
 
     addMarker() {
@@ -223,7 +227,7 @@ export let game = {
     initMouse: function () {
         document.addEventListener('mousemove', e => {
             if (game.placeMarkerLandscape !== '') {
-                $("#tile-hover").css({left:e.pageX, top:e.pageY-50});
+                $("#tile-hover").css({left:e.pageX+10, top:e.pageY-10});
 
                 let hexmap = document.querySelector('#hexmap');
                 let correctOffsetX = event.clientX-$('#hexmap').offset().left;
@@ -379,28 +383,26 @@ export let game = {
                         this.info('');
 
                         if (document.getElementById("editor")) {
-                            let newLandscape = document.getElementById('changemap-landscape').value
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
-                            $.ajax({
-                                type: "POST",
-                                url: "/saveMap/"+document.getElementById("map_id").value,
-                                data: {"name":document.getElementById('name').value,
-                                    "x": document.getElementById('changemap-x').value,
-                                    "y": document.getElementById('changemap-y').value,
-                                    "landscape" : document.getElementById('changemap-landscape').value,
-                                    "status": document.getElementById('changemap-status').value
-                                },
-                                success: function () {
-                                    $("#hexa-"+newLandscape).click();
-                                    if (document.getElementById('changemap-landscape').value === 'out') {
-                                        window.location.reload();
+                            if (document.getElementById("editor").value === "1") {
+                                let newLandscape = document.getElementById('changemap-landscape').value
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/saveMap/" + document.getElementById("map_id").value,
+                                    data: {
+                                        "name": document.getElementById('name').value,
+                                        "x": document.getElementById('changemap-x').value,
+                                        "y": document.getElementById('changemap-y').value,
+                                        "landscape": document.getElementById('changemap-landscape').value,
+                                        "status": document.getElementById('changemap-status').value
+                                    },
+                                    success: function () {
+                                        $("#hexa-" + newLandscape).click();
+                                        if (document.getElementById('changemap-landscape').value === 'out') {
+                                            window.location.reload();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
                 } else {
@@ -855,5 +857,17 @@ export let game = {
     editTileFinishStart: function (startOrFinish) {
         this.editorStartOrFinish = startOrFinish;
         this.editTile('out');
+    },
+
+    saveSettings: function () {
+        $.ajax({
+            type: "POST",
+            url: "/saveSettings",
+            data: {"map_size":document.getElementById('map_size').value
+            },
+            success: function () {
+                window.location.reload();
+            }
+        });
     }
 }

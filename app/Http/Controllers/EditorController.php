@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Map;
 use Auth;
 use Illuminate\Http\Request;
 use App\Managers\GameManager;
@@ -31,7 +32,7 @@ class EditorController extends Controller
 
     public function editor($mapId)
     {
-        if ($mapId <= 2) {
+        if ($mapId < 2) {
             abort(403);
         } else {
             $themap = $this->gameManager->loadMap($mapId);
@@ -49,7 +50,7 @@ class EditorController extends Controller
     public function saveMap($mapId, Request $request)
     {
         $map = $this->gameManager->loadMap($mapId);
-        if ($map->user_id == Auth::user()->id) {
+        if (!in_array($map->name, ['empty','default']) && $map->user_id == Auth::user()->id) {
             $this->gameManager->saveMap($request);
             if (!empty($request->input("editor"))) {
                 return redirect("/editor/".$mapId);
@@ -64,5 +65,14 @@ class EditorController extends Controller
             $this->gameManager->resetMap();
             return redirect("/editor/".$mapId);
         }
+    }
+
+    public function exportMap($mapId)
+    {
+        $maps = Map::all();
+        foreach ($maps as $map) {
+            $map->exportMap();
+        }
+        return redirect("/editor/".$mapId);
     }
 }

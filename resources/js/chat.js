@@ -8,11 +8,6 @@ export let chat = {
 
     sendMessage: function (gameId) {
         $(".input-group").hide();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             type: "POST",
             url: "/message/"+gameId,

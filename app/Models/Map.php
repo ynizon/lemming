@@ -17,7 +17,7 @@ class Map extends Model
 
     public function exportMap()
     {
-        $file = fopen(storage_path("maps/map".$this->id.".txt"), "w+");
+        $file = fopen(storage_path("maps/".$this->name.".json"), "w+");
         fputs($file, $this->map);
         fclose($file);
     }

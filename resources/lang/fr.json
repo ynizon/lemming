@@ -281,7 +281,7 @@
     "Do you continue to play ? (you will be removed)": "Continuez vous à jouer ? (vous allez être renvoyé)",
     "Demo accounts": "Comptes de démo",
     "Last card played": "Dernière carte jouée",
-    "Show last moves": "Voir le dernier déplacement",
+    "Click to see the last moves": "Cliquer pour voir le dernier déplacement",
     "default": "defaut",
     "Map": "Carte",
     "Create a new map": "Créer une nouvelle carte",
@@ -291,5 +291,6 @@
     "on the map": "sur la carte",
     "Map Editor": "Editeur de carte",
     "Choose your landscape": "Choisissez votre terrain",
-    "You need to have 2 start points and at least 3 finish points": "Vous devez avoir 2 points de départs et au moins 3 points de sortie"
+    "You need to have 2 start points and at least 3 finish points": "Vous devez avoir 2 points de départs et au moins 3 points de sortie",
+    "Map size": "Taille de la carte"
 }

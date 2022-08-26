@@ -51,25 +51,27 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        DB::table('maps')->insert([
-            'name' => 'Default',
-            'user_id' => 1,
-            'published' => 1,
-            'map' => file_get_contents(storage_path("maps/map1.txt"))
-        ]);
+        $maps = scandir(storage_path("maps"));
+        foreach ($maps as $file) {
+            if ($file != "." && $file != "..") {
+                $published = 1;
+                $userId = 1;
+                //This map is for editor only (reset map button)
+                if ($file == 'empty.json') {
+                    $published = 0;
+                }
 
-        DB::table('maps')->insert([
-            'name' => 'empty',
-            'user_id' => 1,
-            'published' => 0,
-            'map' => file_get_contents(storage_path("maps/map2.txt"))
-        ]);
-
-        DB::table('maps')->insert([
-            'name' => 'Nature',
-            'user_id' => 1,
-            'published' => 1,
-            'map' => file_get_contents(storage_path("maps/map3.txt"))
-        ]);
+                //Thoses maps cant be modified
+                if ($file != 'empty.json' && $file != 'Default.json') {
+                    $userId = 6;
+                }
+                DB::table('maps')->insert([
+                    'name' => str_replace('.json', '', $file),
+                    'user_id' => $userId,
+                    'published' => $published,
+                    'map' => file_get_contents(storage_path("maps/".$file))
+                ]);
+            }
+        }
     }
 }
