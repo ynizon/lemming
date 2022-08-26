@@ -57,6 +57,7 @@
 
 .cards{
     list-style:none;
+    padding:0;
 }
 .chk{
     float:left;
@@ -118,7 +119,7 @@
     color: #f80031 !important;
 }
 .player2{
-    color: #878787!important;
+    color: #5e5e5e!important;
 }
 .player3{
     color: #7c6d1f!important;
@@ -407,9 +408,14 @@ padding-top:2px;
 }
 
 @media only screen and (min-width: 600px) {
-.forminfo {
-text-align: center;
+    .forminfo {
+        text-align: center;
+    }
 }
+@media only screen and (min-width: 600px) and (max-width: 1000px) {
+    .playerinfos{
+        width:435px;
+    }
 }
 
 .emoji {
@@ -445,7 +451,7 @@ sans-serif;
 }
 .hexmap.map-30{
     top:-30px;
-    min-width:900px;
+    min-width:875px;
 }
 .hexmap.map-25{
     top:-10px;

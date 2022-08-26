@@ -4,8 +4,15 @@ const Honeycomb = require('honeycomb-grid');
 
 let grid;
 let sizeIcon = 35;
-if (document.getElementById('map_size')) {
-    sizeIcon = parseInt(document.getElementById('map_size').value);
+
+const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+if (vw < 1550) {
+    sizeIcon = 30;
+    document.getElementById('hexmap').classList.add('map-35');
+}
+if (vw < 1350) {
+    sizeIcon = 25;
+    document.getElementById('hexmap').classList.add('map-25');
 }
 const draw = SVG(document.getElementById('hexmap'));
 const Hex = Honeycomb.extendHex({
@@ -264,6 +271,7 @@ export let game = {
                 let currentIcon = document.getElementById("current_icon").value;
                 if (!hex.start || $(this).attr('data-content') === currentIcon) {
                     if (!hex.finish) {
+                        hex.color = game.getColorLemming($(this));
                         hex.addMarker();
                     }
                 }
@@ -515,26 +523,7 @@ export let game = {
         }
 
         //Add new position
-        //Fix color if no emoji (win < 10)
-        let color = "#FFFFFF";
-        switch (lemming.attr("data-color")) {
-            case "player1":
-                color = "#f80031";
-                break;
-            case "player2":
-                color = "#878787";
-                break;
-            case "player3":
-                color = "#7c6d1f";
-                break;
-            case "player4":
-                color = "#37be0a";
-                break;
-            case "player5":
-                color = "#0a53be";
-                break;
-        }
-        hex.color = color;
+        hex.color = this.getColorLemming(lemming);
         hex.addMarker();
 
         if (lemming.attr("data-player") === this.currentLemming.attr("data-player")
@@ -558,6 +547,29 @@ export let game = {
         this.isWinner();
     },
 
+    getColorLemming: function (lemming) {
+        //Fix color if no emoji (win < 10)
+        let color = "#FFFFFF";
+        switch (lemming.attr("data-color")) {
+            case "player1":
+                color = "#f80031";
+                break;
+            case "player2":
+                color = "#5e5e5e";
+                break;
+            case "player3":
+                color = "#7c6d1f";
+                break;
+            case "player4":
+                color = "#37be0a";
+                break;
+            case "player5":
+                color = "#0a53be";
+                break;
+        }
+        return color;
+    },
+
     isWinner: function () {
         if ($('#lemming1').length > 0 && $('#lemming2').length > 0) {
             let coord = {x: parseInt($("#lemming1").attr('data-x')), y: parseInt($("#lemming1").attr('data-y'))};
@@ -569,7 +581,7 @@ export let game = {
                 let audio = new Audio('/sounds/finish.mp3');
                 audio.play();
                 Swal.fire({
-                    iconHtml: '<img alt="winner" class="winner" src="/images/winner'+document.getElementById('icon_number').value+'.png">',
+                    iconHtml: '<img alt="winner" class="winner" src="/images/emojis1/winner'+document.getElementById('icon_number').value+'.png">',
                     title: this.__("You have win"),
                     showDenyButton: false,
                     showCancelButton: false,

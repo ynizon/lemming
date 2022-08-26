@@ -74,7 +74,7 @@
         <thead>
             <tr>
                 <td>
-                    <i onclick="$('#settings').toggleClass('hidden')" class="fa fa-gear cursor"></i>
+                    <i onclick="$('#settings').toggleClass('hidden')" class="fa fa-gear cursor hidden"></i>
                 </td>
                 <td>
                     {{__('Players')}}
@@ -134,7 +134,7 @@
                                 @if ($lemmingsPositions[$playerId][1]["finish"])
                                     {{config("app.finish")}}
                                 @endif
-                                - <span class="lemming cursor" id="lemming2"
+                                &nbsp;<span class="lemming cursor" id="lemming2"
                                         data-lemming = "2"
                                         data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
                                         data-player = "{{$playerId}}"
@@ -159,7 +159,7 @@
                                 @if ($lemmingsPositions[$playerId][1]["finish"])
                                     {{config("app.finish")}}
                                 @endif
-                                - <span class="lemming"
+                                &nbsp;<span class="lemming"
                                         data-color="player{{$loop->iteration}}"
                                         data-lemming = "2"
                                         data-finish = "{{$lemmingsPositions[$playerId][2]["finish"]}}"
