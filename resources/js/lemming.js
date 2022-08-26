@@ -10,7 +10,7 @@ if (vw < 1550) {
     sizeIcon = 30;
     document.getElementById('hexmap').classList.add('map-35');
 }
-if (vw < 1350) {
+if (vw < 1370) {
     sizeIcon = 25;
     document.getElementById('hexmap').classList.add('map-25');
 }
