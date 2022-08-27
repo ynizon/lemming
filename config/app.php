@@ -5,6 +5,8 @@ return [
     'nb_cards'=> 10*5,
     'map_width'=> 17,
     'map_height'=> 14,
+    //directory for winner icons (for switching icons, write emojis2, and switch icons and icons2)
+    'emojis' => 'emojis1',
     'icons' => [ '🐶', '🐨', '🐗', '🐇', '🐳', '🐢'],
     'icons2' => [ '🦊', '🦝', '🦁', '🐇', '🐋', '🦖'],
     'start' => '🚦',

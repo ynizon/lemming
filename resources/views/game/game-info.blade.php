@@ -65,7 +65,7 @@
         @if (0 != $game->winner) {{ $playersInformations[$game->winner]['name'] }}. @endif
         <br/><a href="/replay/{{$game->id}}">{{__('Play again')}}</a>
     </div>
-    <img alt="winner" class="winner" src="/images/winner{{$winnerNumber}}.png">
+    <img alt="winner" class="winner" src="/images/{{config("app.emojis")}}/winner{{$winnerNumber}}.png">
     <br/>
 @endif
 <br/>

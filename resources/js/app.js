@@ -61,8 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     setTimeout(function () {
                         window.location.reload();
                     }, 2000);
-                    let audio = new Audio('/sounds/go.mp3');
-                    audio.play();
+                    if (document.getElementById("same").value !== "1") {
+                        let audio = new Audio('/sounds/go.mp3');
+                        audio.play();
+                    }
                 });
 
             //@TODO : I dont understand why it disconnect after 30 seconds

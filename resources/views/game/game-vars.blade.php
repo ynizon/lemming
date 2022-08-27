@@ -9,6 +9,7 @@
 <input type="hidden" id="icon_finish" value="{{ config("app.finish") }}" />
 <input type="hidden" id="is_your_turn" value="@if ($game->player == Auth()->user()->id || $game->same) 1 @else 0 @endif" />
 <input type="hidden" id="icon_number" value="{{$iconNumber}}" />
+<input type="hidden" id="emojis" value="{{config("app.emojis")}}" />
 <input type="hidden" id="same" value="{{ $game->same }}" />
 <input type="hidden" id="is_started" value="@if ($game->status == Game::STATUS_STARTED) 1 @else 0 @endif" />
 <div id="tile-hover"><div class="hexagone"><div class="hexagonemain"></div></div></div>

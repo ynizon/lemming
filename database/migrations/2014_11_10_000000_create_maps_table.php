@@ -16,7 +16,7 @@ class CreateMapsTable extends Migration
     {
         Schema::create('maps', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->default('');
+            $table->string('name')->default('')->unique();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->text('map');
             $table->boolean('published')->default(0);

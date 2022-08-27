@@ -49,12 +49,16 @@ class EditorController extends Controller
 
     public function saveMap($mapId, Request $request)
     {
-        $map = $this->gameManager->loadMap($mapId);
-        if (!in_array($map->name, ['empty','default']) && $map->user_id == Auth::user()->id) {
-            $this->gameManager->saveMap($request);
-            if (!empty($request->input("editor"))) {
-                return redirect("/editor/".$mapId);
+        try {
+            $map = $this->gameManager->loadMap($mapId);
+            if (!in_array($map->name, ['empty','default']) && $map->user_id == Auth::user()->id) {
+                    $this->gameManager->saveMap($request);
+                if (!empty($request->input("editor"))) {
+                    return redirect("/editor/".$mapId);
+                }
             }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

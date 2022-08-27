@@ -400,6 +400,7 @@ export let game = {
                                         "name": document.getElementById('name').value,
                                         "x": document.getElementById('changemap-x').value,
                                         "y": document.getElementById('changemap-y').value,
+                                        "published": document.getElementById('published').value,
                                         "landscape": document.getElementById('changemap-landscape').value,
                                         "status": document.getElementById('changemap-status').value
                                     },
@@ -580,8 +581,9 @@ export let game = {
             if (hex1.finish && hex2.finish) {
                 let audio = new Audio('/sounds/finish.mp3');
                 audio.play();
+                let emojisDir = document.getElementById('emojis').value;
                 Swal.fire({
-                    iconHtml: '<img alt="winner" class="winner" src="/images/emojis1/winner'+document.getElementById('icon_number').value+'.png">',
+                    iconHtml: '<img alt="winner" class="winner" src="/images/'+emojisDir+'/winner'+document.getElementById('icon_number').value+'.png">',
                     title: this.__("You have win"),
                     showDenyButton: false,
                     showCancelButton: false,

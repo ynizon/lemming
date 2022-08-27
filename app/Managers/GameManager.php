@@ -81,11 +81,14 @@ class GameManager
 
     public function resetMap()
     {
-        $emptyMap = Map::find(2);
+        $emptyMap = Map::where("name", "=", "empty")->where("user_id", "=", "1")->first();
         $this->map->map = $emptyMap->map;
         $this->map->save();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function saveMap($request)
     {
         $x = (int) $request->input('x');
@@ -110,9 +113,11 @@ class GameManager
                     }
                     if ($status == 'start') {
                         $map[$k]["start"] = true;
+                        $map[$k]["landscape"]  ="none";
                     }
                     if ($status == 'finish') {
                         $map[$k]["finish"] = true;
+                        $map[$k]["landscape"]  ="none";
                     }
                 }
                 $k++;
@@ -120,24 +125,31 @@ class GameManager
 
             $this->map->map = json_encode($map);
         }
-        $this->map->name = $name;
 
         $nbStart = 0;
         $nbFinish = 0;
         foreach ($map as $tile) {
-            if ($status == 'start') {
+            if ($tile["start"]) {
                 $nbStart++;
             }
-            if ($status == 'finish') {
+            if ($tile["finish"]) {
                 $nbFinish++;
             }
         }
+
         if ($nbStart != 2 && $nbFinish < 3) {
             $published = 0;
         }
 
         $this->map->published = $published;
         $this->map->save();
+
+        try {
+            $this->map->name = $name;
+            $this->map->save();
+        } catch (\Exception $e) {
+            throw new \Exception(__("Name already taken"));
+        }
     }
 
     public function getCardsSummary(): array

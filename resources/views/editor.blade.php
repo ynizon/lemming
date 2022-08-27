@@ -8,6 +8,12 @@
                 <div class="col-md-12">
                     <form method="POST" action="/saveMap/{{$themap->id}}">
                         <h1>{{__('Map Editor')}}</h1>
+                        {{ Session::get('message') }}
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {!! session('error') !!}
+                            </div>
+                        @endif
                         <input type="name" name="name" id="name" value="{{$themap->name}}" /><br/>
                         <br/>
                         {{__('Choose your landscape')}} :<br/>
@@ -46,7 +52,7 @@
                         <br style="clear:both"/>
                         <br/>
 
-                        <select class="form-select myselect" name="published">
+                        <select class="form-select myselect" name="published" id="published">
                             <option @if ($themap->published == 0) selected @endif value="0">{{__('Draft')}}</option>
                             <option @if ($themap->published == 1) selected @endif value="1">{{__('Published')}}</option>
                         </select>
