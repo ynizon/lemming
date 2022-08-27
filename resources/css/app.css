@@ -223,13 +223,6 @@ polygon.selected {
     overflow-x:auto;
 }
 
-@media (max-width: 1024px) {
-    .container{
-        margin-left:10px;
-        margin-right:10px;
-    }
-}
-
 @media (min-width: 768px){
     .container-md, .container-sm, .container {
         max-width: initial;
@@ -412,21 +405,8 @@ padding-top:2px;
         text-align: center;
     }
 }
-@media only screen and (min-width: 600px) and (max-width: 1000px) {
-    .playerinfos{
-        width:435px;
-    }
-}
-
-.emoji {
-font-family: "Twemoji Mozilla",
-"Apple Color Emoji",
-"Segoe UI Emoji",
-"Segoe UI Symbol",
-"Noto Color Emoji",
-"EmojiOne Color",
-"Android Emoji",
-sans-serif;
+.min200{
+    min-width: 200px;
 }
 
 .nolist{

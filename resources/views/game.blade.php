@@ -3,17 +3,17 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-4">
+        <div class="col-lg-4 col-12 col-sm-12">
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     @include('game/game-info', ['cards' => $cards, 'game' => $game, 'winnerNumber'=>$winnerNumber])
                 </div>
                 @if ($game->status != Game::STATUS_WAITING)
-                    <div class="col-md-6">
+                    <div class="col-6 min200">
                         @include('game/game-cards', ['cards' => $cards, 'game' => $game])
                     </div>
                 @else
-                    <div class="col-md-12">
+                    <div class="col-12">
                         <h5>{{__("Rules")}}</h5>
                         <a href="https://youtu.be/WLSg3jQa570" target="_blank">Les règles en vidéo</a>.<br/>
                         Vous devez emmener vos 2 lemmings du {{config("app.start")}} au {{config("app.finish")}}.
@@ -29,7 +29,7 @@
                         <br/><br/>
                     </div>
                 @endif
-                <div class="col-md-6">
+                <div class="col-6  min200">
                     @include('game/game-deck', ['cards' => $cards, 'game' => $game])
                 </div>
                 @if (!$game->same)
@@ -41,7 +41,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-md-8 scroll">
+        <div class="col-lg-8 scroll col-12 col-sm-12">
             @include('game/game-map', ['cards' => $cards, 'game' => $game])
         </div>
     </div>

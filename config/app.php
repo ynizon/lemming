@@ -7,8 +7,8 @@ return [
     'map_height'=> 14,
     //directory for winner icons (for switching icons, write emojis2, and switch icons and icons2)
     'emojis' => 'emojis1',
-    'icons' => [ '🐶', '🐨', '🐗', '🐇', '🐳', '🐢'],
-    'icons2' => [ '🦊', '🦝', '🦁', '🐇', '🐋', '🦖'],
+    'icons' => [ '🐶', '🐨', '🐗', '🐇', '🐳', '🐢'],//Compatible with major OS
+    'icons2' => [ '🦊', '🦝', '🦁', '🐇', '🐋', '🦖'],//Better but doesnt work on old system
     'start' => '🚦',
     'finish' => '🏁',
     'winner' => '🏆',
