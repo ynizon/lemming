@@ -1,113 +1,29 @@
+import {Grid, grid} from './grid';
 import Swal from 'sweetalert2';
-import {chat} from './chat.js';
-const Honeycomb = require('honeycomb-grid');
+import {ajax} from './app';
 
-let grid;
-let sizeIcon = 35;
-
-const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-if (vw < 1550) {
-    sizeIcon = 30;
-    document.getElementById('hexmap').classList.add('map-35');
-}
-if (vw < 1370) {
-    sizeIcon = 25;
-    document.getElementById('hexmap').classList.add('map-25');
-}
-const draw = SVG(document.getElementById('hexmap'));
-const Hex = Honeycomb.extendHex({
-    size: sizeIcon,
-    mydraw: null,
-
-    addMarker() {
-        if (this.text !== '') {
-            let updateCoordY = 10;
-            if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-                updateCoordY = 5;
-            }
-            let allClasses = 'x-'+this.x+'_y-'+this.y;
-            if (this.start && this.text ===  document.getElementById("icon_start").value) {
-                allClasses = allClasses + ' start ';
-            }
-            if (this.finish && this.text ===  document.getElementById("icon_finish").value) {
-                allClasses = allClasses + ' finish ';
-            }
-
-            this.mydraw.text(this.text).font({ fill: this.color })
-                .addClass(allClasses)
-                .move(this.coordX+3, this.coordY+updateCoordY);
-        }
-    },
-
-    render(draw) {
-        const { x, y } = this.toPoint()
-        const corners = this.corners()
-        this.editorStartOrFinish = '';
-        this.mydraw = draw;
-        this.start = false;
-        this.finish = false;
-        this.landscape = "none";
-        this.picture = "/images/meadow.png";
-        this.text = "";
-        this.color=  "#000000";
-        this.coordX = x;
-        this.coordY = y;
-        let allClasses = 'poly-x-'+this.x+'_y-'+this.y;
-        if (this.start) {
-            allClasses = this.allClasses + ' start ';
-        }
-        if (this.finish) {
-            allClasses = this.allClasses + ' finish ';
-        }
-
-        this.allClasses = allClasses;
-
-        this.draw = draw
-            .polygon(corners.map(({ x, y }) => `${x},${y}`))
-            .fill(this.picture)
-            .stroke({ width: 0, color: 'none' })
-            .addClass(this.allClasses)
-            .translate(x, y);
-    },
-    highlight() {
-        this.draw
-            // stop running animation
-            .stop(true, true)
-            .fill({ opacity: 1, color: 'aquamarine' })
-            .animate(1000)
-            .fill({ opacity: 0, color: 'none' })
+export class Game {
+    constructor(mapWidth, mapHeight, mapTiles, gameId)
+    {
+        this.gameId = gameId;
+        this.sound = false;
+        this.hasTakenATile = false;
+        this.currentCard =  null;
+        this.currentLemming = null;
+        this.currentTile = null;
+        this.path = [];
+        this.fullPath = [];
+        this.isContinueToPlay = true;
+        this.maxTilesPath = 0;
+        this.landscapePath = null;
+        this.placeMarkerLandscape = '';
+        this.tilesLandscape = {water:0, earth:0, rock:0, forest:0, desert:0};
+        this.isYourTurn = 0;
     }
-})
-const Grid = Honeycomb.defineGrid(Hex);
 
-export let game = {
-    sound: false,
-    hasTakenATile : false,
-    currentCard:  null,
-    currentLemming : null,
-    currentTile : null,
-    path : [],
-    fullPath : [],
-    isContinueToPlay : true,
-    maxTilesPath : 0,
-    landscapePath : null,
-    placeMarkerLandscape : '',
-    tilesLandscape : {water:0, earth:0, rock:0, forest:0, desert:0},
-
-    grid : null,
-    isYourTurn : 0,
-
-    loadGame: function (width, height, map, gameId) {
+    loadGame(width, height, map)
+    {
         this.isYourTurn = parseInt(document.getElementById('is_your_turn').value);
-        grid = Grid.rectangle({
-            width: width,
-            height: height,
-            // render each hex, passing the draw instance
-            onCreate(hex) {
-                hex.render(draw);
-            }
-        })
-
         let deserializedGrid = JSON.parse(map);
 
         deserializedGrid.forEach((hexa) => {
@@ -120,7 +36,6 @@ export let game = {
             grid.get(coord).draw.fill(grid.get(coord).picture) ;
         });
 
-        chat.initMessages(gameId);
         this.initButtons();
         this.initCards();
         this.initMap();
@@ -128,43 +43,46 @@ export let game = {
         this.InitStartAndFinish();
         this.initMouse();
         this.initLastMoves();
-    },
+    }
 
-    initButtons: function () {
+    initButtons()
+    {
         $(".clicker").each(function () {
             $(this).on("click", function () {
                 let audio = new Audio('/sounds/click.mp3');
                 audio.play();
             });
         });
-    },
+    }
 
-    initCards: function () {
+    initCards()
+    {
         $(".yourcard").each(function () {
             $(this).on("click", function () {
-                game.cardClick($(this));
+                window.game.cardClick($(this));
             });
         });
-    },
+    }
 
-    cardClick: function (card) {
-        if (game.hasTakenATile) {
-            game.popin(game.__("You can't, because you have already change the map"), "error");
+    cardClick(card)
+    {
+        if (window.game.hasTakenATile) {
+            window.game.popin(game.__("You can't, because you have already change the map"), "error");
         } else {
-            if (game.isYourTurn && game.path.length === 0) {
+            if (window.game.isYourTurn && window.game.path.length === 0) {
                 let audio = new Audio('/sounds/card.mp3');
                 audio.play();
 
-                if (game.currentCard) {
-                    game.resetCard();
+                if (window.game.currentCard) {
+                    window.game.resetCard();
                 }
-                game.currentCard = card;
+                window.game.currentCard = card;
                 card.addClass("selected");
                 let score = parseInt(card.attr('data-score'));
                 let landscape = card.attr('data-landscape');
                 let cardId = card.attr('data-cardid');
 
-                game.landscapePath = landscape;
+                window.game.landscapePath = landscape;
 
                 $(".cards-deck").each(function () {
                     card.html(card.attr("data-origine"));
@@ -173,23 +91,23 @@ export let game = {
                 let min = parseInt($('#score-' + landscape).attr("data-min"));
                 if (score <= min) {
                     let total = score + parseInt($('#score-' + landscape).attr("data-score"));
-                    game.maxTilesPath = total;
+                    window.game.maxTilesPath = total;
                     $('#score-' + landscape).html(
                         $('#score-' + landscape).attr("data-origine") + ' + ' + score + ' = ' + total
                     );
                 } else {
                     let total = score;
-                    game.maxTilesPath = total;
+                    window.game.maxTilesPath = total;
                     $('#score-' + landscape).html(
                         score + ' = ' + total
                     );
-                    if (game.tilesLandscape[landscape] === "0") {
+                    if (window.game.tilesLandscape[landscape] === "0") {
                         landscape = 'meadow';
                     }
-                    game.placeMarkerLandscape = landscape;
-                    $("#tile-hover .hexagonemain").attr('class', 'hexagonemain');
-                    $("#tile-hover .hexagonemain").addClass("hex-"+landscape);
-                    game.popinPlaceMarker(game.__("You should now replace a tile by a tile ") + game.__(landscape) + ".", "warning");
+                    window.game.placeMarkerLandscape = landscape;
+                    $("#tile-hover .hexagonemain").attr('class', 'hexagonemain').addClass("hex-"+landscape);
+                    window.game.popinPlaceMarker(window.game.__("You should now replace a tile by a tile ") +
+                        window.game.__(landscape) + ".", "warning");
                     let allHexa = document.querySelectorAll("polygon");
                     allHexa.forEach((hexa) => {
                         hexa.classList.add('cursor_map');
@@ -198,9 +116,10 @@ export let game = {
                 $('#card_id').val(cardId);
             }
         }
-    },
+    }
 
-    InitStartAndFinish: function () {
+    InitStartAndFinish()
+    {
         window.setTimeout(function () {
             grid.forEach((hexa) => {
                 if (hexa.start) {
@@ -229,11 +148,12 @@ export let game = {
                 }
             }
         }, 1000);
-    },
+    }
 
-    initMouse: function () {
+    initMouse()
+    {
         document.addEventListener('mousemove', e => {
-            if (game.placeMarkerLandscape !== '') {
+            if (window.game.placeMarkerLandscape !== '') {
                 $("#tile-hover").css({left:e.pageX+10, top:e.pageY-10});
 
                 let hexmap = document.querySelector('#hexmap');
@@ -253,16 +173,18 @@ export let game = {
                 }
             }
         });
-    },
+    }
 
-    initLastMoves: function () {
-        game.seeLastMoves();
+    initLastMoves()
+    {
+        window.game.seeLastMoves();
         window.setTimeout(function () {
-            game.seeLastMoves();
+            window.game.seeLastMoves();
         }, 3000);
-    } ,
+    }
 
-    initLemmings: function () {
+    initLemmings()
+    {
         $(".lemming").each(function ( ) {
             if ($(this).attr('data-x') !== "-1" && $(this).attr('data-y') !== "-1") {
                 let coord = {x: parseInt($(this).attr('data-x')), y: parseInt($(this).attr('data-y'))};
@@ -271,7 +193,7 @@ export let game = {
                 let currentIcon = document.getElementById("current_icon").value;
                 if (!hex.start || $(this).attr('data-content') === currentIcon) {
                     if (!hex.finish) {
-                        hex.color = game.getColorLemming($(this));
+                        hex.color = window.game.getColorLemming($(this));
                         hex.addMarker();
                     }
                 }
@@ -279,33 +201,34 @@ export let game = {
         });
 
         $("#lemming1").on("click", function () {
-            game.lemmingClick(this.id);
+            window.game.lemmingClick(this.id);
         });
 
         $("#lemming2").on("click", function () {
-            game.lemmingClick(this.id);
+            window.game.lemmingClick(this.id);
         });
-    },
+    }
 
-    lemmingClick: function (lemmingId) {
-        if (game.isYourTurn) {
-            if (game.sound) {
+    lemmingClick(lemmingId)
+    {
+        if (window.game.isYourTurn) {
+            if (window.game.sound) {
                 let audio = new Audio('/sounds/lemming.mp3');
                 audio.play();
             }
-            game.sound = true;//No sound before user click on DOM
+            window.game.sound = true;//No sound before user click on DOM
 
             if ($("#" + lemmingId).attr("data-finish") === "1") {
-                game.popin(game.__("This lemming has already finished"), "error");
+                window.game.popin(window.game.__("This lemming has already finished"), "error");
             } else {
-                if (game.path.length > 0) {
-                    game.popin(this.__("You can't move 2 lemmings"), "error");
+                if (window.game.path.length > 0) {
+                    window.game.popin(this.__("You can't move 2 lemmings"), "error");
                 } else {
                     let allHexa = document.querySelectorAll("polygon.cursor");
                     allHexa.forEach((adjacentHexa) => {
                         adjacentHexa.classList.remove('cursor');
                     });
-                    game.currentLemming = $("#" + lemmingId);
+                    window.game.currentLemming = $("#" + lemmingId);
                     $(".lemming").removeClass("selected");
                     $("#" + lemmingId).addClass("selected");
                     document.getElementById('num_lemming').value = $("#" + lemmingId).attr("data-lemming");
@@ -320,10 +243,10 @@ export let game = {
                         };
                         let hex = grid.get(coord);
                         document.getElementById(hex.draw.node.id).classList.add('selected');
-                        game.currentTile = hex;
-                        adjacentsHexa = game.getAdjacentHexa(hex);
+                        window.game.currentTile = hex;
+                        adjacentsHexa = window.game.getAdjacentHexa(hex);
                     } else {
-                        adjacentsHexa = game.getStartHexa();
+                        adjacentsHexa = window.game.getStartHexa();
                     }
 
                     let icons = document.querySelectorAll("text");
@@ -340,9 +263,10 @@ export let game = {
                 }
             }
         }
-    },
+    }
 
-    initMap: function () {
+    initMap()
+    {
         this.tilesLandscape.earth = $('#nb_earth').val();
         this.tilesLandscape.water = $('#nb_water').val();
         this.tilesLandscape.forest = $('#nb_forest').val();
@@ -393,95 +317,81 @@ export let game = {
                         if (document.getElementById("editor")) {
                             if (document.getElementById("editor").value === "1") {
                                 let newLandscape = document.getElementById('changemap-landscape').value
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/saveMap/" + document.getElementById("map_id").value,
-                                    data: {
-                                        "name": document.getElementById('name').value,
-                                        "x": document.getElementById('changemap-x').value,
-                                        "y": document.getElementById('changemap-y').value,
-                                        "published": document.getElementById('published').value,
-                                        "landscape": document.getElementById('changemap-landscape').value,
-                                        "status": document.getElementById('changemap-status').value
-                                    },
-                                    success: function () {
-                                        $("#hexa-" + newLandscape).click();
-                                        if (document.getElementById('changemap-landscape').value === 'out') {
-                                            window.location.reload();
-                                        }
-                                    }
-                                });
+                                ajax.saveMap(newLandscape);
                             }
                         }
                     }
                 } else {
-                    if (document.getElementById('editor').value === "0") {
-                        if (this.currentLemming) {
-                            if (this.currentCard) {
-                                if (this.fullPath.length < this.maxTilesPath) {
-                                    if (hex) {
-                                        if (hex.landscape === 'none' || hex.landscape === 'meadow' ||
-                                            hex.landscape === this.landscapePath ||
-                                            hex.start ||
-                                            hex.finish) {
-                                            var canMove = false;
-                                            if (!this.currentTile) {
-                                                if (hex.start) {
-                                                    canMove = true;
-                                                } else {
-                                                    this.info(this.__("This is not a start area"), 'error');
-                                                }
-                                            } else {
-                                                if (this.isAdjacentHexa(hex)) {
-                                                    canMove = true;
-                                                }
-                                            }
-                                            if (canMove) {
-                                                let direction = this.getDirection(this.currentTile, hex);
-                                                if (hex.text !== '' && !hex.finish) {
-                                                    if (this.fullPath.length >= (this.maxTilesPath - 1)) {
-                                                        this.popin(this.__("You don't have enough moves to push the other lemming(s)"), "error");
-                                                    } else {
-                                                        this.askPushLemming(this.__("Do you want push the other lemming ?"), "question", hex, direction);
-                                                    }
-                                                } else {
-                                                    this.updateLemmingPosition(hex, this.currentLemming);
-                                                }
-                                            } else {
-                                                if (this.currentTile) {
-                                                    this.popin(this.__("This tile is not accessible"), "error");
-                                                }
-                                            }
-                                        } else {
-                                            if (hex.landscape !== 'out') {
-                                                this.popin(this.__("You can't cross this area"), "error");
-                                            }
-                                        }
-                                    }
+                    if (!(document.getElementById('editor').value === "0")) {
+                        return;
+                    }
+                    if (!(this.currentLemming)) {
+                        this.popin(this.__("Select your lemming first"), "error");
+                        return;
+                    }
+                    if (!(this.currentCard)) {
+                        this.popin(this.__("Select a card before"), "error");
+                        return;
+                    }
+                    if (!(this.fullPath.length < this.maxTilesPath)) {
+                        this.popin(this.__("Maximum path exceeded"), "error");
+                        return;
+                    }
+                    if (hex) {
+                        if (hex.landscape === 'none' || hex.landscape === 'meadow' ||
+                            hex.landscape === this.landscapePath ||
+                            hex.start ||
+                            hex.finish) {
+                            var canMove = false;
+                            if (!this.currentTile) {
+                                if (hex.start) {
+                                    canMove = true;
                                 } else {
-                                    this.popin(this.__("Maximum path exceeded"), "error");
+                                    this.info(this.__("This is not a start area"), 'error');
                                 }
                             } else {
-                                this.popin(this.__("Select a card before"), "error");
+                                if (this.isAdjacentHexa(hex)) {
+                                    canMove = true;
+                                }
+                            }
+                            if (canMove) {
+                                let direction = this.getDirection(this.currentTile, hex);
+                                if (hex.text !== '' && !hex.finish) {
+                                    if (this.fullPath.length >= (this.maxTilesPath - 1)) {
+                                        this.popin(this.__("You don't have enough moves to push the other lemming(s)"), "error");
+                                    } else {
+                                        this.askPushLemming(this.__("Do you want push the other lemming ?"), "question", hex, direction);
+                                    }
+                                } else {
+                                    this.updateLemmingPosition(hex, this.currentLemming);
+                                }
+                            } else {
+                                if (this.currentTile) {
+                                    this.popin(this.__("This tile is not accessible"), "error");
+                                }
                             }
                         } else {
-                            this.popin(this.__("Select your lemming first"), "error");
+                            if (hex.landscape !== 'out') {
+                                this.popin(this.__("You can't cross this area"), "error");
+                            }
                         }
                     }
                 }
             }
         });
-    },
+    }
 
-    changeCards: function () {
+    changeCards()
+    {
         if ($("#mycard li").length === 1) {
             $("#renew_cards").click();
         } else {
             $(".changecard").toggleClass("hidden");
         }
-    },
+    }
 
-    updateLemmingPosition: function (hex, lemming) {
+    updateLemmingPosition(hex, lemming)
+    {
         let audio = new Audio('/sounds/move.mp3');
         audio.play();
 
@@ -546,9 +456,10 @@ export let game = {
         }
 
         this.isWinner();
-    },
+    }
 
-    getColorLemming: function (lemming) {
+    getColorLemming(lemming)
+    {
         //Fix color if no emoji (win < 10)
         let color = "#FFFFFF";
         switch (lemming.attr("data-color")) {
@@ -569,9 +480,10 @@ export let game = {
                 break;
         }
         return color;
-    },
+    }
 
-    isWinner: function () {
+    isWinner()
+    {
         if ($('#lemming1').length > 0 && $('#lemming2').length > 0) {
             let coord = {x: parseInt($("#lemming1").attr('data-x')), y: parseInt($("#lemming1").attr('data-y'))};
             let hex1 = grid.get(coord);
@@ -593,9 +505,10 @@ export let game = {
                 });
             }
         }
-    },
+    }
 
-    isAdjacentHexa: function (newHexa) {
+    isAdjacentHexa(newHexa)
+    {
         let canMove = false;
         var contiguousHexa = this.getAdjacentHexa(this.currentTile);
 
@@ -606,9 +519,10 @@ export let game = {
         });
 
         return canMove;
-    },
+    }
 
-    getAdjacentHexa : function (hexagone) {
+    getAdjacentHexa(hexagone)
+    {
         let adjacentsHexa = [];
         let hexagones = grid.neighborsOf(hexagone, 'all');
 
@@ -621,9 +535,10 @@ export let game = {
         });
 
         return adjacentsHexa;
-    },
+    }
 
-    getStartHexa: function () {
+    getStartHexa()
+    {
         let adjacentsHexa = [];
 
         grid.forEach((hexa) => {
@@ -633,9 +548,10 @@ export let game = {
         });
 
         return adjacentsHexa;
-    },
+    }
 
-    resetCard: function () {
+    resetCard()
+    {
         $(".card").removeClass("selected");
         $(".hex").removeClass("path");
 
@@ -645,15 +561,16 @@ export let game = {
 
         this.path = [];
         this.fullPath = [];
-    },
+    }
 
-    validateCardAndPath: function () {
-        if (game.path.length === 0) {
-            game.popin(game.__("You need to indicate a route"), "error");
+    validateCardAndPath()
+    {
+        if (window.game.path.length === 0) {
+            window.game.popin(window.game.__("You need to indicate a route"), "error");
             return false;
         } else {
             let serializedPath = [];
-            game.path.forEach((hexa) => {
+            window.game.path.forEach((hexa) => {
                 serializedPath.push(
                     {
                         x: hexa.x,
@@ -666,9 +583,10 @@ export let game = {
             $('#full_path').val(JSON.stringify(serializedPath));
             return true;
         }
-    },
+    }
 
-    popin: function (title, icon) {
+    popin(title, icon)
+    {
         let audio = new Audio('/sounds/info.mp3');
         audio.play();
 
@@ -681,9 +599,10 @@ export let game = {
         }).then(() => {
 
         });
-    },
+    }
 
-    popinPlaceMarker: function (title, icon) {
+    popinPlaceMarker(title, icon)
+    {
         let audio = new Audio('/sounds/info.mp3');
         audio.play();
 
@@ -696,9 +615,10 @@ export let game = {
         }).then(() => {
             $("#tile-hover").show();
         });
-    },
+    }
 
-    askPushLemming: function (title, icon, hex, direction) {
+    askPushLemming(title, icon, hex, direction)
+    {
         Swal.fire({
             icon: icon,
             title: title,
@@ -730,9 +650,10 @@ export let game = {
                 }
             }
         });
-    },
+    }
 
-    getOtherLemmingsForPush: function (otherLemmings, hex, direction) {
+    getOtherLemmingsForPush(otherLemmings, hex, direction)
+    {
         if (hex.text !== '' && hex.text !== document.getElementById('icon_start').value
             && hex.text !== document.getElementById('icon_finish').value ) {
             let hexagone = grid.neighborsOf(hex,  [direction])[0];
@@ -742,9 +663,10 @@ export let game = {
             }
         }
         return otherLemmings;
-    },
+    }
 
-    checkPositionsForPushingLemmings: function (otherLemmings, direction) {
+    checkPositionsForPushingLemmings(otherLemmings, direction)
+    {
         let canMove = true;
         otherLemmings.forEach((hexa) => {
             let hexagone = grid.neighborsOf(hexa,  [direction])[0];
@@ -758,9 +680,10 @@ export let game = {
         });
 
         return canMove;
-    },
+    }
 
-    getDirection: function (oldTile, nextTile) {
+    getDirection(oldTile, nextTile)
+    {
         let direction = '';
         let directions = ['SE','SW','E','W','NW','NE'];
         directions.forEach((onlyDirection) => {
@@ -775,27 +698,30 @@ export let game = {
         });
 
         return direction;
-    },
+    }
 
-    info: function (title) {
+    info(title)
+    {
         $("#info").html("");
         $("#info").removeClass('alert-success');
         if (title !== '') {
             $("#info").addClass('alert-success');
             $("#info").html("<i class='fa fa-info'></i>"+title);
         }
-    },
+    }
 
-    checkNbCardsToRenew: function () {
+    checkNbCardsToRenew()
+    {
         if ($("#mycard li").length === 7 && $("#mycard li input:checked").length === 0) {
             this.popin(this.__("Select cards before renew them"), "error");
             return false;
         } else {
             return true;
         }
-    },
+    }
 
-    removePlayer: function (url) {
+    removePlayer(url)
+    {
         Swal.fire({
             icon: 'question',
             title: this.__('Confirm removing this player ?'),
@@ -808,9 +734,10 @@ export let game = {
                 window.location.href = url;
             }
         });
-    },
+    }
 
-    timeOut: function () {
+    timeOut()
+    {
         Swal.fire({
             icon: 'question',
             title: this.__('Do you continue to play ? (you will be removed)'),
@@ -820,68 +747,50 @@ export let game = {
             denyButtonText: this.__('No')
         }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type: "GET",
-                    url: "/timeout/"+gameId,
-                    data: {},
-                    success: function (data) {
-                        document.getElementById('max_time').value = data;
-                        game.isContinueToPlay = true;
-                    }
-                });
+                ajax.timeOut(this.gameId);
             }
         });
-    },
+    }
 
-    seeLastMoves: function () {
+    seeLastMoves()
+    {
         let moves =  JSON.parse(document.getElementById('game_lastmoves').value);
         moves.forEach((move) => {
             let hexa = grid.get({x: move.x, y:move.y});
             hexa.draw.toggleClass('lastmoves');
         });
-    },
+    }
 
-    changeMap: function (mapId) {
-        $.ajax({
-            type: "GET",
-            url: "/changeMap/"+gameId,
-            data: {"map":mapId},
-            success: function (data) {
-                window.location.reload();
-            }
-        });
-    },
+    changeMap(mapId)
+    {
+        ajax.changeMap(this.gameId, mapId);
+    }
 
-    __: function (key, replace = {}) {
+    __(key, replace = {})
+    {
         var translation = key.split('.').reduce((t, i) => t[i] || null, window.translations);
 
         for (var placeholder in replace) {
             translation = translation.replace(`:${placeholder}`, replace[placeholder]);
         }
         return translation;
-    },
+    }
 
-    editTile: function (landscape) {
-        game.placeMarkerLandscape = landscape;
-        $("#tile-hover .hexagonemain").attr('class', 'hexagonemain');
-        $("#tile-hover .hexagonemain").addClass("hex-"+landscape);
+    editTile(landscape)
+    {
+        window.game.placeMarkerLandscape = landscape;
+        $("#tile-hover .hexagonemain").attr('class', 'hexagonemain').addClass("hex-"+landscape);
         $("#tile-hover").show();
-    },
+    }
 
-    editTileFinishStart: function (startOrFinish) {
+    editTileFinishStart(startOrFinish)
+    {
         this.editorStartOrFinish = startOrFinish;
         this.editTile('out');
-    },
+    }
 
-    saveSettings: function () {
-        $.ajax({
-            type: "POST",
-            url: "/saveSettings",
-            data: {"map_size":document.getElementById('map_size').value
-            },
-            success: function () {
-                window.location.reload();
-            }
-        });
+    saveSettings()
+    {
+        ajax.saveSettings();
     }
 }

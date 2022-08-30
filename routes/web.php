@@ -42,7 +42,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/createAndStart', 'GameController@createAndStart');
     Route::post('/update/{id}', 'GameController@update');
     Route::post('/renew/{id}', 'GameController@renew');
-    Route::post('/saveSettings', 'GameController@saveSettings');
     Route::get('/start/{id}', 'GameController@start');
     Route::get('messages/{id}', 'ChatsController@fetchMessages');
     Route::post('message/{id}', 'ChatsController@sendMessage');

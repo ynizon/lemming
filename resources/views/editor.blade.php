@@ -19,18 +19,18 @@
                         {{__('Choose your landscape')}} :<br/>
                         <ul class="list-horizontal">
                             <li>
-                                <div id="hexa-out" class="cursor hexagone hexa-editor" onclick="window.game.game.editTile('out')">
+                                <div id="hexa-out" class="cursor hexagone hexa-editor" onclick="window.game.editTile('out')">
                                     <div class="hexagonemain hex-out"></div>
                                 </div>
                             </li>
                             <li>
-                                <div id="hexa-meadow" class="cursor hexagone hexa-editor" onclick="window.game.game.editTile('meadow')">
+                                <div id="hexa-meadow" class="cursor hexagone hexa-editor" onclick="window.game.editTile('meadow')">
                                     <div class="hexagonemain hex-meadow"></div>
                                 </div>
                             </li>
                             @foreach (Card::CARDS as $card)
                                 <li>
-                                    <div id="hexa-{{$card}}" class="cursor hexagone hexa-editor"  onclick="window.game.game.editTile('{{$card}}')">
+                                    <div id="hexa-{{$card}}" class="cursor hexagone hexa-editor"  onclick="window.game.editTile('{{$card}}')">
                                         <div class="hexagonemain hex-{{$card}}"></div>
                                     </div>
                                 </li>
@@ -39,12 +39,12 @@
                         <br style="clear:both"/>
                         <ul class="list-horizontal">
                             <li>
-                                <div class="cursor" style="font-size:30px" onclick="window.game.game.editTileFinishStart('start')">
+                                <div class="cursor" style="font-size:30px" onclick="window.game.editTileFinishStart('start')">
                                     {{config("app.start")}}
                                 </div>
                             </li>
                             <li>
-                                <div class="cursor" style="font-size:30px" onclick="window.game.game.editTileFinishStart('finish')">
+                                <div class="cursor" style="font-size:30px" onclick="window.game.editTileFinishStart('finish')">
                                     {{config("app.finish")}}
                                 </div>
                             </li>
@@ -58,7 +58,6 @@
                         </select>
                         <br/><br/>
 
-                        <input type="hidden" name="map_size" id="map_size" value="@if (empty(Cookie::get('map_size'))) 35 @else {{Cookie::get('map_size')}} @endif" />
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <input type="hidden" id="editor" name="editor" value="1" />
                         <input type="hidden" id="map_id" value="{{$themap->id}}" />

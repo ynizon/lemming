@@ -1,27 +1,31 @@
-export let chat = {
-    initMessages: function (gameId) {
-        this.loadMessages(gameId);
+import {ajax} from './app';
+
+export class Chat {
+    constructor(gameId)
+    {
+        this.gameId = gameId;
+        this.initMessages();
+    }
+
+    initMessages()
+    {
+        this.loadMessages(this.gameId);
         if (document.getElementById("message")) {
             document.getElementById("message").focus();
         }
-    },
+    }
 
-    sendMessage: function (gameId) {
+    sendMessage()
+    {
         $(".input-group").hide();
-        $.ajax({
-            type: "POST",
-            url: "/message/"+gameId,
-            data: {message: document.getElementById("message").value},
-            success: function () {
-                window.chat.chat.loadMessages(gameId);
-            }
-        });
+        ajax.sendMessage(this.gameId);
         document.getElementById("message").value = '';
-    },
+    }
 
-    loadMessages: function (gameId) {
+    loadMessages()
+    {
         if (document.getElementById("message")) {
-            $.getJSON("/messages/" + gameId, function (data) {
+            $.getJSON("/messages/" + this.gameId, function (data) {
                 let ul = document.getElementById("messages");
                 ul.innerHTML = '';
                 $.each(data, function (key, val) {

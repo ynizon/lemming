@@ -883,11 +883,6 @@ class GameManager
         $game->player = $nextPlayerId;
     }
 
-    public function saveSettings(Request $request)
-    {
-        Cookie::queue('map_size', $request->input("map_size"));
-    }
-
     /**
      * Use for test moves
      * @return void

@@ -34,7 +34,7 @@
         <br/>
         <div>
             {{__("Map")}} :
-            <select id="change_map" class="form-select myselect" onchange="window.game.game.changeMap(this.value)">
+            <select id="change_map" class="form-select myselect" onchange="window.game.changeMap(this.value)">
                 @foreach ($game->maps() as $map)
                     <option @if ($game->map->id == $map->id) selected @endif value="{{$map->id}}">{{__($map->name)}}</option>
                 @endforeach
@@ -74,7 +74,7 @@
         <thead>
             <tr>
                 <td>
-                    <i onclick="$('#settings').toggleClass('hidden')" class="fa fa-gear cursor hidden"></i>
+                    &nbsp;
                 </td>
                 <td>
                     {{__('Players')}}
@@ -94,16 +94,6 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="hidden" id="settings">
-                <td colspan="5">
-                    {{__('Map size')}} :
-                    <select id="map_size" onchange="window.game.game.saveSettings()">
-                        <option value="35" @if (35 == Cookie::get('map_size')) selected @endif>35 px</option>
-                        <option value="30" @if (30 == Cookie::get('map_size')) selected @endif>30 px</option>
-                        <option value="25" @if (25 == Cookie::get('map_size')) selected @endif>25 px</option>
-                    </select>
-                </td>
-            </tr>
             @foreach ($playersInformations as $playerId => $playerInfo)
                 <tr class="player{{$loop->iteration}} @if ($playerId == $game->player) player-selected @endif">
                     <td>
@@ -179,13 +169,13 @@
                     </td>
                     <td>
                         @if ($playerInfo['lastcard_score'] !== '')
-                            <span title="{{__("Click to see the last moves")}}" onclick="window.game.game.seeLastMoves()"
+                            <span title="{{__("Click to see the last moves")}}" onclick="window.game.seeLastMoves()"
                                   title="{{__('Last card played')}}"
                                   class="minicard landscape-{{$playerInfo['lastcard_landscape']}}">{{$playerInfo['lastcard_score']}}</span>
                         @endif
                     </td>
                     <td>
-                        <a title="{{__('Remove this player')}}" onclick='window.game.game.removePlayer("/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}")'
+                        <a title="{{__('Remove this player')}}" onclick='window.game.removePlayer("/game/{{$game->id}}/removePlayer/{{$playerIdTrash}}")'
                            class="player{{$loop->iteration}} @if ($playerIdTrash != $playerId) hidden @endif"><i class="fa fa-trash cursor"></i></a>
                         &nbsp;
                     </td>
@@ -201,7 +191,7 @@
         <input type="hidden" id="nb_{{$land}}" value="{{3-$mapUpdate[$land]}}" />
     @endforeach
 
-    <form class="forminfo" method="post" onsubmit="return window.game.game.validateCardAndPath()" action="/update/{{$game->id}}">
+    <form class="forminfo" method="post" onsubmit="return window.game.validateCardAndPath()" action="/update/{{$game->id}}">
         @csrf
         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}" />
         <input type="hidden" id="num_lemming" name="num_lemming" value="" />
@@ -218,7 +208,7 @@
         <input type="hidden" id="changemap-y" name="changemap-y" value="" />
         <input type="hidden" id="changemap-landscape" name="changemap-landscape" value="" />
 
-        <input type="button" onclick="window.game.game.changeCards()" value="{{__('Renew my cards')}}" class="clicker btn btn-primary"/>
+        <input type="button" onclick="window.game.changeCards()" value="{{__('Renew my cards')}}" class="clicker btn btn-primary"/>
         <input type="button" onclick="window.location.reload();" value="{{__('Restart')}}" class="clicker btn btn-secondary"/>
         <input type="submit" id="btnConfirm" value="{{__('Validate')}}" class="btn btn-primary clicker"/>
     </form>

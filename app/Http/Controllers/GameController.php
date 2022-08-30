@@ -62,6 +62,14 @@ class GameController extends Controller
         return view('game', $gameVars);
     }
 
+    public function ajaxgame($id)
+    {
+        $this->gameManager->loadById($id);
+        $gameVars = $this->gameManager->game();
+
+        return view('ajaxgame', $gameVars);
+    }
+
     public function join($id)
     {
         $this->gameManager->loadById($id);
@@ -123,10 +131,5 @@ class GameController extends Controller
     {
         $this->gameManager->loadById($id);
         $this->gameManager->changeMap($request);
-    }
-
-    public function saveSettings(Request $request)
-    {
-        $this->gameManager->saveSettings($request);
     }
 }
