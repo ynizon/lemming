@@ -44,7 +44,7 @@ PUSHER_APP_CLUSTER="eu"
 ````  
 
 ## Maps
-- For create new map, modify the game.js > createOriginalMap function
+- To create new map, modify the game.js > createOriginalMap function
 - Start a new game
 - Edit the json from the map table
 

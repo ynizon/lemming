@@ -57,6 +57,10 @@
 	</script>
 </head>
 <body>
+    <div id="loader">
+        <div class="rotate">{{config("app.wait")}}</div>
+    </div>
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">

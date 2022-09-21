@@ -581,6 +581,7 @@ export class Game {
 
             $('#path').val(JSON.stringify(serializedPath));
             $('#full_path').val(JSON.stringify(serializedPath));
+            window.game.disableButtons();
             return true;
         }
     }
@@ -716,6 +717,7 @@ export class Game {
             this.popin(this.__("Select cards before renew them"), "error");
             return false;
         } else {
+            window.game.disableButtons();
             return true;
         }
     }
@@ -789,8 +791,10 @@ export class Game {
         this.editTile('out');
     }
 
-    saveSettings()
+    disableButtons()
     {
-        ajax.saveSettings();
+        $(".btn").attr("disabled",true);
+        $("#app").hide();
+        $("#loader").show();
     }
 }
