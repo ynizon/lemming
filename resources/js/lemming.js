@@ -36,6 +36,7 @@ export class Game {
             grid.get(coord).draw.fill(grid.get(coord).picture) ;
         });
 
+        this.initInfos();
         this.initButtons();
         this.initCards();
         this.initMap();
@@ -43,6 +44,14 @@ export class Game {
         this.InitStartAndFinish();
         this.initMouse();
         this.initLastMoves();
+    }
+
+    initInfos()
+    {
+        let showInfo = this.getCookieValue("info");
+        if (showInfo === 'false') {
+            $("#info").hide();
+        }
     }
 
     initButtons()
@@ -70,6 +79,7 @@ export class Game {
             window.game.popin(game.__("You can't, because you have already change the map"), "error");
         } else {
             if (window.game.isYourTurn && window.game.path.length === 0) {
+                window.game.placeMarkerLandscape = '';
                 let audio = new Audio('/sounds/card.mp3');
                 audio.play();
 
@@ -796,5 +806,16 @@ export class Game {
         $(".btn").attr("disabled",true);
         $("#app").hide();
         $("#loader").show();
+    }
+
+    removeInfos()
+    {
+        document.cookie = "info=false";
+        $("#info").fadeOut();
+    }
+
+    getCookieValue(name)
+    {
+        return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
     }
 }

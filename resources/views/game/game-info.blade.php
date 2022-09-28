@@ -1,5 +1,6 @@
 @if (($game->status == Game::STATUS_STARTED && $game->winner == 0) || $game->status != Game::STATUS_STARTED)
     <div id="info" class="alert-success">
+        <span id="info-close" onclick="window.game.removeInfos()">X</span>
         @if ($game->status != Game::STATUS_STARTED)
             @if ($game->status != Game::STATUS_ENDED)
                 <i class="fa fa-info"></i>{{__("Rules are available in the footer")}}.

@@ -218,6 +218,11 @@ polygon.selected {
 #info{
     padding: 5px 5px 5px 15px;
 }
+#info-close{
+    float: right;
+    padding-right:5px;
+    cursor: pointer;
+}
 
 .scroll{
     overflow-x:auto;
@@ -242,7 +247,7 @@ polygon.selected {
 .playerinfos{
     border:1px solid #cccccc;
     border-bottom: 0;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 .playerinfos thead td{
     font-weight: bold;
